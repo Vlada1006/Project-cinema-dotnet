@@ -6,7 +6,7 @@ using System.Reflection.Emit;
 
 namespace Cinema_project_dotnet.DataAccess
 {
-    public class CinemaDbContext : IdentityDbContext<User, IdentityRole<int>, int>
+    public class CinemaDbContext : IdentityDbContext<User>
     {
         public CinemaDbContext(DbContextOptions<CinemaDbContext> options) : base(options) 
         { 
