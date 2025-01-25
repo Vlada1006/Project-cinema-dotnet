@@ -31,6 +31,17 @@ namespace Cinema_project_dotnet.DataAccess
             }
         }
 
+        public async Task DeleteAsync(TEntity entity)
+        {
+            if (_context.Entry(entity).State == EntityState.Detached)
+            {
+                _dbSet.Attach(entity);
+            }
+
+            _dbSet.Remove(entity);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<IEnumerable<TEntity>> GetAllAsync()
         {
             return await _dbSet.ToListAsync();
