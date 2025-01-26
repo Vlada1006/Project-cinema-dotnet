@@ -9,6 +9,7 @@ namespace Cinema_project_dotnet.BusinessLogic.Interfaces
         Task AddAsync(TEntity entity);
         Task UpdateAsync(TEntity entity);
         Task DeleteAsync(int id);
+        Task DeleteAsync(TEntity entity);
         Task<IEnumerable<TEntity>> GetByConditionAsync(Expression<Func<TEntity, bool>> predicate);
     }
 }
