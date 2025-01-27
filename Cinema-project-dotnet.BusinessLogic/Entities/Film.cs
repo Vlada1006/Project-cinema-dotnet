@@ -20,9 +20,9 @@
 
         public string TrailerUrl { get; set; } = string.Empty;
 
-        public List<Genre> Genres { get; set; } = new List<Genre>();
+        public List<FilmGenre> FilmGenres { get; set; } = new List<FilmGenre>();
 
-        public List<Director> Directors { get; set; } = new List<Director>();
+        public List<FilmDirector> FilmDirectors { get; set; } = new List<FilmDirector>();
 
         public List<Session> Sessions { get; set; } = new List<Session>();
     }

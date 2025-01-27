@@ -6,6 +6,6 @@
 
         public string Name { get; set; } = string.Empty;
 
-        public List<Film> Films { get; set; } = new List<Film>();
+        public List<FilmDirector> FilmDirectors { get; set; } = new List<FilmDirector>();
     }
 }

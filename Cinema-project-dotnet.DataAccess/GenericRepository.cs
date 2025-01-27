@@ -31,9 +31,27 @@ namespace Cinema_project_dotnet.DataAccess
             }
         }
 
-        public async Task<IEnumerable<TEntity>> GetAllAsync()
+        public async Task DeleteAsync(TEntity entity)
         {
-            return await _dbSet.ToListAsync();
+            if (_context.Entry(entity).State == EntityState.Detached)
+            {
+                _dbSet.Attach(entity);
+            }
+
+            _dbSet.Remove(entity);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<IEnumerable<TEntity>> GetAllAsync(Func<IQueryable<TEntity>, IQueryable<TEntity>> includeFunc = null)
+        {
+            IQueryable<TEntity> query = _dbSet;
+
+            if (includeFunc != null)
+            {
+                query = includeFunc(query);
+            }
+
+            return await query.ToListAsync();
         }
 
         public async Task<IEnumerable<TEntity>> GetByConditionAsync(Expression<Func<TEntity, bool>> predicate)

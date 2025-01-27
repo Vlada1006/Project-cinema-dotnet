@@ -21,28 +21,38 @@ namespace Cinema_project_dotnet.DataAccess
         public DbSet<Session> Sessions { get; set; }
         public DbSet<Transaction> Transactions { get; set; }
         public DbSet<Booking> Bookings { get; set; }
+        public DbSet<FilmGenre> FilmGenres { get; set; }
+        public DbSet<FilmDirector> FilmDirectors { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
 
-            builder.Entity<Film>()
-                .HasMany(f => f.Genres) 
-                .WithMany(g => g.Films)
-                .UsingEntity<Dictionary<string, object>>(
-                    "FilmGenre", 
-                    j => j.HasOne<Genre>().WithMany().HasForeignKey("GenreId"), 
-                    j => j.HasOne<Film>().WithMany().HasForeignKey("FilmId")
-                );
+            builder.Entity<FilmGenre>()
+            .HasKey(fg => new { fg.FilmId, fg.GenreId });
 
-            builder.Entity<Film>()
-                .HasMany(f => f.Directors) 
-                .WithMany(d => d.Films) 
-                .UsingEntity<Dictionary<string, object>>(
-                    "FilmDirector",
-                    j => j.HasOne<Director>().WithMany().HasForeignKey("DirectorId"),
-                    j => j.HasOne<Film>().WithMany().HasForeignKey("FilmId")
-                );
+            builder.Entity<FilmGenre>()
+                .HasOne(fg => fg.Film)
+                .WithMany(f => f.FilmGenres)
+                .HasForeignKey(fg => fg.FilmId);
+
+            builder.Entity<FilmGenre>()
+                .HasOne(fg => fg.Genre)
+                .WithMany(g => g.FilmGenres)
+                .HasForeignKey(fg => fg.GenreId);
+
+            builder.Entity<FilmDirector>()
+                .HasKey(fg => new { fg.FilmId, fg.DirectorId });
+
+            builder.Entity<FilmDirector>()
+                .HasOne(fg => fg.Film)
+                .WithMany(f => f.FilmDirectors)
+                .HasForeignKey(fg => fg.FilmId);
+
+            builder.Entity<FilmDirector>()
+                .HasOne(fg => fg.Director)
+                .WithMany(g => g.FilmDirectors)
+                .HasForeignKey(fg => fg.FilmId);
 
             builder.Entity<Session>()
                 .HasOne(s => s.Film)
