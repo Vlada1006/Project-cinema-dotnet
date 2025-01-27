@@ -9,8 +9,18 @@ namespace Cinema_project_dotnet.BusinessLogic.Helpers
         public ApplicationProfile()
         {
             CreateMap<Film, FilmDTO>()
-                .ForMember(dest => dest.Genres, opt => opt.MapFrom(src => src.Genres.Select(g => g.Name).ToList()))
-                .ForMember(dest => dest.Directors, opt => opt.MapFrom(src => src.Directors.Select(d => d.Name).ToList()));
+                .ForMember(dest => dest.FilmGenres, opt => opt.MapFrom(src => src.FilmGenres))
+                .ForMember(dest => dest.FilmDirectors, opt => opt.MapFrom(src => src.FilmDirectors));
+
+            CreateMap<FilmGenre, FilmGenreDTO>();
+            CreateMap<FilmDirector, FilmDirectorDTO>();
+
+            CreateMap<FilmDTO, Film>()
+                .ForMember(dest => dest.FilmGenres, opt => opt.MapFrom(src => src.FilmGenres))
+                .ForMember(dest => dest.FilmDirectors, opt => opt.MapFrom(src => src.FilmDirectors));
+
+            CreateMap<FilmGenreDTO, FilmGenre>();
+            CreateMap<FilmDirectorDTO, FilmDirector>();
         }
     }
 }

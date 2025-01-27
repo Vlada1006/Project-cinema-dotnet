@@ -1,4 +1,5 @@
 using Cinema_project_dotnet.BusinessLogic.Interfaces;
+using Cinema_project_dotnet.BusinessLogic.Services;
 using Cinema_project_dotnet.DataAccess;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,6 +15,9 @@ builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepositor
 
 // add AutoMapper with profile classes
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+// add custom service:
+builder.Services.AddScoped<IFilmService, FilmService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
