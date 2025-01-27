@@ -27,8 +27,8 @@ namespace Cinema_project_dotnet.DataAccess.Migrations
                 {
                     table.PrimaryKey("PK_FilmDirectors", x => new { x.FilmId, x.DirectorId });
                     table.ForeignKey(
-                        name: "FK_FilmDirectors_Directors_FilmId",
-                        column: x => x.FilmId,
+                        name: "FK_FilmDirectors_Directors_DirectorId",
+                        column: x => x.DirectorId,
                         principalTable: "Directors",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
@@ -63,6 +63,11 @@ namespace Cinema_project_dotnet.DataAccess.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FilmDirectors_DirectorId",
+                table: "FilmDirectors",
+                column: "DirectorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_FilmGenres_GenreId",

@@ -6,7 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>Cinema_project_dotnet.Server</RootNamespace>
     <SpaRoot>..\cinema-project-dotnet.client</SpaRoot>
-    <SpaProxyLaunchCommand>npm run dev</SpaProxyLaunchCommand>
+    
     <SpaProxyServerUrl>https://localhost:51425</SpaProxyServerUrl>
   </PropertyGroup>
 

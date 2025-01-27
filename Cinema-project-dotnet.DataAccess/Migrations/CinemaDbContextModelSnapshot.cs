@@ -130,6 +130,8 @@ namespace Cinema_project_dotnet.DataAccess.Migrations
 
                     b.HasKey("FilmId", "DirectorId");
 
+                    b.HasIndex("DirectorId");
+
                     b.ToTable("FilmDirectors");
                 });
 
@@ -506,7 +508,7 @@ namespace Cinema_project_dotnet.DataAccess.Migrations
                 {
                     b.HasOne("Cinema_project_dotnet.BusinessLogic.Entities.Director", "Director")
                         .WithMany("FilmDirectors")
-                        .HasForeignKey("FilmId")
+                        .HasForeignKey("DirectorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

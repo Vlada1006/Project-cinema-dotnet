@@ -2,7 +2,7 @@
 {
     public class FilmGenreDTO
     {
-        public int Id { get; set; }
-        public string Name { get; set; } = string.Empty;
+        public int GenreId { get; set; }
+        public string GenreName { get; set; } = string.Empty;
     }
 }

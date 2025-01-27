@@ -2,7 +2,7 @@
 {
     public class FilmDirectorDTO
     {
-        public int Id { get; set; }
-        public string Name { get; set; } = string.Empty;
+        public int DirectorId { get; set; }
+        public string DirectorName { get; set; } = string.Empty;
     }
 }

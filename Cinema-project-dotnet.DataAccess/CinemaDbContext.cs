@@ -52,7 +52,7 @@ namespace Cinema_project_dotnet.DataAccess
             builder.Entity<FilmDirector>()
                 .HasOne(fg => fg.Director)
                 .WithMany(g => g.FilmDirectors)
-                .HasForeignKey(fg => fg.FilmId);
+                .HasForeignKey(fg => fg.DirectorId);
 
             builder.Entity<Session>()
                 .HasOne(s => s.Film)
