@@ -5,15 +5,9 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>Cinema_project_dotnet.Server</RootNamespace>
-    <SpaRoot>..\cinema-project-dotnet.client</SpaRoot>
-    <SpaProxyLaunchCommand>npm run dev</SpaProxyLaunchCommand>
-    <SpaProxyServerUrl>https://localhost:51425</SpaProxyServerUrl>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.SpaProxy">
-      <Version>8.*-*</Version>
-    </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.12">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -24,9 +18,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Cinema-project-dotnet.BusinessLogic\Cinema-project-dotnet.BusinessLogic.csproj" />
-    <ProjectReference Include="..\cinema-project-dotnet.client\cinema-project-dotnet.client.esproj">
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
     <ProjectReference Include="..\Cinema-project-dotnet.DataAccess\Cinema-project-dotnet.DataAccess.csproj" />
   </ItemGroup>
 
