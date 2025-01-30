@@ -1,14 +1,13 @@
-﻿using Cinema_project_dotnet.BusinessLogic.DTOs;
-using Cinema_project_dotnet.BusinessLogic.Entities;
+﻿using Cinema_project_dotnet.BusinessLogic.DTOs.FilmDTO;
 
 namespace Cinema_project_dotnet.BusinessLogic.Interfaces
 {
     public interface IFilmService
     {
-        Task<List<FilmDTO>> GetAllFilmsAsync();
-        Task<FilmDTO> GetFilmByIdAsync(int id);
-        Task<FilmDTO> CreateFilmAsync(FilmDTO filmDTO);
-        Task<Film> UpdateFilmAsync(int id, FilmDTO filmDTO);
+        Task<List<FilmGetDTO>> GetAllFilmsAsync();
+        Task<FilmGetDTO> GetFilmByIdAsync(int id);
+        Task CreateFilmAsync(FilmCreateUpdateDTO filmDTO);
+        Task UpdateFilmAsync(int id, FilmCreateUpdateDTO filmDTO);
         Task DeleteFilmAsync(int id);
     }
 }

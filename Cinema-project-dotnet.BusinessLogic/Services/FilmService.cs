@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Cinema_project_dotnet.BusinessLogic.DTOs;
+using Cinema_project_dotnet.BusinessLogic.DTOs.FilmDTO;
 using Cinema_project_dotnet.BusinessLogic.Entities;
 using Cinema_project_dotnet.BusinessLogic.Interfaces;
 using Microsoft.EntityFrameworkCore;
@@ -11,85 +11,91 @@ namespace Cinema_project_dotnet.BusinessLogic.Services
         private readonly IGenericRepository<Film> _filmRepo;
         private readonly IGenericRepository<Genre> _genreRepo;
         private readonly IGenericRepository<Director> _directorRepo;
-        private readonly IGenericRepository<FilmGenre> _filmGenreRepo;
-        private readonly IGenericRepository<FilmDirector> _filmDirectorRepo;
         private readonly IMapper _mapper;
+        
         public FilmService(
             IGenericRepository<Film> filmRepo,
             IGenericRepository<Genre> genreRepo,
             IGenericRepository<Director> directorRepo,
-            IGenericRepository<FilmGenre> filmGenreRepo, 
-            IGenericRepository<FilmDirector> filmDirectorRepo, 
             IMapper mapper)
         {
             this._filmRepo = filmRepo;
             this._genreRepo = genreRepo;
             this._directorRepo = directorRepo;
-            this._filmGenreRepo = filmGenreRepo;
-            this._filmDirectorRepo = filmDirectorRepo;
             this._mapper = mapper;
         }
         
-        public async Task<List<FilmDTO>> GetAllFilmsAsync()
+        public async Task<List<FilmGetDTO>> GetAllFilmsAsync()
         {
-            var film = await _filmRepo.GetAllAsync();
+            var films = await _filmRepo.GetAllAsync(query => query
+                .Include(f => f.FilmGenres)
+                .ThenInclude(fg => fg.Genre)
+                .Include(f => f.FilmDirectors)
+                .ThenInclude(fg => fg.Director));
 
-            return _mapper.Map<List<FilmDTO>>(film);
+            if (films == null)
+            {
+                throw new Exception("Nod film items found");
+            }
+
+            return _mapper.Map<List<FilmGetDTO>>(films);
         }
         
-        public async Task<FilmDTO> GetFilmByIdAsync(int id)
+        public async Task<FilmGetDTO> GetFilmByIdAsync(int id)
         {
-            var film = await _filmRepo.GetByIdAsync(id);
+            var film = await _filmRepo.GetByIdAsync(id, query => query
+                .Include(f => f.FilmGenres)
+                .ThenInclude(fg => fg.Genre)
+                .Include(f => f.FilmDirectors)
+                .ThenInclude(fg => fg.Director));
+
             if (film == null)
             {
-                throw new KeyNotFoundException("Film not found");
+                throw new Exception("Film not found");
             }
-            return _mapper.Map<FilmDTO>(film);
+
+            return _mapper.Map<FilmGetDTO>(film);
         }
 
-        public async Task<FilmDTO> CreateFilmAsync(FilmDTO filmDTO)
+        public async Task CreateFilmAsync(FilmCreateUpdateDTO filmDTO)
         {
             var film = _mapper.Map<Film>(filmDTO);
-            
-            await _filmRepo.AddAsync(film);
 
-            foreach (var genreDTO in filmDTO.FilmGenres)
+            foreach (var genreId in filmDTO.GenreIds)
             {
-                var genre = await _genreRepo.GetByIdAsync(genreDTO.GenreId);
+                var genre = await _genreRepo.GetByIdAsync(genreId);
                 if (genre == null)
                 {
-                    throw new InvalidOperationException($"Genre with ID {genreDTO.GenreId} does not exist.");
+                    throw new Exception($"Genre with ID {genreId} does not exist.");
                 }
 
                 var filmGenre = new FilmGenre
                 {
-                    FilmId = film.Id,
-                    GenreId = genreDTO.GenreId
+                    Film = film,
+                    Genre = genre
                 };
 
-                await _filmGenreRepo.AddAsync(filmGenre);
+                film.FilmGenres.Add(filmGenre);
             }
 
-            foreach (var directorDTO in filmDTO.FilmDirectors)
+            foreach (var directorId in filmDTO.DirectorIds)
             {
-                var director = await _directorRepo.GetByIdAsync(directorDTO.DirectorId);
+                var director = await _directorRepo.GetByIdAsync(directorId);
                 if (director == null)
                 {
-                    throw new InvalidOperationException($"Director with ID {directorDTO.DirectorId} does not exist.");
+                    throw new Exception($"Director with ID {directorId} does not exist.");
                 }
 
                 var filmDirector = new FilmDirector
                 {
-                    FilmId = film.Id,
-                    DirectorId = directorDTO.DirectorId
+                    Film = film,
+                    Director = director
                 };
 
-                await _filmDirectorRepo.AddAsync(filmDirector);
+                film.FilmDirectors.Add(filmDirector);
             }
 
-            await _filmRepo.SaveAsync();
-
-            return _mapper.Map<FilmDTO>(film);
+            await _filmRepo.AddAsync(film);
         }
 
         public async Task DeleteFilmAsync(int id)
@@ -97,24 +103,78 @@ namespace Cinema_project_dotnet.BusinessLogic.Services
             var film = await _filmRepo.GetByIdAsync(id);
             if (film == null)
             {
-                throw new KeyNotFoundException("Film not found");
+                throw new Exception("Film not found");
             }
 
             await _filmRepo.DeleteAsync(film);
         }
 
-        public async Task<Film> UpdateFilmAsync(int id, FilmDTO filmDTO)
+        public async Task UpdateFilmAsync(int id, FilmCreateUpdateDTO filmDTO)
         {
-            var film = await _filmRepo.GetByIdAsync(id);
+            var film = await _filmRepo.GetByIdAsync(id, query => query
+                .Include(f => f.FilmGenres)
+                .ThenInclude(fg => fg.Genre)
+                .Include(f => f.FilmDirectors)
+                .ThenInclude(fg => fg.Director));
+
             if (film == null)
             {
-                throw new KeyNotFoundException("Film not found");
+                throw new Exception("Film not found");
             }
 
             _mapper.Map(filmDTO, film);
 
+            // Clear existing genres associated with the film to replace them with new ones
+            var existingGenres = film.FilmGenres.ToList();
+            foreach (var existingGenre in existingGenres)
+            {
+                film.FilmGenres.Remove(existingGenre);
+            }
+
+            // Loop through each genre from the FilmDTO and add them to the film
+            foreach (var genreId in filmDTO.GenreIds)
+            {
+                var genre = await _genreRepo.GetByIdAsync(genreId);
+                if (genre == null)
+                {
+                    throw new Exception($"Genre with ID {genreId} does not exist.");
+                }
+
+                var filmGenre = new FilmGenre
+                {
+                    Film = film,
+                    Genre = genre
+                };
+
+                film.FilmGenres.Add(filmGenre);
+            }
+
+            // Clear existing directors associated with the film to replace them with new ones
+            var existingDirectors = film.FilmDirectors.ToList();
+            foreach (var existingDirector in existingDirectors)
+            {
+                film.FilmDirectors.Remove(existingDirector);
+            }
+
+            // Loop through each director from the FilmDTO and add them to the film
+            foreach (var directorId in filmDTO.DirectorIds)
+            {
+                var director = await _directorRepo.GetByIdAsync(directorId);
+                if (director == null)
+                {
+                    throw new Exception($"Director with ID {directorId} does not exist.");
+                }
+
+                var filmDirector = new FilmDirector
+                {
+                    Film = film,
+                    Director = director
+                };
+
+                film.FilmDirectors.Add(filmDirector);
+            }
+
             await _filmRepo.UpdateAsync(film);
-            return film;
         }
     }
 }

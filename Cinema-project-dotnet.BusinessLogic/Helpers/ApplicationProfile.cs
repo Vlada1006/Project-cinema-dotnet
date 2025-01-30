@@ -1,5 +1,5 @@
-﻿using AutoMapper;
-using Cinema_project_dotnet.BusinessLogic.DTOs;
+﻿using Cinema_project_dotnet.BusinessLogic.DTOs;
+using Cinema_project_dotnet.BusinessLogic.DTOs.FilmDTO;
 using Cinema_project_dotnet.BusinessLogic.Entities;
 
 namespace Cinema_project_dotnet.BusinessLogic.Helpers
@@ -8,19 +8,17 @@ namespace Cinema_project_dotnet.BusinessLogic.Helpers
     {
         public ApplicationProfile()
         {
-            CreateMap<Film, FilmDTO>()
-                .ForMember(dest => dest.FilmGenres, opt => opt.MapFrom(src => src.FilmGenres))
-                .ForMember(dest => dest.FilmDirectors, opt => opt.MapFrom(src => src.FilmDirectors));
+            CreateMap<Film, FilmGetDTO>()
+                .ForMember(dest => dest.Genres, opt => opt.MapFrom(src => src.FilmGenres.Select(fg => fg.Genre)))
+                .ForMember(dest => dest.Directors, opt => opt.MapFrom(src => src.FilmDirectors.Select(fd => fd.Director)));
 
-            CreateMap<FilmGenre, FilmGenreDTO>();
-            CreateMap<FilmDirector, FilmDirectorDTO>();
+            CreateMap<FilmCreateUpdateDTO, Film>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForMember(dest => dest.FilmGenres, opt => opt.Ignore())
+                .ForMember(dest => dest.FilmDirectors, opt => opt.Ignore());
 
-            CreateMap<FilmDTO, Film>()
-                .ForMember(dest => dest.FilmGenres, opt => opt.MapFrom(src => src.FilmGenres))
-                .ForMember(dest => dest.FilmDirectors, opt => opt.MapFrom(src => src.FilmDirectors));
-
-            CreateMap<FilmGenreDTO, FilmGenre>();
-            CreateMap<FilmDirectorDTO, FilmDirector>();
+            CreateMap<Genre, GenreDTO>().ReverseMap();
+            CreateMap<Director, DirectorDTO>().ReverseMap();
         }
     }
 }

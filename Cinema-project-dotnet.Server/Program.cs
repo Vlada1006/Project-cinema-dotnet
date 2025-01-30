@@ -1,7 +1,9 @@
 using Cinema_project_dotnet.BusinessLogic.Interfaces;
 using Cinema_project_dotnet.BusinessLogic.Services;
+using Cinema_project_dotnet.BusinessLogic.Validators;
 using Cinema_project_dotnet.DataAccess;
 using Microsoft.EntityFrameworkCore;
+using FluentValidation;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,6 +17,9 @@ builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepositor
 
 // add AutoMapper with profile classes
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+// add FluentValidator with validation classes
+builder.Services.AddValidatorsFromAssemblyContaining<FilmValidator>();
 
 // add custom service:
 builder.Services.AddScoped<IFilmService, FilmService>();

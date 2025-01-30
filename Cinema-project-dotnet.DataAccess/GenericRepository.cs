@@ -18,6 +18,7 @@ namespace Cinema_project_dotnet.DataAccess
         public async Task AddAsync(TEntity entity)
         {
             await _dbSet.AddAsync(entity);
+            await _context.SaveChangesAsync();
         }
 
         public async Task DeleteAsync(int id)
@@ -41,7 +42,12 @@ namespace Cinema_project_dotnet.DataAccess
             await _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<TEntity>> GetAllAsync(Func<IQueryable<TEntity>, IQueryable<TEntity>> includeFunc = null)
+        public async Task<IEnumerable<TEntity>> GetAllAsync()
+        {
+            return await _dbSet.ToListAsync();
+        }
+
+        public async Task<IEnumerable<TEntity>> GetAllAsync(Func<IQueryable<TEntity>, IQueryable<TEntity>> includeFunc)
         {
             IQueryable<TEntity> query = _dbSet;
 
@@ -63,14 +69,21 @@ namespace Cinema_project_dotnet.DataAccess
             return await _dbSet.FindAsync(id);
         }
 
+        public async Task<TEntity> GetByIdAsync(int id, Func<IQueryable<TEntity>, IQueryable<TEntity>> includeFunc)
+        {
+            IQueryable<TEntity> query = _dbSet;
+
+            if (includeFunc != null)
+            {
+                query = includeFunc(query);
+            }
+
+            return await query.FirstOrDefaultAsync(e => EF.Property<int>(e, "Id") == id);
+        }
+
         public async Task UpdateAsync(TEntity entity)
         {
             _dbSet.Update(entity);
-            await _context.SaveChangesAsync();
-        }
-
-        public async Task SaveAsync()
-        {
             await _context.SaveChangesAsync();
         }
     }

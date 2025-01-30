@@ -1,8 +1,6 @@
-﻿using Cinema_project_dotnet.BusinessLogic.DTOs;
+﻿using Cinema_project_dotnet.BusinessLogic.DTOs.FilmDTO;
 using Cinema_project_dotnet.BusinessLogic.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Cinema_project_dotnet.Server.Controllers
 {
@@ -18,41 +16,71 @@ namespace Cinema_project_dotnet.Server.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<FilmDTO>>> GetFilms()
+        public async Task<ActionResult<List<FilmGetDTO>>> GetFilms()
         {
-            var films = await _filmService.GetAllFilmsAsync();
-            return Ok(films);
+            try
+            {
+                var films = await _filmService.GetAllFilmsAsync();
+                return Ok(new { message = "Successfully retrieved all films", data = films });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = "An error occurred while retrieving all films", error = ex.Message });
+            }
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<FilmDTO>> GetFilm(int id) 
+        public async Task<ActionResult<FilmGetDTO>> GetFilm(int id) 
         {
             try
             {
                 var film = await _filmService.GetFilmByIdAsync(id);
-                return Ok(film);
+                return Ok(new { message = $"Successfully retrieved film with id {id}", data = film });
             }
-            catch (KeyNotFoundException) 
+            catch (Exception ex) 
             {
-                return NotFound();
+                return StatusCode(500, new { message = $"An error occurred while retrieving film with id {id}", error = ex.Message });
             }
         }
 
         [HttpPost]
-        public async Task<ActionResult<FilmDTO>> CreatFilm([FromBody] FilmDTO filmDTO)
+        public async Task<ActionResult> CreatFilm([FromBody] FilmCreateUpdateDTO filmDTO)
         {
-            var createdFilm = await _filmService.CreateFilmAsync(filmDTO);
-            return Ok(createdFilm);
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            try
+            {
+                await _filmService.CreateFilmAsync(filmDTO);
+                return Ok(new { message = "Film successfully created" });
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(500, new { message = "An error occurred while creating the film", error = ex.Message });
+            }
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<FilmDTO>> UpdateFilm(int id, [FromBody] FilmDTO filmDTO)
+        public async Task<ActionResult> UpdateFilm(int id, [FromBody] FilmCreateUpdateDTO filmDTO)
         {
-            if (!ModelState.IsValid) return BadRequest();
+            if (!ModelState.IsValid)
+            {
+                var messages = ModelState.Values
+                    .SelectMany(modelState => modelState.Errors)
+                    .Select(err => err.ErrorMessage)
+                    .ToList();
 
-            var updatedFilm = await _filmService.UpdateFilmAsync(id, filmDTO);
+                return BadRequest(messages);
+            }
 
-            return Ok(updatedFilm);
+            try
+            {
+                await _filmService.UpdateFilmAsync(id, filmDTO);
+                return Ok(new { message = $"Film with id {id} successfully updated" });
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(500, new { message = $"An error occurred while updating film with id {id}", error = ex.Message });
+            }
         }
 
         [HttpDelete("{id}")]
@@ -61,11 +89,11 @@ namespace Cinema_project_dotnet.Server.Controllers
             try
             {
                 await _filmService.DeleteFilmAsync(id);
-                return NoContent();
+                return Ok(new { message = $"Film  with id {id} successfully deleted" });
             }
-            catch (KeyNotFoundException)
+            catch (Exception ex)
             {
-                return NotFound();
+                return StatusCode(500, new { message = $"An error occurred while deleting film with id {id}", error = ex.Message });
             }
         }
     }
