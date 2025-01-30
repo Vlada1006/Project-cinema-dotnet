@@ -20,9 +20,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Cinema-project-dotnet.BusinessLogic\Cinema-project-dotnet.BusinessLogic.csproj" />
-    <ProjectReference Include="..\cinema-project-dotnet.client\cinema-project-dotnet.client.esproj">
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-    </ProjectReference>
     <ProjectReference Include="..\Cinema-project-dotnet.DataAccess\Cinema-project-dotnet.DataAccess.csproj" />
   </ItemGroup>
 
