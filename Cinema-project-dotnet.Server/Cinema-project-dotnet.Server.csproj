@@ -5,15 +5,9 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>Cinema_project_dotnet.Server</RootNamespace>
-    <SpaRoot>..\cinema-project-dotnet.client</SpaRoot>
-    
-    <SpaProxyServerUrl>https://localhost:51425</SpaProxyServerUrl>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.SpaProxy">
-      <Version>8.*-*</Version>
-    </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.12">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
