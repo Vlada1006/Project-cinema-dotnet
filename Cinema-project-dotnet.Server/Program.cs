@@ -24,6 +24,7 @@ builder.Services.AddValidatorsFromAssemblyContaining<FilmValidator>();
 
 // add custom service:
 builder.Services.AddScoped<IFilmService, FilmService>();
+builder.Services.AddScoped<IGenreService, GenreService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
