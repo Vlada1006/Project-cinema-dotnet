@@ -24,7 +24,7 @@ namespace Cinema_project_dotnet.Server.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<FilmGetDTO>> GetGenre(int id)
+        public async Task<ActionResult<GenreDTO>> GetGenre(int id)
         {
             var genre = await _genreService.GetGenreByIdAsync(id);
             return Ok(new { message = $"Successfully retrieved genre with id {id}", data = genre });
