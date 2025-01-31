@@ -1,4 +1,6 @@
-﻿namespace Cinema_project_dotnet.BusinessLogic.DTOs
+﻿using System.Net;
+
+namespace Cinema_project_dotnet.BusinessLogic.DTOs
 {
     public class GenreDTO
     {

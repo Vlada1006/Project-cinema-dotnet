@@ -4,6 +4,7 @@ using Cinema_project_dotnet.BusinessLogic.Validators;
 using Cinema_project_dotnet.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using FluentValidation;
+using Cinema_project_dotnet.Server;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,6 +43,9 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+// Add Exception Handler middleware
+app.UseMiddleware<ExceptionMiddleware>();
 
 app.UseAuthorization();
 
