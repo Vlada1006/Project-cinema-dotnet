@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Cinema_project_dotnet.BusinessLogic.DTOs.FilmDTO;
 using Cinema_project_dotnet.BusinessLogic.Entities;
+using Cinema_project_dotnet.BusinessLogic.Exeptions;
 using Cinema_project_dotnet.BusinessLogic.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 
 namespace Cinema_project_dotnet.BusinessLogic.Services
 {
@@ -33,11 +35,6 @@ namespace Cinema_project_dotnet.BusinessLogic.Services
                 .Include(f => f.FilmDirectors)
                 .ThenInclude(fg => fg.Director));
 
-            if (films == null)
-            {
-                throw new Exception("Nod film items found");
-            }
-
             return _mapper.Map<List<FilmGetDTO>>(films);
         }
         
@@ -51,7 +48,7 @@ namespace Cinema_project_dotnet.BusinessLogic.Services
 
             if (film == null)
             {
-                throw new Exception("Film not found");
+                throw new HttpException("Film not found", HttpStatusCode.NotFound);
             }
 
             return _mapper.Map<FilmGetDTO>(film);
@@ -66,7 +63,7 @@ namespace Cinema_project_dotnet.BusinessLogic.Services
                 var genre = await _genreRepo.GetByIdAsync(genreId);
                 if (genre == null)
                 {
-                    throw new Exception($"Genre with ID {genreId} does not exist.");
+                    throw new HttpException($"Genre with ID {genreId} does not exist.", HttpStatusCode.NotFound);
                 }
 
                 var filmGenre = new FilmGenre
@@ -83,7 +80,7 @@ namespace Cinema_project_dotnet.BusinessLogic.Services
                 var director = await _directorRepo.GetByIdAsync(directorId);
                 if (director == null)
                 {
-                    throw new Exception($"Director with ID {directorId} does not exist.");
+                    throw new HttpException($"Director with ID {directorId} does not exist.", HttpStatusCode.NotFound);
                 }
 
                 var filmDirector = new FilmDirector
@@ -103,7 +100,7 @@ namespace Cinema_project_dotnet.BusinessLogic.Services
             var film = await _filmRepo.GetByIdAsync(id);
             if (film == null)
             {
-                throw new Exception("Film not found");
+                throw new HttpException("Film not found", HttpStatusCode.NotFound);
             }
 
             await _filmRepo.DeleteAsync(film);
@@ -119,7 +116,7 @@ namespace Cinema_project_dotnet.BusinessLogic.Services
 
             if (film == null)
             {
-                throw new Exception("Film not found");
+                throw new HttpException("Film not found", HttpStatusCode.NotFound);
             }
 
             _mapper.Map(filmDTO, film);
@@ -137,7 +134,7 @@ namespace Cinema_project_dotnet.BusinessLogic.Services
                 var genre = await _genreRepo.GetByIdAsync(genreId);
                 if (genre == null)
                 {
-                    throw new Exception($"Genre with ID {genreId} does not exist.");
+                    throw new HttpException($"Genre with ID {genreId} does not exist.", HttpStatusCode.NotFound);
                 }
 
                 var filmGenre = new FilmGenre
@@ -162,7 +159,7 @@ namespace Cinema_project_dotnet.BusinessLogic.Services
                 var director = await _directorRepo.GetByIdAsync(directorId);
                 if (director == null)
                 {
-                    throw new Exception($"Director with ID {directorId} does not exist.");
+                    throw new HttpException($"Director with ID {directorId} does not exist.", HttpStatusCode.NotFound);
                 }
 
                 var filmDirector = new FilmDirector
