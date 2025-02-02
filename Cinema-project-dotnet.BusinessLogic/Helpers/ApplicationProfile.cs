@@ -17,7 +17,10 @@ namespace Cinema_project_dotnet.BusinessLogic.Helpers
                 .ForMember(dest => dest.FilmGenres, opt => opt.Ignore())
                 .ForMember(dest => dest.FilmDirectors, opt => opt.Ignore());
 
-            CreateMap<Genre, GenreDTO>().ReverseMap();
+            CreateMap<Genre, GenreDTO>();
+            CreateMap<GenreDTO, Genre>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore());
+
             CreateMap<Director, DirectorDTO>().ReverseMap();
         }
     }
