@@ -14,11 +14,6 @@ const Home = () => {
   }
 
   const [movies, setMovies] = useState<Movie[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState("");
-  const [search, setSearch] = useState("");
-  const [currentIndex, setCurrentIndex] = useState(0);
-  const [clientReady, setClientReady] = useState(false);
 
   useEffect(() => {
     setClientReady(true); // Only proceed when the component is mounted
@@ -50,26 +45,6 @@ const Home = () => {
     fetchMovies();
   }, []);
 
-  const filteredMovies = movies.filter((movie) =>
-    movie.title.toLowerCase().includes(search.toLowerCase())
-  );
-
-  const sortedMovies = [...filteredMovies].sort((a, b) => b.rating - a.rating);
-
-  const handleNextMovie = () => {
-    setCurrentIndex((prevIndex) => (prevIndex === sortedMovies.length - 1 ? 0 : prevIndex + 1));
-  };
-
-  const handlePrevMovie = () => {
-    setCurrentIndex((prevIndex) => (prevIndex === 0 ? sortedMovies.length - 1 : prevIndex - 1));
-  };
-
-  const formatDate = (dateString: string) => new Date(dateString).toLocaleDateString("en-US");
-
-  // Prevent rendering until after the component has mounted (client-side only)
-  if (!clientReady || loading) return <p>Loading movies...</p>;
-  if (error) return <p>{error}</p>;
-
   return (
     <div className="p-6 bg-gray-900 text-white min-h-screen">
       <header className="flex justify-between items-center mb-8">
@@ -79,8 +54,6 @@ const Home = () => {
             type="text"
             placeholder="Search movies..."
             className="w-64 p-2 bg-gray-800 rounded"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
           />
           <button className="p-2 bg-gray-700 rounded">🔍</button>
           <button className="p-2 bg-gray-900 rounded" onClick={() => (window.location.href = "/booking")}>
