@@ -16,14 +16,14 @@ const PaymentsPage = () => {
   const [filter, setFilter] = useState("");
 
   useEffect(() => {
-    fetch("/api/payments") // API endpoint для отримання оплат
+    fetch("https://localhost:7000/api/Films") // API endpoint для отримання оплат
       .then((response) => response.json())
       .then((data) => setPayments(data))
       .catch((error) => console.error("Error fetching payments:", error));
   }, []);
 
   const updatePaymentStatus = (id: number, status: string) => {
-    fetch(`/api/payments/${id}`, {
+    fetch(`https://localhost:7000/api/Films/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ status }),
@@ -39,7 +39,7 @@ const PaymentsPage = () => {
   };
 
   const processRefund = (id: number) => {
-    fetch(`/api/payments/${id}/refund`, {
+    fetch(`https://localhost:7000/api/Films/${id}/refund`, {
       method: "POST",
     })
       .then(() => {

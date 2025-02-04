@@ -28,21 +28,23 @@ const SchedulePage = () => {
 
   // Fetch movies and sessions
   useEffect(() => {
-    fetch("/api/movies") // API для отримання списку фільмів
+    // Fetch movies
+    fetch("https://localhost:7000/api/Films")
       .then((response) => response.json())
-      .then((data) => setMovies(data))
+      .then((data) => setMovies(Array.isArray(data) ? data : [])) // Ensure data is an array
       .catch((error) => console.error("Error fetching movies:", error));
 
-    fetch("/api/sessions") // API для отримання сеансів
+    // Fetch sessions
+    fetch("https://localhost:7000/api/Films") // Replace with correct endpoint for sessions
       .then((response) => response.json())
-      .then((data) => setSessions(data))
+      .then((data) => setSessions(Array.isArray(data) ? data : [])) // Ensure data is an array
       .catch((error) => console.error("Error fetching sessions:", error));
   }, []);
 
   // Add a new session
   const addSession = () => {
     if (newSession.filmId && newSession.startTime && newSession.endTime) {
-      fetch("/api/sessions", {
+      fetch("https://localhost:7000/api/Films", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(newSession),
@@ -62,14 +64,14 @@ const SchedulePage = () => {
 
   // Delete a session
   const removeSession = (id: number) => {
-    fetch(`/api/sessions/${id}`, { method: "DELETE" })
+    fetch(`https://localhost:7000/api/Films/${id}`, { method: "DELETE" })
       .then(() => setSessions(sessions.filter((session) => session.id !== id)))
       .catch((error) => console.error("Error deleting session:", error));
   };
 
   // Update session price
   const updatePrice = (id: number, newPrice: number) => {
-    fetch(`/api/sessions/${id}`, {
+    fetch(`https://localhost:7000/api/Films/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ price: newPrice }),
@@ -101,11 +103,15 @@ const SchedulePage = () => {
             }
           >
             <option value={0}>Оберіть фільм</option>
-            {movies.map((movie) => (
-              <option key={movie.id} value={movie.id}>
-                {movie.title}
-              </option>
-            ))}
+            {movies.length > 0 ? (
+              movies.map((movie) => (
+                <option key={movie.id} value={movie.id}>
+                  {movie.title}
+                </option>
+              ))
+            ) : (
+              <option disabled>Завантаження фільмів...</option>
+            )}
           </select>
           <input
             type="datetime-local"
@@ -144,38 +150,42 @@ const SchedulePage = () => {
 
         {/* List of sessions */}
         <ul className="space-y-4">
-          {sessions.map((session) => (
-            <li
-              key={session.id}
-              className="flex flex-col md:flex-row justify-between items-center bg-gray-700 p-4 rounded-lg"
-            >
-              <div>
-                <h2 className="text-lg font-bold text-yellow-500">
-                  🎬 {session.filmTitle}
-                </h2>
-                <p>
-                  🕒 {session.startTime} - {session.endTime}
-                </p>
-                <p>💵 Ціна: {session.price} грн</p>
-              </div>
-              <div className="flex items-center gap-2 mt-3 md:mt-0">
-                <input
-                  type="number"
-                  className="w-24 p-2 bg-gray-800 text-white rounded"
-                  defaultValue={session.price}
-                  onChange={(e) =>
-                    updatePrice(session.id, parseFloat(e.target.value))
-                  }
-                />
-                <button
-                  className="bg-red-600 p-2 text-white rounded hover:bg-red-500"
-                  onClick={() => removeSession(session.id)}
-                >
-                  Видалити
-                </button>
-              </div>
-            </li>
-          ))}
+          {sessions.length > 0 ? (
+            sessions.map((session) => (
+              <li
+                key={session.id}
+                className="flex flex-col md:flex-row justify-between items-center bg-gray-700 p-4 rounded-lg"
+              >
+                <div>
+                  <h2 className="text-lg font-bold text-yellow-500">
+                    🎬 {session.filmTitle}
+                  </h2>
+                  <p>
+                    🕒 {session.startTime} - {session.endTime}
+                  </p>
+                  <p>💵 Ціна: {session.price} грн</p>
+                </div>
+                <div className="flex items-center gap-2 mt-3 md:mt-0">
+                  <input
+                    type="number"
+                    className="w-24 p-2 bg-gray-800 text-white rounded"
+                    defaultValue={session.price}
+                    onChange={(e) =>
+                      updatePrice(session.id, parseFloat(e.target.value))
+                    }
+                  />
+                  <button
+                    className="bg-red-600 p-2 text-white rounded hover:bg-red-500"
+                    onClick={() => removeSession(session.id)}
+                  >
+                    Видалити
+                  </button>
+                </div>
+              </li>
+            ))
+          ) : (
+            <p className="text-center text-gray-400">Немає сеансів для показу</p>
+          )}
         </ul>
       </div>
     </div>
