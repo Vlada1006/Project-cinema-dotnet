@@ -89,6 +89,27 @@ namespace Cinema_project_dotnet.DataAccess
                 .WithOne(t => t.Booking) 
                 .HasForeignKey<Booking>(b => b.TransactionId) 
                 .OnDelete(DeleteBehavior.Restrict);
+
+
+
+            var userRoleId = "8b2339d6-8db4-4696-924d-5d335c0475bf";
+            var adminRoleId = "6816c544-8422-4d6f-a83e-dbf8d90539f4";
+            var roles = new List<IdentityRole>
+            {
+                new IdentityRole
+                {
+                    Id = userRoleId,
+                    Name = "User",
+                    NormalizedName = "USER"
+                },
+                new IdentityRole
+                {
+                    Id = adminRoleId,
+                    Name = "Admin",
+                    NormalizedName = "ADMIN"
+                }
+            };
+            builder.Entity<IdentityRole>().HasData(roles);
         }
     }
 }

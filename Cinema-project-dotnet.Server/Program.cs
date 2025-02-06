@@ -40,6 +40,17 @@ builder.Services.AddDbContext<CinemaDbContext>(options =>
     options.UseNpgsql(configuration.GetConnectionString("DefaultConnection"))
 );
 
+builder.Services.AddIdentityCore<IdentityUser>()
+    .AddRoles<IdentityRole>()
+    .AddTokenProvider<DataProtectorTokenProvider<IdentityUser>>("Cinema-project-dotnet")
+    .AddEntityFrameworkStores<CinemaDbContext>()
+    .AddDefaultTokenProviders();
+
+builder.Services.Configure<IdentityOptions>(options =>
+{
+    options.Password.RequiredLength = 6;
+});
+
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     options.TokenValidationParameters = new TokenValidationParameters
