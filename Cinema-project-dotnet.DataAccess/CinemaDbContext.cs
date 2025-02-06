@@ -23,13 +23,31 @@ namespace Cinema_project_dotnet.DataAccess
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<FilmGenre> FilmGenres { get; set; }
         public DbSet<FilmDirector> FilmDirectors { get; set; }
+        public DbSet<SessionSeat> SessionSeats { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
 
+            builder.Entity<SessionSeat>()
+                .HasKey(fg => new { fg.SessionId, fg.SeatId });
+
+            builder.Entity<SessionSeat>()
+                .HasOne(ss => ss.Session)
+                .WithMany(s => s.SessionSeats)
+                .HasForeignKey(ss => ss.SessionId);
+
+            builder.Entity<SessionSeat>()
+                .HasOne(ss => ss.Seat)
+                .WithMany(s => s.SessionSeats)
+                .HasForeignKey(ss => ss.SeatId);
+
+            builder.Entity<SessionSeat>()
+                .Property(ss => ss.IsAvailable)
+                .IsRequired();
+
             builder.Entity<FilmGenre>()
-            .HasKey(fg => new { fg.FilmId, fg.GenreId });
+                .HasKey(fg => new { fg.FilmId, fg.GenreId });
 
             builder.Entity<FilmGenre>()
                 .HasOne(fg => fg.Film)
