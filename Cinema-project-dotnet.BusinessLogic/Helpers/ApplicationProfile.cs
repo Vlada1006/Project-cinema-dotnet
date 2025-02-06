@@ -1,5 +1,6 @@
 ﻿using Cinema_project_dotnet.BusinessLogic.DTOs;
 using Cinema_project_dotnet.BusinessLogic.DTOs.FilmDTO;
+using Cinema_project_dotnet.BusinessLogic.DTOs.RoomDTO;
 using Cinema_project_dotnet.BusinessLogic.Entities;
 
 namespace Cinema_project_dotnet.BusinessLogic.Helpers
@@ -24,6 +25,13 @@ namespace Cinema_project_dotnet.BusinessLogic.Helpers
             CreateMap<Director, DirectorDTO>();
             CreateMap<DirectorDTO, Director>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore());
+
+            CreateMap<Room, RoomGetDTO>()
+                .ForMember(dest => dest.Seats, opt => opt.MapFrom(src => src.Seats));
+
+            CreateMap<RoomCreatUpdateDTO, Room>();
+
+            CreateMap<SeatDTO, Seat>().ReverseMap();
         }
     }
 }

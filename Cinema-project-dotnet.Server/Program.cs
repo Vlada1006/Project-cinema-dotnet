@@ -26,6 +26,7 @@ builder.Services.AddValidatorsFromAssemblyContaining<FilmValidator>();
 builder.Services.AddScoped<IFilmService, FilmService>();
 builder.Services.AddScoped<IGenreService, GenreService>();
 builder.Services.AddScoped<IDirectorService, DirectorService>();
+builder.Services.AddScoped<IRoomService, RoomService>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
