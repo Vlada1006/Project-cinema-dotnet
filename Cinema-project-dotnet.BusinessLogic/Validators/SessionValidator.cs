@@ -19,10 +19,10 @@ namespace Cinema_project_dotnet.BusinessLogic.Validators
                 .GreaterThan(0).WithMessage("Price must be greater than 0.");
 
             RuleFor(x => x.FilmId)
-                .GreaterThan(0).WithMessage("FilmId is required.");
+                .NotEmpty().WithMessage("FilmId is required.");
 
             RuleFor(x => x.RoomId)
-                .GreaterThan(0).WithMessage("RoomId is required.");
+                .NotEmpty().WithMessage("RoomId is required.");
         }
     }
 }

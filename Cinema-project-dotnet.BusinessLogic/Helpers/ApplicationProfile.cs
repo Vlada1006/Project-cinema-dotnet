@@ -32,6 +32,10 @@ namespace Cinema_project_dotnet.BusinessLogic.Helpers
             CreateMap<Session, SessionDTO>();
             CreateMap<SessionDTO, Session>()
                 .ForMember(dest => dest.Id, opt => opt.Ignore());
+
+            CreateMap<Booking, BookingDTO>();
+            CreateMap<BookingDTO, Booking>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore());
         }
     }
 }
