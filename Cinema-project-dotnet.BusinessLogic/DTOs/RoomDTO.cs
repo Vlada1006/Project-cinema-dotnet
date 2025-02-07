@@ -1,13 +1,12 @@
-﻿namespace Cinema_project_dotnet.BusinessLogic.DTOs.RoomDTO
+﻿namespace Cinema_project_dotnet.BusinessLogic.DTOs
 {
-    public class RoomGetDTO
+    public class RoomDTO
     {
         public int Id { get; set; }
         public string Name { get; set; } = string.Empty;
-        public int TotalSeats { get; set; }
         public string Type { get; set; } = string.Empty;
+        public int TotalSeats { get; set; }
         public int Rows { get; set; }
         public int SeatsPerRow { get; set; }
-        public List<SeatDTO> Seats { get; set; } = new List<SeatDTO>();
     }
 }

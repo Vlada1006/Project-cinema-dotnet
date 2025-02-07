@@ -1,6 +1,5 @@
 ﻿using System;
 using Cinema_project_dotnet.BusinessLogic.DTOs;
-using Cinema_project_dotnet.BusinessLogic.DTOs.RoomDTO;
 using Cinema_project_dotnet.BusinessLogic.Interfaces;
 using Cinema_project_dotnet.BusinessLogic.Services;
 using FluentValidation;
@@ -13,16 +12,30 @@ namespace Cinema_project_dotnet.Server.Controllers
     public class RoomsController : ControllerBase
     {
         private readonly IRoomService _roomService;
-        private readonly IValidator<RoomCreatUpdateDTO> _validator;
+        private readonly IValidator<RoomDTO> _validator;
 
-        public RoomsController(IRoomService roomService, IValidator<RoomCreatUpdateDTO> validator)
+        public RoomsController(IRoomService roomService, IValidator<RoomDTO> validator)
         {
             _roomService = roomService;
             _validator = validator;
         }
 
+        [HttpGet]
+        public async Task<ActionResult<List<RoomDTO>>> GetRooms()
+        {
+            var rooms = await _roomService.GetAllRoomsAsync();
+            return Ok(new { message = "Successfully retrieved all rooms", data = rooms });
+        }
+
+        [HttpGet("{id}")]
+        public async Task<ActionResult<RoomDTO>> GetRoom(int id)
+        {
+            var room = await _roomService.GetRoomByIdAsync(id);
+            return Ok(new { message = $"Successfully retrieved room with id {id}", data = room });
+        }
+
         [HttpPost]
-        public async Task<ActionResult> CreatRoom([FromBody] RoomCreatUpdateDTO roomDTO)
+        public async Task<ActionResult> CreatRoom([FromBody] RoomDTO roomDTO)
         {
             var validationResult = await _validator.ValidateAsync(roomDTO);
             if (!validationResult.IsValid) return BadRequest(validationResult);
@@ -32,7 +45,7 @@ namespace Cinema_project_dotnet.Server.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult> UpdateRoom(int id, [FromBody] RoomCreatUpdateDTO roomDTO)
+        public async Task<ActionResult> UpdateRoom(int id, [FromBody] RoomDTO roomDTO)
         {
             var validationResult = await _validator.ValidateAsync(roomDTO);
             if (!validationResult.IsValid) return BadRequest(validationResult);

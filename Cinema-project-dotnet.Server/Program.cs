@@ -12,6 +12,7 @@ var configuration = builder.Configuration;
 
 // Add services to the container.
 builder.Services.AddControllers();
+builder.Services.AddSignalR();
 
 //Add repository
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
