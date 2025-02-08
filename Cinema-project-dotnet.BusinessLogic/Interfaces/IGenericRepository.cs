@@ -9,6 +9,7 @@ namespace Cinema_project_dotnet.BusinessLogic.Interfaces
         Task<TEntity> GetByIdAsync(int id);
         Task<TEntity> GetByIdAsync(int id, Func<IQueryable<TEntity>, IQueryable<TEntity>> includeFunc);
         Task AddAsync(TEntity entity);
+        Task AddRangeAsync(IEnumerable<TEntity> entities);
         Task UpdateAsync(TEntity entity);
         Task DeleteAsync(int id);
         Task DeleteAsync(TEntity entity);

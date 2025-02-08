@@ -82,7 +82,7 @@ namespace Cinema_project_dotnet.DataAccess
                 .HasOne(s => s.Room) 
                 .WithMany(r => r.Sessions) 
                 .HasForeignKey(s => s.RoomId) 
-                .OnDelete(DeleteBehavior.Restrict); 
+                .OnDelete(DeleteBehavior.Cascade); 
 
             builder.Entity<Session>()
                 .HasMany(s => s.Bookings) 
@@ -94,19 +94,19 @@ namespace Cinema_project_dotnet.DataAccess
                 .HasOne(b => b.User) 
                 .WithMany(u => u.Bookings) 
                 .HasForeignKey(b => b.UserId) 
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<Booking>()
                 .HasOne(b => b.Seat) 
                 .WithOne(s => s.Booking) 
                 .HasForeignKey<Booking>(b => b.SeatId) 
-                .OnDelete(DeleteBehavior.Restrict); 
+                .OnDelete(DeleteBehavior.Cascade); 
 
             builder.Entity<Booking>()
                 .HasOne(b => b.Transaction) 
                 .WithOne(t => t.Booking) 
                 .HasForeignKey<Booking>(b => b.TransactionId) 
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

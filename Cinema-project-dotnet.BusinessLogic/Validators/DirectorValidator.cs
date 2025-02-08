@@ -7,7 +7,7 @@ namespace Cinema_project_dotnet.BusinessLogic.Validators
     {
         public DirectorValidator() 
         {
-            RuleFor(genre => genre.Name)
+            RuleFor(d => d.Name)
                 .NotEmpty().WithMessage("Назва не може бути порожньою");
         }
     }
