@@ -68,10 +68,16 @@ namespace Cinema_project_dotnet.BusinessLogic.Services
         public async Task UpdateRoomAsync(int id, RoomDTO roomDTO)
         {
             var room = await _roomRepo.GetByIdAsync(id, query => query
-                .Include(f => f.Seats));
+                .Include(f => f.Seats)
+                .Include(r => r.Sessions));
 
             if (room == null)
-                throw new Exception("Room not found.");
+                throw new HttpException("Room not found.", HttpStatusCode.NotFound);
+
+            if (room.Sessions.Any())
+            {
+                throw new HttpException("Cannot update room as it has associated sessions.", HttpStatusCode.Conflict);
+            }
 
             room.Seats.Clear();
 

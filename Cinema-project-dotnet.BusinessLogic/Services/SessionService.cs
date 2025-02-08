@@ -14,17 +14,23 @@ namespace Cinema_project_dotnet.BusinessLogic.Services
         private readonly IGenericRepository<Session> _sessionRepo;
         private readonly IGenericRepository<Film> _filmRepo;
         private readonly IGenericRepository<Room> _roomRepo;
+        private readonly IGenericRepository<SessionSeat> _sessionSeatRepo;
+        private readonly IGenericRepository<Seat> _seatRepo;
         private readonly IMapper _mapper;
 
         public SessionService(
             IGenericRepository<Session> sessionRepo,
             IGenericRepository<Film> filmRepo,
             IGenericRepository<Room> roomRepo,
+            IGenericRepository<SessionSeat> sessionSeatRepo,
+            IGenericRepository<Seat> seatRepo,
             IMapper mapper)
         {
             _sessionRepo = sessionRepo;
             _filmRepo = filmRepo;
             _roomRepo = roomRepo;
+            _sessionSeatRepo = sessionSeatRepo;
+            _seatRepo = seatRepo;
             _mapper = mapper;
         }
 
@@ -59,14 +65,12 @@ namespace Cinema_project_dotnet.BusinessLogic.Services
             }
 
             var film = await _filmRepo.GetByIdAsync(sessionDTO.FilmId);
-
             if(film == null)
             {
                 throw new HttpException("Film not found", HttpStatusCode.NotFound);
             }
 
             var room = await _roomRepo.GetByIdAsync(sessionDTO.RoomId);
-
             if (room == null)
             {
                 throw new HttpException("Room not found", HttpStatusCode.NotFound);
@@ -74,12 +78,22 @@ namespace Cinema_project_dotnet.BusinessLogic.Services
 
             var session = _mapper.Map<Session>(sessionDTO);
             await _sessionRepo.AddAsync(session);
+
+            var seats = await _seatRepo.GetByConditionAsync(s => s.RoomId == sessionDTO.RoomId);
+
+            var sessionSeats = seats.Select(seat => new SessionSeat
+            {
+                SessionId = session.Id,
+                SeatId = seat.Id,
+                IsAvailable = true 
+            }).ToList();
+
+            await _sessionSeatRepo.AddRangeAsync(sessionSeats);
         }
 
         public async Task UpdateSessionAsync(int id, SessionDTO sessionDTO)
         {
             var session = await _sessionRepo.GetByIdAsync(id);
-
             if (session == null)
             {
                 throw new HttpException("Session not found", HttpStatusCode.NotFound);
@@ -101,14 +115,12 @@ namespace Cinema_project_dotnet.BusinessLogic.Services
             }
 
             var film = await _filmRepo.GetByIdAsync(sessionDTO.FilmId);
-
             if (film == null)
             {
                 throw new HttpException("Film not found", HttpStatusCode.NotFound);
             }
 
             var room = await _roomRepo.GetByIdAsync(sessionDTO.RoomId);
-
             if (room == null)
             {
                 throw new HttpException("Room not found", HttpStatusCode.NotFound);
