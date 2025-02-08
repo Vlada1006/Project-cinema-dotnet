@@ -1,4 +1,6 @@
 ﻿using Cinema_project_dotnet.BusinessLogic.DTOs;
+using Cinema_project_dotnet.BusinessLogic.Interfaces;
+using Cinema_project_dotnet.BusinessLogic.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -9,38 +11,42 @@ namespace Cinema_project_dotnet.Server.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly UserManager<IdentityUser> userManager;
-        public AuthController(UserManager<IdentityUser> userManager)
+        private readonly IAuthService _authService;
+
+        public AuthController(IAuthService authService)
         {
-            this.userManager = userManager;      
+            _authService = authService;
         }
-        //POST: /api/Auth/Register
+
+        // POST: /api/Auth/Register
         [HttpPost]
         [Route("Register")]
-        public async Task<ActionResult> Register([FromBody] RegisterRequestDTO registerRequestDTO)
+        public async Task<IActionResult> Register([FromBody] RegisterRequestDTO registerRequestDTO)
         {
-            var identityUser = new IdentityUser
+            var result = await _authService.RegisterUser(registerRequestDTO);
+            if (result)
             {
-                UserName = registerRequestDTO.UserName,
-                Email = registerRequestDTO.UserName
-            };
-           var identityResult = await userManager.CreateAsync(identityUser, registerRequestDTO.Password);
-
-            if(identityResult.Succeeded)
-            {
-                if(registerRequestDTO.Roles != null && registerRequestDTO.Roles.Any())
-                {
-                    identityResult = await userManager.AddToRolesAsync(identityUser, registerRequestDTO.Roles);
-                }
-
-                if(identityResult.Succeeded)
-                {
-                   return Ok("Ви зареєструвалися!");
-                }
-
+                return Ok("Ви зареєструвалися!");
             }
             return BadRequest("Щось пішло не так.. Спробуйте ще раз.");
         }
 
+        // POST: /api/Auth/Login
+        [HttpPost]
+        [Route("Login")]
+
+        public async Task<IActionResult> Login([FromBody] LoginRequestDTO loginRequestDTO)
+        {
+            var isAuthenticated = await _authService.LoginUser(loginRequestDTO.Username, loginRequestDTO.Password);
+
+            if (isAuthenticated)
+            {
+                // Create token here (e.g., JWT token generation)
+                return Ok();
+            }
+
+            return BadRequest("Неправильний логін або пароль");
+        }
     }
+    
 }

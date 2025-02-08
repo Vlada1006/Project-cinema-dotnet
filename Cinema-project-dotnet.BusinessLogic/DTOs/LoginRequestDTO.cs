@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Cinema_project_dotnet.BusinessLogic.DTOs
 {
-    public class RegisterRequestDTO
+    public class LoginRequestDTO
     {
         [Required]
         [DataType(DataType.EmailAddress)]
@@ -16,9 +16,5 @@ namespace Cinema_project_dotnet.BusinessLogic.DTOs
         [Required]
         [DataType(DataType.Password)]
         public string Password { get; set; }
-
-        public string[] Roles { get; set; }
-
-
     }
 }

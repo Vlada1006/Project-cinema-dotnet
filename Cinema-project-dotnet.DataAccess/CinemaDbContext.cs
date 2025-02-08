@@ -99,12 +99,14 @@ namespace Cinema_project_dotnet.DataAccess
                 new IdentityRole
                 {
                     Id = userRoleId,
+                    ConcurrencyStamp = userRoleId,
                     Name = "User",
                     NormalizedName = "USER"
                 },
                 new IdentityRole
                 {
                     Id = adminRoleId,
+                    ConcurrencyStamp = adminRoleId,
                     Name = "Admin",
                     NormalizedName = "ADMIN"
                 }
