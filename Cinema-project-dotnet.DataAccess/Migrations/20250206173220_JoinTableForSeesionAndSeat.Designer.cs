@@ -3,6 +3,7 @@ using System;
 using Cinema_project_dotnet.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Cinema_project_dotnet.DataAccess.Migrations
 {
     [DbContext(typeof(CinemaDbContext))]
-    partial class CinemaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250206173220_JoinTableForSeesionAndSeat")]
+    partial class JoinTableForSeesionAndSeat
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -178,12 +181,6 @@ namespace Cinema_project_dotnet.DataAccess.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("text");
-
-                    b.Property<int>("Rows")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("SeatsPerRow")
-                        .HasColumnType("integer");
 
                     b.Property<int>("TotalSeats")
                         .HasColumnType("integer");
@@ -382,22 +379,6 @@ namespace Cinema_project_dotnet.DataAccess.Migrations
                         .HasDatabaseName("RoleNameIndex");
 
                     b.ToTable("AspNetRoles", (string)null);
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "8b2339d6-8db4-4696-924d-5d335c0475bf",
-                            ConcurrencyStamp = "8b2339d6-8db4-4696-924d-5d335c0475bf",
-                            Name = "User",
-                            NormalizedName = "USER"
-                        },
-                        new
-                        {
-                            Id = "6816c544-8422-4d6f-a83e-dbf8d90539f4",
-                            ConcurrencyStamp = "6816c544-8422-4d6f-a83e-dbf8d90539f4",
-                            Name = "Admin",
-                            NormalizedName = "ADMIN"
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -511,7 +492,7 @@ namespace Cinema_project_dotnet.DataAccess.Migrations
                     b.HasOne("Cinema_project_dotnet.BusinessLogic.Entities.Seat", "Seat")
                         .WithOne("Booking")
                         .HasForeignKey("Cinema_project_dotnet.BusinessLogic.Entities.Booking", "SeatId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Cinema_project_dotnet.BusinessLogic.Entities.Session", "Session")
@@ -523,13 +504,13 @@ namespace Cinema_project_dotnet.DataAccess.Migrations
                     b.HasOne("Cinema_project_dotnet.BusinessLogic.Entities.Transaction", "Transaction")
                         .WithOne("Booking")
                         .HasForeignKey("Cinema_project_dotnet.BusinessLogic.Entities.Booking", "TransactionId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Cinema_project_dotnet.BusinessLogic.Entities.User", "User")
                         .WithMany("Bookings")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Seat");
@@ -601,7 +582,7 @@ namespace Cinema_project_dotnet.DataAccess.Migrations
                     b.HasOne("Cinema_project_dotnet.BusinessLogic.Entities.Room", "Room")
                         .WithMany("Sessions")
                         .HasForeignKey("RoomId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Film");

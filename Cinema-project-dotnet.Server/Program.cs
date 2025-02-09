@@ -18,6 +18,7 @@ var configuration = builder.Configuration;
 
 // Add services to the container.
 builder.Services.AddControllers();
+builder.Services.AddSignalR();
 
 //Add repository
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
@@ -33,6 +34,10 @@ builder.Services.AddValidatorsFromAssemblyContaining<FilmValidator>();
 builder.Services.AddScoped<IFilmService, FilmService>();
 builder.Services.AddScoped<IGenreService, GenreService>();
 builder.Services.AddScoped<IDirectorService, DirectorService>();
+builder.Services.AddScoped<IRoomService, RoomService>();
+builder.Services.AddScoped<ISessionService, SessionService>();
+builder.Services.AddScoped<IBookingService, BookingService>();
+builder.Services.AddScoped<ITransactionService, TransactionService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 
 

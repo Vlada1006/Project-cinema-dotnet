@@ -10,6 +10,10 @@
 
         public string Type { get; set; } = string.Empty;
 
+        public int Rows { get; set; }
+
+        public int SeatsPerRow { get; set; }
+
         public List<Session> Sessions { get; set; } = new List<Session>();
 
         public List<Seat> Seats { get; set; } = new List<Seat>();

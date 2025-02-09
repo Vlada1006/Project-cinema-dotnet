@@ -21,6 +21,12 @@ namespace Cinema_project_dotnet.DataAccess
             await _context.SaveChangesAsync();
         }
 
+        public async Task AddRangeAsync(IEnumerable<TEntity> entities)
+        {
+            await _dbSet.AddRangeAsync(entities);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task DeleteAsync(int id)
         {
             var entity = await _dbSet.FindAsync(id);

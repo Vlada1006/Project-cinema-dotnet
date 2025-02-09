@@ -19,5 +19,7 @@
         public Room? Room { get; set; }
 
         public List<Booking> Bookings { get; set; } = new List<Booking>();
+
+        public List<SessionSeat> SessionSeats { get; set; } = new List<SessionSeat>();
     }
 }

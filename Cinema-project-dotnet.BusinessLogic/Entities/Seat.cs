@@ -8,12 +8,12 @@
 
         public int Number {  get; set; }
 
-        public bool IsAvailable { get; set; }
-
         public int RoomId { get; set; }
 
         public Room? Room { get; set; }
 
         public Booking? Booking { get; set; }
+
+        public List<SessionSeat> SessionSeats { get; set; } = new List<SessionSeat>();
     }
 }

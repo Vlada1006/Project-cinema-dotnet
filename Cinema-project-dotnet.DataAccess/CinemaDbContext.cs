@@ -23,13 +23,31 @@ namespace Cinema_project_dotnet.DataAccess
         public DbSet<Booking> Bookings { get; set; }
         public DbSet<FilmGenre> FilmGenres { get; set; }
         public DbSet<FilmDirector> FilmDirectors { get; set; }
+        public DbSet<SessionSeat> SessionSeats { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
 
+            builder.Entity<SessionSeat>()
+                .HasKey(fg => new { fg.SessionId, fg.SeatId });
+
+            builder.Entity<SessionSeat>()
+                .HasOne(ss => ss.Session)
+                .WithMany(s => s.SessionSeats)
+                .HasForeignKey(ss => ss.SessionId);
+
+            builder.Entity<SessionSeat>()
+                .HasOne(ss => ss.Seat)
+                .WithMany(s => s.SessionSeats)
+                .HasForeignKey(ss => ss.SeatId);
+
+            builder.Entity<SessionSeat>()
+                .Property(ss => ss.IsAvailable)
+                .IsRequired();
+
             builder.Entity<FilmGenre>()
-            .HasKey(fg => new { fg.FilmId, fg.GenreId });
+                .HasKey(fg => new { fg.FilmId, fg.GenreId });
 
             builder.Entity<FilmGenre>()
                 .HasOne(fg => fg.Film)
@@ -64,7 +82,7 @@ namespace Cinema_project_dotnet.DataAccess
                 .HasOne(s => s.Room) 
                 .WithMany(r => r.Sessions) 
                 .HasForeignKey(s => s.RoomId) 
-                .OnDelete(DeleteBehavior.Restrict); 
+                .OnDelete(DeleteBehavior.Cascade); 
 
             builder.Entity<Session>()
                 .HasMany(s => s.Bookings) 
@@ -76,19 +94,19 @@ namespace Cinema_project_dotnet.DataAccess
                 .HasOne(b => b.User) 
                 .WithMany(u => u.Bookings) 
                 .HasForeignKey(b => b.UserId) 
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<Booking>()
                 .HasOne(b => b.Seat) 
                 .WithOne(s => s.Booking) 
                 .HasForeignKey<Booking>(b => b.SeatId) 
-                .OnDelete(DeleteBehavior.Restrict); 
+                .OnDelete(DeleteBehavior.Cascade); 
 
             builder.Entity<Booking>()
                 .HasOne(b => b.Transaction) 
                 .WithOne(t => t.Booking) 
                 .HasForeignKey<Booking>(b => b.TransactionId) 
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.Cascade);
 
 
 
