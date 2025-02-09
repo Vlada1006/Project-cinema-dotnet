@@ -1,4 +1,5 @@
 ﻿using Cinema_project_dotnet.BusinessLogic.DTOs;
+using Cinema_project_dotnet.BusinessLogic.Entities;
 using Cinema_project_dotnet.BusinessLogic.Interfaces;
 using Cinema_project_dotnet.BusinessLogic.Services;
 using FluentValidation;
@@ -59,6 +60,13 @@ namespace Cinema_project_dotnet.Server.Controllers
         {
             await _sessionService.DeleteSessionAsync(id);
             return Ok(new { message = $"Session  with id {id} successfully deleted" });
+        }
+
+        [HttpGet("seats/{id}")]
+        public async Task<ActionResult<List<SeatDTO>>> GetAllSeatsForSession(int id)
+        {
+            var seats = await _sessionService.GetAllSeatsForSessionAsync(id);
+            return Ok(new { message = "Successfully retrieved all seats", data = seats });
         }
     }
 }
