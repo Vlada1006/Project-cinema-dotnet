@@ -1,6 +1,8 @@
 ﻿using Cinema_project_dotnet.BusinessLogic.DTOs;
+using Cinema_project_dotnet.BusinessLogic.Entities;
 using Cinema_project_dotnet.BusinessLogic.Interfaces;
 using Cinema_project_dotnet.BusinessLogic.Services;
+using Cinema_project_dotnet.DataAccess;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -12,10 +14,14 @@ namespace Cinema_project_dotnet.Server.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
+        private readonly ITokenRepository _tokenRepository;
+        private readonly UserManager<User> _userManager;
 
-        public AuthController(IAuthService authService)
+        public AuthController(IAuthService authService, ITokenRepository tokenRepository, UserManager<User> userManager)
         {
             _authService = authService;
+            _tokenRepository = tokenRepository;
+            _userManager = userManager;
         }
 
         // POST: /api/Auth/Register
@@ -35,18 +41,42 @@ namespace Cinema_project_dotnet.Server.Controllers
         [HttpPost]
         [Route("Login")]
 
+        //public async Task<IActionResult> Login([FromBody] LoginRequestDTO loginRequestDTO)
+        //{
+        //    var user = await _userManager.FindByEmailAsync(loginRequestDTO.Username);
+
+        //    if (user != null)
+        //    {
+        //        var checkedPassword = await _userManager.CheckPasswordAsync(user, loginRequestDTO.Password);
+
+        //        if (checkedPassword)
+        //        {
+        //            var roles = await _userManager.GetRolesAsync(user);
+        //            if(roles != null)
+        //            {
+        //                var jwtToken = _tokenRepository.CreateJWTToken(user, roles.ToList());
+
+        //                var response = new LoginResponseDTO
+        //                {
+        //                    JwtToken = jwtToken
+        //                };
+        //                return Ok(response);
+        //            }                    
+        //        }                
+        //    }
+        //    return BadRequest("Неправильний логін або пароль");
+        //}
+
         public async Task<IActionResult> Login([FromBody] LoginRequestDTO loginRequestDTO)
         {
-            var isAuthenticated = await _authService.LoginUser(loginRequestDTO.Username, loginRequestDTO.Password);
+            var response = await _authService.LoginUser(loginRequestDTO.Username, loginRequestDTO.Password);
 
-            if (isAuthenticated)
+            if (response == null)
             {
-                // Create token here (e.g., JWT token generation)
-                return Ok();
+                return BadRequest("Неправильний логін або пароль");
             }
 
-            return BadRequest("Неправильний логін або пароль");
+            return Ok(response);
         }
     }
-    
 }

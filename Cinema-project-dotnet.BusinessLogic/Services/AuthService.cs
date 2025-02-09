@@ -14,10 +14,12 @@ namespace Cinema_project_dotnet.BusinessLogic.Services;
   public class AuthService : IAuthService
   {
     private readonly UserManager<User> _userManager;
+    private readonly ITokenRepository _tokenRepository;
 
-    public AuthService(UserManager<User> userManager)
+    public AuthService(UserManager<User> userManager, ITokenRepository tokenRepository)
     {
         _userManager = userManager;
+        _tokenRepository = tokenRepository;
     }
 
     public async Task<bool> RegisterUser(RegisterRequestDTO registerRequestDTO)
@@ -41,16 +43,31 @@ namespace Cinema_project_dotnet.BusinessLogic.Services;
         return false;
     }
 
-    public async Task<bool> LoginUser(string username, string password)
+    public async Task<LoginResponseDTO?> LoginUser(string username, string password)
     {
         var user = await _userManager.FindByEmailAsync(username);
+
         if (user != null)
         {
             var checkedPassword = await _userManager.CheckPasswordAsync(user, password);
-            return checkedPassword;
+
+            if (checkedPassword)
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+                if (roles != null)
+                {
+                    var jwtToken = _tokenRepository.CreateJWTToken(user, roles.ToList());
+
+                    return new LoginResponseDTO
+                    {
+                        JwtToken = jwtToken
+                    };
+                }
+            }
         }
 
-        return false;
+        return null;
     }
 }
+
 

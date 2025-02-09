@@ -20,6 +20,7 @@ builder.Services.AddControllers();
 
 //Add repository
 builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
+builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 
 // add AutoMapper with profile classes
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
