@@ -179,7 +179,7 @@ export default function Booking() {
               <span className="w-4 h-4 inline-block rounded-full bg-green-500"></span> — Вибране місце
             </p>
             <p className="mb-2">
-              <span className="w-4 h-4 inline-block rounded-full bg-red-600"></span> — Заброньоване місце
+              <span className="w-4 h-4 inline-block rounded-full bg-yellow-600"></span> — Заброньоване місце
             </p>
             <p>
               <span className="w-4 h-4 inline-block rounded-full bg-gray-500"></span> — Доступне місце
