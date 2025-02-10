@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { JSX, useEffect, useState } from 'react';
@@ -52,7 +53,7 @@ const Home = () => {
             title: movie.title,
             description: movie.description,
             release_date: movie.release_date,
-            rating: Math.floor(Math.random() * 10) + 1,
+            rating: movie.rating,
           });
         }
         setFormattedMovies(movies);
@@ -145,7 +146,7 @@ const Home = () => {
             className="w-full text-left p-2 hover:bg-gray-700"
             onClick={() => (window.location.href = '/sortdate')}
           >
-            Сортувати за датою
+            Сортувати за тривалістю
           </button>
         </li>
 
