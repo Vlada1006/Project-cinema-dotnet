@@ -2,88 +2,135 @@
 
 import React, { useState, useEffect } from "react";
 
+interface Genre {
+  id: number;
+  name: string;
+}
+
+interface Director {
+  id: number;
+  name: string;
+}
+
 interface Movie {
   id: number;
   title: string;
+  description: string;
+  releaseDate: string;
+  rating: number;
+  duration: number;
+  language: string;
+  posterUrl: string;
+  trailerUrl: string;
+  genres: Genre[];
+  directors: Director[];
+  sessions: Session[];
 }
 
 interface Session {
   id: number;
   filmId: number;
-  filmTitle: string;
   startTime: string;
   endTime: string;
   price: number;
+  hall: string;
 }
+
+const halls = ["Зал 1", "Зал 2", "Зал 3"];
 
 const SchedulePage = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
-  const [sessions, setSessions] = useState<Session[]>([]);
   const [newSession, setNewSession] = useState({
     filmId: 0,
     startTime: "",
     endTime: "",
     price: 0,
+    hall: ""
   });
 
-  // Fetch movies and sessions
   useEffect(() => {
-    // Fetch movies
     fetch("https://localhost:7000/api/Films")
       .then((response) => response.json())
-      .then((data) => setMovies(Array.isArray(data) ? data : [])) // Ensure data is an array
+      .then((data) => {
+        console.log("Received data:", data);
+        if (Array.isArray(data.data)) {
+          setMovies(data.data);
+        } else {
+          console.error("Received data is not an array:", data);
+        }
+      })
       .catch((error) => console.error("Error fetching movies:", error));
-
-    // Fetch sessions
-    fetch("https://localhost:7000/api/Films") // Replace with correct endpoint for sessions
-      .then((response) => response.json())
-      .then((data) => setSessions(Array.isArray(data) ? data : [])) // Ensure data is an array
-      .catch((error) => console.error("Error fetching sessions:", error));
   }, []);
 
-  // Add a new session
-  const addSession = () => {
-    if (newSession.filmId && newSession.startTime && newSession.endTime) {
-      fetch("https://localhost:7000/api/Films", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(newSession),
-      })
-        .then((response) => response.json())
-        .then((data) => setSessions([...sessions, data]))
-        .catch((error) => console.error("Error adding session:", error));
+  const isValidSession = () => {
+    const { filmId, startTime, endTime, price, hall } = newSession;
+    if (!filmId || !startTime || !endTime || !hall) return false;
+    if (price < 0) return false;
 
-      setNewSession({
-        filmId: 0,
-        startTime: "",
-        endTime: "",
-        price: 0,
-      });
+    const now = new Date().toISOString();
+    if (startTime < now || endTime <= startTime) return false;
+
+    const conflictingSession = movies.some((movie) =>
+      movie.sessions?.some(
+        (session) =>
+          session.hall === hall &&
+          ((startTime >= session.startTime && startTime < session.endTime) ||
+           (endTime > session.startTime && endTime <= session.endTime) ||
+           (startTime <= session.startTime && endTime >= session.endTime))
+      )
+    );
+    
+    if (conflictingSession) {
+      alert("У вибраному залі вже йде інший сеанс у цей час!");
+      return false;
     }
+    return true;
   };
 
-  // Delete a session
-  const removeSession = (id: number) => {
-    fetch(`https://localhost:7000/api/Films/${id}`, { method: "DELETE" })
-      .then(() => setSessions(sessions.filter((session) => session.id !== id)))
-      .catch((error) => console.error("Error deleting session:", error));
-  };
+  const addSession = () => {
+    if (!isValidSession()) return;
 
-  // Update session price
-  const updatePrice = (id: number, newPrice: number) => {
-    fetch(`https://localhost:7000/api/Films/${id}`, {
-      method: "PUT",
+    // Define newSessionPayload here
+    const newSessionPayload = {
+      filmId: newSession.filmId,
+      roomId: halls.indexOf(newSession.hall) + 1,  // Convert hall to roomId
+      startTime: newSession.startTime,
+      endTime: newSession.endTime,
+      price: newSession.price,
+    };
+
+    fetch("https://localhost:7000/api/Sessions", {
+      method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ price: newPrice }),
+      body: JSON.stringify(newSessionPayload),
     })
-      .then(() => {
-        setSessions(
-          sessions.map((session) =>
-            session.id === id ? { ...session, price: newPrice } : session
-          )
-        );
+      .then((response) => {
+        console.log("Response status:", response.status);
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        return response.json();
       })
-      .catch((error) => console.error("Error updating price:", error));
+      .then((data) => {
+        console.log("Server response:", data); // Додаткове логування відповіді
+        if (data.success) {
+          setMovies((prevMovies) => {
+            return prevMovies.map((movie) =>
+              movie.id === data.session.filmId
+                ? { ...movie, sessions: [...(movie.sessions || []), data.session] }
+                : movie
+            );
+          });
+          setNewSession({ filmId: 0, startTime: "", endTime: "", price: 0, hall: "" });
+        } else {
+          alert(`Failed to add session: ${data.message || "Unknown error"}`);
+        }
+      })
+      .catch((error) => {
+        console.error("Error adding session:", error);
+        alert(`An error occurred: ${error.message}`);
+      });
+    
   };
 
   return (
@@ -93,53 +140,55 @@ const SchedulePage = () => {
           Список Сеансів на Тиждень
         </h1>
 
-        {/* Add new session */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          <label className="text-gray-400">Оберіть фільм:</label>
           <select
             className="w-full p-3 bg-gray-800 text-white rounded"
             value={newSession.filmId}
-            onChange={(e) =>
-              setNewSession({ ...newSession, filmId: parseInt(e.target.value) })
-            }
+            onChange={(e) => setNewSession({ ...newSession, filmId: parseInt(e.target.value) })}
           >
             <option value={0}>Оберіть фільм</option>
-            {movies.length > 0 ? (
-              movies.map((movie) => (
-                <option key={movie.id} value={movie.id}>
-                  {movie.title}
-                </option>
-              ))
-            ) : (
-              <option disabled>Завантаження фільмів...</option>
-            )}
+            {movies.map((movie) => (
+              <option key={movie.id} value={movie.id}>{movie.title}</option>
+            ))}
           </select>
+
+          <label className="text-gray-400">Час початку:</label>
           <input
             type="datetime-local"
             className="w-full p-3 bg-gray-800 text-white rounded"
-            placeholder="Час початку"
             value={newSession.startTime}
-            onChange={(e) =>
-              setNewSession({ ...newSession, startTime: e.target.value })
-            }
+            onChange={(e) => setNewSession({ ...newSession, startTime: e.target.value })}
           />
+
+          <label className="text-gray-400">Час завершення:</label>
           <input
             type="datetime-local"
             className="w-full p-3 bg-gray-800 text-white rounded"
-            placeholder="Час закінчення"
             value={newSession.endTime}
-            onChange={(e) =>
-              setNewSession({ ...newSession, endTime: e.target.value })
-            }
+            onChange={(e) => setNewSession({ ...newSession, endTime: e.target.value })}
           />
+
+          <label className="text-gray-400">Ціна квитка (грн):</label>
           <input
             type="number"
             className="w-full p-3 bg-gray-800 text-white rounded"
-            placeholder="Ціна"
             value={newSession.price}
-            onChange={(e) =>
-              setNewSession({ ...newSession, price: parseFloat(e.target.value) })
-            }
+            onChange={(e) => setNewSession({ ...newSession, price: Math.max(0, parseFloat(e.target.value)) })}
           />
+
+          <label className="text-gray-400">Оберіть зал:</label>
+          <select
+            className="w-full p-3 bg-gray-800 text-white rounded"
+            value={newSession.hall}
+            onChange={(e) => setNewSession({ ...newSession, hall: e.target.value })}
+          >
+            <option value="">Оберіть зал</option>
+            {halls.map((hall) => (
+              <option key={hall} value={hall}>{hall}</option>
+            ))}
+          </select>
+
           <button
             className="col-span-2 p-3 bg-yellow-600 text-black font-bold rounded hover:bg-yellow-400"
             onClick={addSession}
@@ -147,46 +196,6 @@ const SchedulePage = () => {
             Додати Сеанс
           </button>
         </div>
-
-        {/* List of sessions */}
-        <ul className="space-y-4">
-          {sessions.length > 0 ? (
-            sessions.map((session) => (
-              <li
-                key={session.id}
-                className="flex flex-col md:flex-row justify-between items-center bg-gray-700 p-4 rounded-lg"
-              >
-                <div>
-                  <h2 className="text-lg font-bold text-yellow-500">
-                    🎬 {session.filmTitle}
-                  </h2>
-                  <p>
-                    🕒 {session.startTime} - {session.endTime}
-                  </p>
-                  <p>💵 Ціна: {session.price} грн</p>
-                </div>
-                <div className="flex items-center gap-2 mt-3 md:mt-0">
-                  <input
-                    type="number"
-                    className="w-24 p-2 bg-gray-800 text-white rounded"
-                    defaultValue={session.price}
-                    onChange={(e) =>
-                      updatePrice(session.id, parseFloat(e.target.value))
-                    }
-                  />
-                  <button
-                    className="bg-red-600 p-2 text-white rounded hover:bg-red-500"
-                    onClick={() => removeSession(session.id)}
-                  >
-                    Видалити
-                  </button>
-                </div>
-              </li>
-            ))
-          ) : (
-            <p className="text-center text-gray-400">Немає сеансів для показу</p>
-          )}
-        </ul>
       </div>
     </div>
   );

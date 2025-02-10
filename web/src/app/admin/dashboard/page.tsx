@@ -10,7 +10,7 @@ export default function DashboardPage() {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
-      router.push("/admin/login");
+      router.push("/admin");
     }
   }, [router]);
 
