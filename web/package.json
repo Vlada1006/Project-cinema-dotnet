@@ -12,12 +12,9 @@
     "axios": "^1.7.9",
     "next": "15.1.6",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-<<<<<<< HEAD
-    "react-feather": "^2.0.10",
-=======
->>>>>>> 407e442 (update for admin)
-    "react-sidebar": "^3.0.2"
+"react-dom": "^19.0.0",
+"react-feather": "^2.0.10",
+"react-sidebar": "^3.0.2"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
