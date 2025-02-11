@@ -2,6 +2,7 @@
 using Cinema_project_dotnet.BusinessLogic.DTOs.FilmDTO;
 using Cinema_project_dotnet.BusinessLogic.Interfaces;
 using Cinema_project_dotnet.BusinessLogic.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,6 +20,7 @@ namespace Cinema_project_dotnet.Server.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin,User")]
         public async Task<ActionResult<List<DirectorDTO>>> GetDirectors()
         {
             var directors = await _directorService.GetAllDirectorsAsync();
@@ -26,6 +28,7 @@ namespace Cinema_project_dotnet.Server.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin,User")]
         public async Task<ActionResult<DirectorDTO>> GetDirector(int id)
         {
             var director = await _directorService.GetDirectorByIdAsync(id);
@@ -33,6 +36,7 @@ namespace Cinema_project_dotnet.Server.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> CreatDirector([FromBody] DirectorDTO directorDTO)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -42,6 +46,7 @@ namespace Cinema_project_dotnet.Server.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> UpdateDirector(int id, [FromBody] DirectorDTO directorDTO)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -51,6 +56,7 @@ namespace Cinema_project_dotnet.Server.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> DeleteDirector(int id)
         {
             await _directorService.DeleteDirectorAsync(id);

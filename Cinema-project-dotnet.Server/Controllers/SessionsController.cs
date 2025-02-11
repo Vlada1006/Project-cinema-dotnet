@@ -2,6 +2,7 @@
 using Cinema_project_dotnet.BusinessLogic.Interfaces;
 using Cinema_project_dotnet.BusinessLogic.Services;
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,6 +22,7 @@ namespace Cinema_project_dotnet.Server.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin,User")]
         public async Task<ActionResult<List<SessionDTO>>> GetSessions()
         {
             var sessions = await _sessionService.GetAllSessionsAsync();
@@ -28,6 +30,7 @@ namespace Cinema_project_dotnet.Server.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin,User")]
         public async Task<ActionResult<SessionDTO>> GetSession(int id)
         {
             var session = await _sessionService.GetSessionByIdAsync(id);
@@ -35,6 +38,7 @@ namespace Cinema_project_dotnet.Server.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> CreatSession([FromBody] SessionDTO sessionDTO)
         {
             var validationResult = await _validator.ValidateAsync(sessionDTO);
@@ -45,6 +49,7 @@ namespace Cinema_project_dotnet.Server.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> UpdateSession(int id, [FromBody] SessionDTO sessionDTO)
         {
             var validationResult = await _validator.ValidateAsync(sessionDTO);
@@ -55,6 +60,7 @@ namespace Cinema_project_dotnet.Server.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> DeleteSession(int id)
         {
             await _sessionService.DeleteSessionAsync(id);

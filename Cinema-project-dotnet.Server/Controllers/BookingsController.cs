@@ -2,6 +2,7 @@
 using Cinema_project_dotnet.BusinessLogic.Interfaces;
 using Cinema_project_dotnet.BusinessLogic.Services;
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -21,6 +22,7 @@ namespace Cinema_project_dotnet.Server.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin,User")]
         public async Task<ActionResult<List<BookingDTO>>> GetBookings()
         {
             var bookings = await _bookingService.GetAllBookingsAsync();
@@ -28,6 +30,7 @@ namespace Cinema_project_dotnet.Server.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin,User")]
         public async Task<ActionResult<BookingDTO>> GetBooking(int id)
         {
             var booking = await _bookingService.GetBookingByIdAsync(id);
@@ -35,6 +38,7 @@ namespace Cinema_project_dotnet.Server.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin,User")]
         public async Task<ActionResult> CreatBooking([FromBody] BookingDTO bookingDTO)
         {
             var validationResult = await _validator.ValidateAsync(bookingDTO);
@@ -55,6 +59,7 @@ namespace Cinema_project_dotnet.Server.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin,User")]
         public async Task<ActionResult> CancelBooking(int id, string cancellationMessage)
         {
             await _bookingService.CancelBookingAsync(id, cancellationMessage);

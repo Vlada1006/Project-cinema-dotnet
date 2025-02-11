@@ -1,5 +1,6 @@
 ﻿using Cinema_project_dotnet.BusinessLogic.DTOs.FilmDTO;
 using Cinema_project_dotnet.BusinessLogic.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cinema_project_dotnet.Server.Controllers
@@ -16,6 +17,7 @@ namespace Cinema_project_dotnet.Server.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin,User")]
         public async Task<ActionResult<List<FilmGetDTO>>> GetFilms()
         {
             var films = await _filmService.GetAllFilmsAsync();
@@ -23,6 +25,7 @@ namespace Cinema_project_dotnet.Server.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin,User")]
         public async Task<ActionResult<FilmGetDTO>> GetFilm(int id) 
         {
             var film = await _filmService.GetFilmByIdAsync(id);
@@ -30,6 +33,7 @@ namespace Cinema_project_dotnet.Server.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> CreatFilm([FromBody] FilmCreateUpdateDTO filmDTO)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -39,6 +43,7 @@ namespace Cinema_project_dotnet.Server.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> UpdateFilm(int id, [FromBody] FilmCreateUpdateDTO filmDTO)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -48,6 +53,7 @@ namespace Cinema_project_dotnet.Server.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> DeleteFilm(int id)
         {
             await _filmService.DeleteFilmAsync(id);
