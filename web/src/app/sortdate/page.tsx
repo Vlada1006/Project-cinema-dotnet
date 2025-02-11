@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 interface Movie {
   id: string;
@@ -8,7 +9,7 @@ interface Movie {
   title: string;
   description: string;
   release_date: string;
-  duration: number; // Тривалість фільму
+  duration: number;
   rating: number;
 }
 
@@ -16,7 +17,13 @@ const SortByDuration = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
-  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc'); // Сортування за тривалістю
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc'); 
+
+  const router = useRouter();
+  
+  const handleMovieClick = (id: string) => {
+    router.push(`/movie/${id}`);
+  };
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -44,7 +51,6 @@ const SortByDuration = () => {
             });
           }
 
-          // Сортуємо фільми в залежності від обраного порядку сортування
           sortMovies(fetchedMovies);
 
         } else {
@@ -58,15 +64,14 @@ const SortByDuration = () => {
     };
 
     fetchMovies();
-  }, [sortOrder]); // Викликається при зміні сортування
+  }, [sortOrder]); 
 
-  // Функція для сортування фільмів
   const sortMovies = (fetchedMovies: Movie[]) => {
     const sortedMovies = [...fetchedMovies];
     if (sortOrder === 'asc') {
-      sortedMovies.sort((a, b) => a.duration - b.duration); // Від меншої до більшої
+      sortedMovies.sort((a, b) => a.duration - b.duration); 
     } else {
-      sortedMovies.sort((a, b) => b.duration - a.duration); // Від більшої до меншої
+      sortedMovies.sort((a, b) => b.duration - a.duration); 
     }
     setMovies(sortedMovies);
   };
@@ -86,13 +91,13 @@ const SortByDuration = () => {
       </header>
       <div className="flex justify-center space-x-4 mb-6">
         <button
-          className={`px-4 py-2 rounded-md ${sortOrder === 'asc' ? 'bg-grey-700' : 'bg-gray-600'}`}
+          className={`px-4 py-2 rounded-md ${sortOrder === 'asc' ? 'bg-gray-700' : 'bg-gray-600'}`}
           onClick={() => setSortOrder('asc')}
         >
           Від меншої до більшої
         </button>
         <button
-          className={`px-4 py-2 rounded-md ${sortOrder === 'desc' ? 'bg-grey-700' : 'bg-gray-600'}`}
+          className={`px-4 py-2 rounded-md ${sortOrder === 'desc' ? 'bg-gray-700' : 'bg-gray-600'}`}
           onClick={() => setSortOrder('desc')}
         >
           Від більшої до меншої
@@ -101,7 +106,7 @@ const SortByDuration = () => {
       <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {movies.length > 0 ? (
           movies.map((movie) => (
-            <div key={movie.id} className="bg-gray-800 p-4 rounded-lg shadow-md">
+            <div key={movie.id} onClick={() => handleMovieClick(movie.id)} className="bg-gray-800 p-4 rounded-lg shadow-md cursor-pointer hover:bg-gray-700 transition">
               <img
                 src={movie.posterUrl}
                 alt={movie.title}

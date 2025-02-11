@@ -98,11 +98,11 @@ class MovieDetailsPage extends React.Component<{}, MovieDetailsPageState> {
       ? `https://localhost:7000${movie.posterUrl}` 
       : '/images/default-image.jpg';
 
-    // Ensure the trailer URL is in the correct format (for example, YouTube URL)
+    
     const trailerUrl = movie.trailerUrl
       ? movie.trailerUrl.startsWith('https://www.youtube.com')
         ? movie.trailerUrl.replace('watch?v=', 'embed/')
-        : movie.trailerUrl // Check if URL is correct for other platforms
+        : movie.trailerUrl 
       : '';
 
     return (
@@ -124,8 +124,6 @@ class MovieDetailsPage extends React.Component<{}, MovieDetailsPageState> {
           <p>Genres: {movie.genres && movie.genres.length > 0 ? movie.genres.map((g) => g.name).join(', ') : 'N/A'}</p>
 
           <p>Directors: {movie.directors && movie.directors.length > 0 ? movie.directors.map((d) => d.name).join(', ') : 'N/A'}</p>
-
-          {/* Ensure trailer URL is valid and display it if exists */}
           {trailerUrl && (
             <div>
               <h3>Trailer:</h3>

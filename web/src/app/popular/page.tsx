@@ -2,6 +2,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
 interface Movie {
   id: string;
@@ -17,8 +18,13 @@ const PopularFilms = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>('');
   const [sortOrder, setSortOrder] = useState<'desc' | 'asc'>('desc');
+  
+  const router = useRouter();
 
-  // Завантаження фільмів (це виконується після серверного рендеру)
+  const handleMovieClick = (id: string) => {
+    router.push(`/movie/${id}`);
+  };
+
   useEffect(() => {
     const fetchMovies = async () => {
       try {
@@ -27,7 +33,7 @@ const PopularFilms = () => {
           throw new Error('Помилка завантаження фільмів');
         }
         const data = await response.json();
-        // Припустимо, що API повертає об'єкт з полем data, що містить масив фільмів:
+    
         if (data.data && Array.isArray(data.data)) {
           const fetchedMovies: Movie[] = data.data.map((movie: any) => ({
             id: movie.id.toString(),
@@ -53,7 +59,6 @@ const PopularFilms = () => {
     fetchMovies();
   }, []);
 
-  // Сортування фільмів за рейтингом
   useEffect(() => {
     if (movies.length > 0) {
       const sortedMovies = [...movies].sort((a, b) => {
@@ -97,7 +102,11 @@ const PopularFilms = () => {
       <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {movies.length > 0 ? (
           movies.map((movie) => (
-            <div key={movie.id} className="bg-gray-800 p-4 rounded-lg shadow-md">
+            <div 
+              key={movie.id} 
+              onClick={() => handleMovieClick(movie.id)} 
+              className="bg-gray-800 p-4 rounded-lg shadow-md cursor-pointer hover:bg-gray-700 transition"
+            >
               <img
                 src={movie.posterUrl}
                 alt={movie.title}

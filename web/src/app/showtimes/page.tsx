@@ -29,11 +29,11 @@ const ShowtimesCalendar = () => {
         }
         const data = await response.json();
 
-        // Перевірка та форматування отриманих даних
+     
         if (Array.isArray(data)) {
           setCalendarData(data);
           if (data.length > 0) {
-            setSelectedDate(data[0].date); // Встановлюємо першу дату як обрану
+            setSelectedDate(data[0].date); 
           }
         } else {
           throw new Error('Неправильний формат даних з API');
@@ -48,7 +48,7 @@ const ShowtimesCalendar = () => {
     fetchShowtimes();
   }, []);
 
-  // Фільтрація даних по вибраній даті
+
   const selectedData = calendarData.find((data) => data.date === selectedDate);
 
   if (loading) {

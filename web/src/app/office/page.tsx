@@ -1,4 +1,3 @@
-
 'use client';
 
 import React, { JSX, useEffect, useState } from 'react';
@@ -14,6 +13,11 @@ interface Movie {
   rating: number;
 }
 
+interface User {
+  name: string;
+  surname: string;
+}
+
 const Home = () => {
   const [formattedMovies, setFormattedMovies] = useState<Movie[]>([]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -21,6 +25,7 @@ const Home = () => {
   const [selectedGenre, setSelectedGenre] = useState('');
   const [minRating, setMinRating] = useState(0);
   const [watchlist, setWatchlist] = useState<string[]>([]);
+  const [user, setUser] = useState<User | null>(null); 
 
   const router = useRouter();
 
@@ -63,11 +68,15 @@ const Home = () => {
     };
 
     fetchMovies();
+
+    
+    const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || 'null');
+    if (loggedInUser) {
+      setUser(loggedInUser); 
+    }
   }, []);
 
-  console.log(formattedMovies.map((movie) => movie.posterUrl)); 
   const addToWatchlist = (id: string) => {
-   
     let exists = false;
     for (let i = 0; i < watchlist.length; i++) {
       if (watchlist[i] === id) {
@@ -76,7 +85,6 @@ const Home = () => {
       }
     }
     if (!exists) {
-   
       const newWatchlist: string[] = [];
       for (let i = 0; i < watchlist.length; i++) {
         newWatchlist.push(watchlist[i]);
@@ -84,6 +92,11 @@ const Home = () => {
       newWatchlist.push(id);
       setWatchlist(newWatchlist);
     }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('loggedInUser');
+    router.push('/'); 
   };
 
   const sidebarContent = (
@@ -99,18 +112,29 @@ const Home = () => {
           </button>
         </li>
 
+      
+        {user && (
+          <li className="text-lg font-semibold mt-4">
+            <p>Привіт, {user.name} {user.surname}!</p>
+          </li>
+        )}
+
+
+        <li>
+          <h4 className="text-lg font-semibold mt-4">Вихід</h4>
+          <button
+            className="w-full text-left p-2 hover:bg-gray-700"
+            onClick={handleLogout}
+          >
+            Вийти
+          </button>
+        </li>
+
+   
         <li>
           <button
             className="w-full text-left p-2 hover:bg-gray-700"
             onClick={() => (window.location.href = '/account')}
-          >
-            Особистий кабінет
-          </button>
-        </li>
-        <li>
-          <button
-            className="w-full text-left p-2 hover:bg-gray-700"
-            onClick={() => (window.location.href = '/popular')}
           >
             Переглянути популярні фільми
           </button>
@@ -123,7 +147,7 @@ const Home = () => {
             Фільтрувати за жанром
           </button>
         </li>
-        <li>
+       <li>
           <button
             className="w-full text-left p-2 hover:bg-gray-700"
             onClick={() => (window.location.href = '/director')}
@@ -132,7 +156,6 @@ const Home = () => {
           </button>
         </li>
         <li>
-
           <button
             className="w-full text-left p-2 hover:bg-gray-700"
             onClick={() => (window.location.href = '/sortdate')}
@@ -148,15 +171,32 @@ const Home = () => {
             Переглянути календар показів
           </button>
         </li>
+
+    
+        <li>
+          <button
+            className="w-full text-left p-2 hover:bg-gray-700"
+            onClick={() => (window.location.href = '/booking')}
+          >
+            Бронювання квитків
+          </button>
+        </li>
+        <li>
+          <button
+            className="w-full text-left p-2 hover:bg-gray-700"
+            onClick={() => (window.location.href = '/purchased-tickets')}
+          >
+            Перегляд куплених квитків
+          </button>
+        </li>
       </ul>
     </div>
   );
 
- 
+
   const movieElements: JSX.Element[] = [];
   for (let i = 0; i < formattedMovies.length; i++) {
     const movie = formattedMovies[i];
-
 
     if (!movie.title.toLowerCase().includes(searchQuery.toLowerCase())) continue;
     if (selectedGenre && !movie.title.includes(selectedGenre)) continue;
@@ -193,7 +233,7 @@ const Home = () => {
             <input
               type="text"
               placeholder="Пошук фільмів..."
-              className="w-64 p-2 bg-gray-800 rounded "
+              className="w-64 p-2 bg-gray-800 rounded"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
             />
