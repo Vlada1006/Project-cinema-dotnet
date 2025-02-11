@@ -3,6 +3,7 @@ using System;
 using Cinema_project_dotnet.DataAccess;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Cinema_project_dotnet.DataAccess.Migrations
 {
     [DbContext(typeof(CinemaDbContext))]
-    partial class CinemaDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250208222414_AddConcurrencyStampToIdentityRole")]
+    partial class AddConcurrencyStampToIdentityRole
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -179,12 +182,6 @@ namespace Cinema_project_dotnet.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("Rows")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("SeatsPerRow")
-                        .HasColumnType("integer");
-
                     b.Property<int>("TotalSeats")
                         .HasColumnType("integer");
 
@@ -204,6 +201,9 @@ namespace Cinema_project_dotnet.DataAccess.Migrations
                         .HasColumnType("integer");
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsAvailable")
+                        .HasColumnType("boolean");
 
                     b.Property<int>("Number")
                         .HasColumnType("integer");
@@ -251,24 +251,6 @@ namespace Cinema_project_dotnet.DataAccess.Migrations
                     b.HasIndex("RoomId");
 
                     b.ToTable("Sessions");
-                });
-
-            modelBuilder.Entity("Cinema_project_dotnet.BusinessLogic.Entities.SessionSeat", b =>
-                {
-                    b.Property<int>("SessionId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("SeatId")
-                        .HasColumnType("integer");
-
-                    b.Property<bool>("IsAvailable")
-                        .HasColumnType("boolean");
-
-                    b.HasKey("SessionId", "SeatId");
-
-                    b.HasIndex("SeatId");
-
-                    b.ToTable("SessionSeats");
                 });
 
             modelBuilder.Entity("Cinema_project_dotnet.BusinessLogic.Entities.Transaction", b =>
@@ -511,7 +493,7 @@ namespace Cinema_project_dotnet.DataAccess.Migrations
                     b.HasOne("Cinema_project_dotnet.BusinessLogic.Entities.Seat", "Seat")
                         .WithOne("Booking")
                         .HasForeignKey("Cinema_project_dotnet.BusinessLogic.Entities.Booking", "SeatId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Cinema_project_dotnet.BusinessLogic.Entities.Session", "Session")
@@ -523,13 +505,13 @@ namespace Cinema_project_dotnet.DataAccess.Migrations
                     b.HasOne("Cinema_project_dotnet.BusinessLogic.Entities.Transaction", "Transaction")
                         .WithOne("Booking")
                         .HasForeignKey("Cinema_project_dotnet.BusinessLogic.Entities.Booking", "TransactionId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Cinema_project_dotnet.BusinessLogic.Entities.User", "User")
                         .WithMany("Bookings")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Seat");
@@ -601,31 +583,12 @@ namespace Cinema_project_dotnet.DataAccess.Migrations
                     b.HasOne("Cinema_project_dotnet.BusinessLogic.Entities.Room", "Room")
                         .WithMany("Sessions")
                         .HasForeignKey("RoomId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("Film");
 
                     b.Navigation("Room");
-                });
-
-            modelBuilder.Entity("Cinema_project_dotnet.BusinessLogic.Entities.SessionSeat", b =>
-                {
-                    b.HasOne("Cinema_project_dotnet.BusinessLogic.Entities.Seat", "Seat")
-                        .WithMany("SessionSeats")
-                        .HasForeignKey("SeatId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Cinema_project_dotnet.BusinessLogic.Entities.Session", "Session")
-                        .WithMany("SessionSeats")
-                        .HasForeignKey("SessionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Seat");
-
-                    b.Navigation("Session");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -708,15 +671,11 @@ namespace Cinema_project_dotnet.DataAccess.Migrations
             modelBuilder.Entity("Cinema_project_dotnet.BusinessLogic.Entities.Seat", b =>
                 {
                     b.Navigation("Booking");
-
-                    b.Navigation("SessionSeats");
                 });
 
             modelBuilder.Entity("Cinema_project_dotnet.BusinessLogic.Entities.Session", b =>
                 {
                     b.Navigation("Bookings");
-
-                    b.Navigation("SessionSeats");
                 });
 
             modelBuilder.Entity("Cinema_project_dotnet.BusinessLogic.Entities.Transaction", b =>
