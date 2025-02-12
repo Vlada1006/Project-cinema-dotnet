@@ -19,7 +19,7 @@ namespace Cinema_project_dotnet.Server.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin, User")]
         public async Task<ActionResult> PayBooking(decimal amount)
         {
             await _transactionService.PayBooking(amount);
