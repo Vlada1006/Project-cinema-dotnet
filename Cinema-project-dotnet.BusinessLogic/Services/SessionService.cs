@@ -143,6 +143,37 @@ namespace Cinema_project_dotnet.BusinessLogic.Services
             await _sessionRepo.DeleteAsync(id);
         }
 
+        public async Task<List<SeatDTO>> GetAllSeatsForSessionAsync(int sessionId)
+        {
+            var session = await _sessionRepo.GetByIdAsync(sessionId);
+
+            if (session == null)
+            {
+                throw new HttpException("Session not found", HttpStatusCode.NotFound);
+            }
+
+            var seats = await _seatRepo.GetByConditionAsync(s => s.RoomId == session.RoomId);
+
+            if (seats == null || !seats.Any())
+            {
+                throw new HttpException("No seats found in this room", HttpStatusCode.NotFound);
+            }
+
+            var sessionSeats = await _sessionSeatRepo.GetByConditionAsync(ss => ss.SessionId == sessionId);
+
+            var seatDTOs = seats.Select(seat => new SeatDTO
+            {
+                Id = seat.Id,
+                Row = seat.Row,
+                Number = seat.Number,
+                RoomId = seat.RoomId,
+                IsAvailable = sessionSeats.Any(ss => ss.SeatId == seat.Id && ss.IsAvailable)
+            }).ToList();
+
+            return seatDTOs;
+        }
+
+
         private async Task<IEnumerable<Session>> GetConflictingSessionAsync(int roomId, DateTime startTime, DateTime endTime)
         {
             return await _sessionRepo.GetByConditionAsync(s => s.RoomId == roomId &&
