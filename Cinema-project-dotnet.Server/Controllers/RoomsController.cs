@@ -3,6 +3,7 @@ using Cinema_project_dotnet.BusinessLogic.DTOs;
 using Cinema_project_dotnet.BusinessLogic.Interfaces;
 using Cinema_project_dotnet.BusinessLogic.Services;
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cinema_project_dotnet.Server.Controllers
@@ -21,6 +22,7 @@ namespace Cinema_project_dotnet.Server.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin,User")]
         public async Task<ActionResult<List<RoomDTO>>> GetRooms()
         {
             var rooms = await _roomService.GetAllRoomsAsync();
@@ -28,6 +30,7 @@ namespace Cinema_project_dotnet.Server.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin,User")]
         public async Task<ActionResult<RoomDTO>> GetRoom(int id)
         {
             var room = await _roomService.GetRoomByIdAsync(id);
@@ -35,6 +38,7 @@ namespace Cinema_project_dotnet.Server.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> CreatRoom([FromBody] RoomDTO roomDTO)
         {
             var validationResult = await _validator.ValidateAsync(roomDTO);
@@ -45,6 +49,7 @@ namespace Cinema_project_dotnet.Server.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> UpdateRoom(int id, [FromBody] RoomDTO roomDTO)
         {
             var validationResult = await _validator.ValidateAsync(roomDTO);
@@ -55,6 +60,7 @@ namespace Cinema_project_dotnet.Server.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> DeleteRoom(int id)
         {
             await _roomService.DeleteRoomAsync(id);

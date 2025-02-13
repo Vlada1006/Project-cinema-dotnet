@@ -1,6 +1,7 @@
 ﻿using Cinema_project_dotnet.BusinessLogic.DTOs;
 using Cinema_project_dotnet.BusinessLogic.DTOs.FilmDTO;
 using Cinema_project_dotnet.BusinessLogic.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Cinema_project_dotnet.Server.Controllers
@@ -17,6 +18,7 @@ namespace Cinema_project_dotnet.Server.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin,User")]
         public async Task<ActionResult<List<GenreDTO>>> GetGenres()
         {
             var genres = await _genreService.GetAllGenrsAsync();
@@ -24,6 +26,7 @@ namespace Cinema_project_dotnet.Server.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = "Admin,User")]
         public async Task<ActionResult<GenreDTO>> GetGenre(int id)
         {
             var genre = await _genreService.GetGenreByIdAsync(id);
@@ -31,6 +34,7 @@ namespace Cinema_project_dotnet.Server.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> CreatGenre([FromBody] GenreDTO genreDTO)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -40,6 +44,7 @@ namespace Cinema_project_dotnet.Server.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> UpdateGenre(int id, [FromBody] GenreDTO genreDTO)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
@@ -49,6 +54,7 @@ namespace Cinema_project_dotnet.Server.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = "Admin")]
         public async Task<ActionResult> DeleteGenre(int id)
         {
             await _genreService.DeleteGenreAsync(id);
