@@ -100,8 +100,8 @@ const MoviesPage = () => {
     const movieWithUtcDate = {
       ...newMovie,
       releaseDate: releaseDateUtc,
-      genres: newMovie.genres.map(genre => ({ id: genre.id, name: genre.name })), // Форматування жанрів
-      directors: newMovie.directors.map(director => ({ id: director.id, name: director.name })), // Форматування режисерів
+      genres: newMovie.genres.map(genre => genre.id), // Передаємо тільки id жанрів
+      directors: newMovie.directors.map(director => director.id), // Передаємо тільки id режисерів
     };
 
     console.log("Movie data to be sent:", movieWithUtcDate); // Логування даних перед відправкою
@@ -350,25 +350,22 @@ const MoviesPage = () => {
                 Жанри <span className="text-red-600">*</span>
               </label>
               <div className="mb-2">
-                <select
-                  className="w-full p-3 bg-gray-800 text-white rounded"
-                  multiple
-                  value={newMovie.genres.map((genre) => genre.id.toString())} // Convert to string
-                  onChange={(e) => {
-                    const selectedGenres = Array.from(e.target.selectedOptions, (option) => {
-                      const genre = allGenres.find((genre) => genre.id === parseInt(option.value));
-                      return genre ? genre : null; // Повертаємо null, якщо жанр не знайдено
-                    }).filter(Boolean); // Фільтруємо null значення
-                    console.log("Selected genres:", selectedGenres); // Логування вибраних жанрів
-                    setNewMovie({ ...newMovie, genres: selectedGenres });
-                  }}
-                >
-                  {allGenres.map((genre) => (
-                    <option key={genre.id} value={genre.id.toString()}>
-                      {genre.name}
-                    </option>
-                  ))}
-                </select>
+              <select
+  className="w-full p-3 bg-gray-800 text-white rounded"
+  multiple
+  value={newMovie.genres.map((genre) => genre.id.toString())} // Convert to string
+  onChange={(e) => {
+    const selectedGenreIds = Array.from(e.target.selectedOptions, (option) => parseInt(option.value)); // Отримуємо тільки id жанрів
+    console.log("Selected genre IDs:", selectedGenreIds); // Логування вибраних id жанрів
+    setNewMovie({ ...newMovie, genres: selectedGenreIds.map(id => ({ id })) }); // Форматування для збереження id
+  }}
+>
+  {allGenres.map((genre) => (
+    <option key={genre.id} value={genre.id.toString()}>
+      {genre.name}
+    </option>
+  ))}
+</select>
               </div>
               <input
                 type="text"
@@ -391,25 +388,22 @@ const MoviesPage = () => {
                 Режисери <span className="text-red-600">*</span>
               </label>
               <div className="mb-2">
-                <select
-                  className="w-full p-3 bg-gray-800 text-white rounded"
-                  multiple
-                  value={newMovie.directors.map((director) => director.id.toString())} // Optional chaining here
-                  onChange={(e) => {
-                    const selectedDirectors = Array.from(e.target.selectedOptions, (option) => {
-                      const director = allDirectors.find((director) => director.id === parseInt(option.value));
-                      return director ? director : null; // Повертаємо null, якщо режисер не знайдено
-                    }).filter(Boolean); // Фільтруємо null значення
-                    console.log("Selected directors:", selectedDirectors); // Логування вибраних режисерів
-                    setNewMovie({ ...newMovie, directors: selectedDirectors });
-                  }}
-                >
-                  {allDirectors.map((director) => (
-                    <option key={director.id} value={director.id.toString()}>
-                      {director.name}
-                    </option>
-                  ))}
-                </select>
+              <select
+  className="w-full p-3 bg-gray-800 text-white rounded"
+  multiple
+  value={newMovie.directors.map((director) => director.id.toString())} // Convert to string
+  onChange={(e) => {
+    const selectedDirectorIds = Array.from(e.target.selectedOptions, (option) => parseInt(option.value)); // Отримуємо тільки id режисерів
+    console.log("Selected director IDs:", selectedDirectorIds); // Логування вибраних id режисерів
+    setNewMovie({ ...newMovie, directors: selectedDirectorIds.map(id => ({ id })) }); // Форматування для збереження id
+  }}
+>
+  {allDirectors.map((director) => (
+    <option key={director.id} value={director.id.toString()}>
+      {director.name}
+    </option>
+  ))}
+</select>
               </div>
               <input
                 type="text"
