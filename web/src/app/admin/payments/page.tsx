@@ -16,9 +16,18 @@ const PaymentsPage = () => {
   const [filter, setFilter] = useState("");
 
   useEffect(() => {
-    fetch("https://localhost:7000/api/Films") // API endpoint для отримання оплат
+    fetch("https://localhost:7000/api/Films")
       .then((response) => response.json())
-      .then((data) => setPayments(data))
+      .then((data) => {
+        console.log("Fetched payments:", data); // Log the data
+        // Assuming the API returns an object with a 'payments' property
+        if (Array.isArray(data.payments)) {
+          setPayments(data.payments);
+        } else {
+          console.error("Expected an array but got:", data);
+          setPayments([]); // Set to empty array if data is not as expected
+        }
+      })
       .catch((error) => console.error("Error fetching payments:", error));
   }, []);
 
