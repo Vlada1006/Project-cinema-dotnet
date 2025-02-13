@@ -4,6 +4,6 @@ namespace Cinema_project_dotnet.BusinessLogic.Interfaces
 {
     public interface ITransactionService
     {
-        Task PayBooking(decimal amount);
+        Task<int> PayBooking(decimal amount);
     }
 }
