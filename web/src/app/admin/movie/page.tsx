@@ -45,24 +45,39 @@ const MoviesPage = () => {
 
   const [formError, setFormError] = useState<string | null>(null); // для помилки форми
 
-  const languages = ["English", "Ukrainian", "Spanish", "French", "German"];
+  const languages = ["Англійська", "Українська", "Іспанська", "Французька", "Німецька"];
+
+  const [allGenres, setAllGenres] = useState<Genre[]>([]);
+  const [newGenre, setNewGenre] = useState<string>("");
+
+  const [allDirectors, setAllDirectors] = useState<Director[]>([]);
+  const [newDirector, setNewDirector] = useState<string>("");
 
   useEffect(() => {
     fetch("https://localhost:7000/api/Films")
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then((data) => {
-        if (data && Array.isArray(data.data)) {
-          setMovies(data.data);
-        }
-      })
+      .then((response) => response.json())
+      .then((data) => setMovies(data.data))
       .catch((error) => console.error("Error fetching movies:", error));
+  
+    // Fetching genres
+    fetch("https://localhost:7000/api/Genres")
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Fetched genres:", data.data); // Debug log
+        setAllGenres(data.data);
+      })
+      .catch((error) => console.error("Error fetching genres:", error));
+  
+    // Fetching directors
+    fetch("https://localhost:7000/api/Directors")
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Fetched directors:", data.data); // Debug log
+        setAllDirectors(data.data);
+      })
+      .catch((error) => console.error("Error fetching directors:", error));
   }, []);
-
+  
   const addMovie = () => {
     if (
       !newMovie.title.trim() ||
@@ -73,17 +88,23 @@ const MoviesPage = () => {
       newMovie.duration <= 0 ||
       !newMovie.language ||
       !newMovie.posterUrl ||
-      !newMovie.trailerUrl
+      !newMovie.trailerUrl ||
+      newMovie.genres.length === 0 ||
+      newMovie.directors.length === 0
     ) {
       setFormError("Всі поля, позначені зірочкою, обов'язкові для заповнення.");
       return;
     }
-
+  
     const releaseDateUtc = new Date(newMovie.releaseDate).toISOString();
     const movieWithUtcDate = {
       ...newMovie,
       releaseDate: releaseDateUtc,
+      genres: newMovie.genres.map(genre => ({ id: genre.id, name: genre.name })), // Форматування жанрів
+      directors: newMovie.directors.map(director => ({ id: director.id, name: director.name })), // Форматування режисерів
     };
+
+    console.log("Movie data to be sent:", movieWithUtcDate); // Логування даних перед відправкою
 
     fetch("https://localhost:7000/api/Films", {
       method: "POST",
@@ -95,19 +116,17 @@ const MoviesPage = () => {
           throw new Error(`Failed to add movie: ${response.status}`);
         }
         const responseData = await response.json();
-        console.log("Movie added response:", responseData); // Додаємо логування
+        console.log("Movie added response:", responseData);
         return fetch("https://localhost:7000/api/Films");
       })
       .then((response) => response.json())
       .then((data) => {
-        console.log("Updated movie list:", data); // Логування для перевірки отриманих даних
         if (data && Array.isArray(data.data)) {
           setMovies(data.data);
         }
       })
       .catch((error) => console.error("Error adding movie:", error));
-    
-
+  
     setNewMovie({
       id: 0,
       title: "",
@@ -122,6 +141,8 @@ const MoviesPage = () => {
       directors: [],
     });
     setFormError(null);
+    setNewGenre("");
+    setNewDirector("");
   };
 
   const removeMovie = (id: number) => {
@@ -135,17 +156,85 @@ const MoviesPage = () => {
       .catch((error) => console.error("Error deleting movie:", error));
   };
 
-  const truncateDescription = (description: string, maxLength: number = 150) => {
-    if (description.length > maxLength) {
-      return `${description.slice(0, maxLength)}...`;
-    }
-    return description;
-  };
-
   const [expanded, setExpanded] = useState<{ [key: number]: boolean }>({});
 
   const toggleDescription = (id: number) => {
     setExpanded((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
+
+  const addNewGenre = () => {
+    if (newGenre.trim()) {
+      const genreExists = allGenres.some((genre) => genre.name.toLowerCase() === newGenre.toLowerCase());
+  
+      if (!genreExists) {
+        const newGenreData = { name: newGenre.trim() };
+  
+        fetch("https://localhost:7000/api/Genres", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(newGenreData),
+        })
+          .then(async (response) => {
+            if (!response.ok) {
+              throw new Error(`Failed to add genre: ${response.status}`);
+            }
+            const responseData = await response.json();
+            console.log("Genre added response:", responseData);
+        
+            if (!responseData.data || !responseData.data.id) {
+              throw new Error("Invalid response structure from server");
+            }
+        
+            const addedGenre = { id: responseData.data.id, name: newGenre.trim() };
+            setAllGenres((prev) => [...prev, addedGenre]);
+        
+            setNewMovie((prev) => ({
+              ...prev,
+              genres: [...prev.genres, addedGenre],
+            }));
+        
+            setNewGenre("");
+          })
+          .catch((error) => console.error("Error adding genre:", error));
+        
+      } else {
+        const existingGenre = allGenres.find((genre) => genre.name.toLowerCase() === newGenre.toLowerCase());
+        if (existingGenre) {
+          setNewMovie((prev) => ({
+            ...prev,
+            genres: [...prev.genres, existingGenre],
+          }));
+        }
+        setNewGenre("");
+      }
+    }
+  };
+
+  const addNewDirector = () => {
+    if (newDirector.trim()) {
+      const directorExists = allDirectors.some((director) => director.name.toLowerCase() === newDirector.toLowerCase());
+  
+      if (!directorExists) {
+        const newDirectorData = { id: allDirectors.length + 1, name: newDirector.trim() };
+  
+        setAllDirectors((prev) => [...prev, newDirectorData]);
+  
+        setNewMovie((prev) => ({
+          ...prev,
+          directors: [...prev.directors, newDirectorData],
+        }));
+      } else {
+        const existingDirector = allDirectors.find((director) => director.name.toLowerCase() === newDirector.toLowerCase());
+        if (existingDirector) {
+          setNewMovie((prev) => ({
+            ...prev,
+            directors: [...prev.directors, existingDirector],
+          }));
+        }
+      }
+  
+      setNewDirector("");
+    }
   };
 
   return (
@@ -153,7 +242,7 @@ const MoviesPage = () => {
       <div className="max-w-6xl mx-auto bg-gray-800 rounded-lg p-6 shadow-lg">
         <div className="bg-gray-700 p-6 rounded-lg mb-8">
           <h2 className="text-xl font-bold text-yellow-600 mb-4">Додати новий фільм</h2>
-          {formError && <p className="text-red-600 mb-4">{formError}</p>} 
+          {formError && <p className="text-red-600 mb-4">{formError}</p>}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label className="block text-yellow-500 mb-2 text-sm">
@@ -256,71 +345,148 @@ const MoviesPage = () => {
                 onChange={(e) => setNewMovie({ ...newMovie, trailerUrl: e.target.value })}
               />
             </div>
+            <div>
+              <label className="block text-yellow-500 mb-2 text-sm">
+                Жанри <span className="text-red-600">*</span>
+              </label>
+              <div className="mb-2">
+                <select
+                  className="w-full p-3 bg-gray-800 text-white rounded"
+                  multiple
+                  value={newMovie.genres.map((genre) => genre.id.toString())} // Convert to string
+                  onChange={(e) => {
+                    const selectedGenres = Array.from(e.target.selectedOptions, (option) => {
+                      const genre = allGenres.find((genre) => genre.id === parseInt(option.value));
+                      return genre ? genre : null; // Повертаємо null, якщо жанр не знайдено
+                    }).filter(Boolean); // Фільтруємо null значення
+                    console.log("Selected genres:", selectedGenres); // Логування вибраних жанрів
+                    setNewMovie({ ...newMovie, genres: selectedGenres });
+                  }}
+                >
+                  {allGenres.map((genre) => (
+                    <option key={genre.id} value={genre.id.toString()}>
+                      {genre.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <input
+                type="text"
+                className="w-full p-3 bg-gray-800 text-white rounded"
+                placeholder="Додати новий жанр"
+                value={newGenre}
+                onChange={(e) => setNewGenre(e.target.value)}
+              />
+              <button
+                className="mt-2 p-2 bg-yellow-500 text-white rounded"
+                type="button"
+                onClick={addNewGenre}
+              >
+                Додати жанр
+              </button>
+            </div>
+
+            <div>
+              <label className="block text-yellow-500 mb-2 text-sm">
+                Режисери <span className="text-red-600">*</span>
+              </label>
+              <div className="mb-2">
+                <select
+                  className="w-full p-3 bg-gray-800 text-white rounded"
+                  multiple
+                  value={newMovie.directors.map((director) => director.id.toString())} // Optional chaining here
+                  onChange={(e) => {
+                    const selectedDirectors = Array.from(e.target.selectedOptions, (option) => {
+                      const director = allDirectors.find((director) => director.id === parseInt(option.value));
+                      return director ? director : null; // Повертаємо null, якщо режисер не знайдено
+                    }).filter(Boolean); // Фільтруємо null значення
+                    console.log("Selected directors:", selectedDirectors); // Логування вибраних режисерів
+                    setNewMovie({ ...newMovie, directors: selectedDirectors });
+                  }}
+                >
+                  {allDirectors.map((director) => (
+                    <option key={director.id} value={director.id.toString()}>
+                      {director.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <input
+                type="text"
+                className="w-full p-3 bg-gray-800 text-white rounded"
+                placeholder="Додати нового режисера"
+                value={newDirector}
+                onChange={(e) => setNewDirector(e.target.value)}
+              />
+              <button
+                className="mt-2 p-2 bg-yellow-500 text-white rounded"
+                type="button"
+                onClick={addNewDirector}
+              >
+                Додати режисера
+              </button>
+            </div>
+            <div className="w-full flex justify-center mt-4">
+              <button
+                className="bg-yellow-600 hover:bg-yellow-700 text-white font-bold py-4 px-6 rounded"
+                onClick={addMovie}
+              >
+                Додати фільм
+              </button>
+            </div>
           </div>
-          <button
-            onClick={addMovie}
-            className="mt-4 w-full bg-yellow-600 text-black p-3 rounded hover:bg-yellow-500"
-          >
-            Додати фільм
-          </button>
         </div>
 
-        <h1 className="text-2xl font-bold text-yellow-600 mb-4">Керування фільмами</h1>
-        <ul className="space-y-4 mb-8">
-          {Array.isArray(movies) && movies.length > 0 ? (
-            movies.map((movie) => (
-              <li
-                key={movie.id}
-                className="flex items-center justify-between bg-gray-700 p-4 rounded-lg"
-              >
-                <div className="flex items-center space-x-4">
-                  {movie.posterUrl && (
-                    <img
-                      src={movie.posterUrl}
-                      alt={`Poster of ${movie.title}`}
-                      className="w-32 h-48 object-cover rounded-lg"
-                    />
-                  )}
-                  <div>
-                    <h2 className="text-xl font-semibold text-yellow-500">{movie.title}</h2>
-                    <p className="text-sm text-gray-300">
-                      {expanded[movie.id]
-                        ? movie.description
-                        : truncateDescription(movie.description)}
-                      <span
-                        onClick={() => toggleDescription(movie.id)}
-                        className="text-yellow-500 cursor-pointer ml-2"
-                      >
-                        {expanded[movie.id] ? "Сховати" : "Більше"}
-                      </span>
-                    </p>
-                    <p className="text-sm text-gray-400">Рейтинг: {movie.rating}/5</p>
-                  </div>
-                </div>
-                <div className="flex items-center space-x-4">
-                  {movie.trailerUrl && (
-                    <a
-                      href={movie.trailerUrl}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="bg-blue-600 px-4 py-2 text-white rounded hover:bg-blue-500"
-                    >
-                      Переглянути трейлер
-                    </a>
-                  )}
+        {/* Movies list */}
+        <h2 className="text-xl font-bold text-yellow-600 mb-4">Список фільмів</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {movies.map((movie) => (
+            <div key={movie.id} className="bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+              <div className="relative">
+                <img
+                  src={movie.posterUrl}
+                  alt={movie.title}
+                  className="w-full h-72 object-cover"
+                />
+                <div className="absolute top-0 left-0 bg-black bg-opacity-50 text-white p-2">
                   <button
+                    className="text-red-600"
                     onClick={() => removeMovie(movie.id)}
-                    className="bg-red-600 px-4 py-2 text-white rounded hover:bg-red-500"
                   >
                     Видалити
                   </button>
                 </div>
-              </li>
-            ))
-          ) : (
-            <p className="text-gray-400">Немає фільмів для відображення.</p>
-          )}
-        </ul>
+              </div>
+              <div className="p-4">
+                <h3 className="text-xl font-semibold">{movie.title}</h3>
+                <p><strong>Мова:</strong> {movie.language}</p>
+                <p><strong>Рейтинг:</strong> {movie.rating}</p>
+                <p><strong>Тривалість:</strong> {movie.duration} хв</p>
+                <p><strong>Жанри:</strong> {movie.genres && movie.genres.length > 0 ? movie.genres.map((genre) => genre.name).join(", ") : "Немає жанрів"}</p>
+                <p><strong>Режисери:</strong> {movie.directors && movie.directors.length > 0 ? movie.directors.map((director) => director.name).join(", ") : "Немає режисерів"}</p>
+                <div>
+                  <button
+                    className="text-yellow-500 mt-2"
+                    onClick={() => toggleDescription(movie.id)}
+                  >
+                    {expanded[movie.id] ? "Згорнути" : "Читати більше"}
+                  </button>
+                  {expanded[movie.id] && (
+                    <div className="mt-2">
+                      <p><strong>Опис:</strong> {movie.description}</p>
+                    </div>
+                  )}
+                </div>
+                <button
+                  className="mt-2 p-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                  onClick={() => window.open(movie.trailerUrl, "_blank")}
+                >
+                  Переглянути трейлер
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
