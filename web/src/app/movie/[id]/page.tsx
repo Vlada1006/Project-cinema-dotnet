@@ -116,17 +116,17 @@ class MovieDetailsPage extends React.Component<{}, MovieDetailsPageState> {
           />
           
           <p>{movie.description}</p>
-          <p className="text-yellow-600">Release Date: {movie.releaseDate || 'N/A'}</p>
-          <p className="text-yellow-600">Rating: {movie.rating || 'N/A'}/5</p>
-          <p>Duration: {movie.duration || 'N/A'} min</p>
-          <p>Language: {movie.language || 'N/A'}</p>
+          <p className="text-yellow-600">Дата випуску: {movie.releaseDate || 'N/A'}</p>
+          <p className="text-yellow-600">Рейтинг: {movie.rating || 'N/A'}/5</p>
+          <p>Тривалість фільму : {movie.duration || 'N/A'} min</p>
+          <p>Мова: {movie.language || 'N/A'}</p>
 
-          <p>Genres: {movie.genres && movie.genres.length > 0 ? movie.genres.map((g) => g.name).join(', ') : 'N/A'}</p>
+          <p>Жанр: {movie.genres && movie.genres.length > 0 ? movie.genres.map((g) => g.name).join(', ') : 'N/A'}</p>
 
-          <p>Directors: {movie.directors && movie.directors.length > 0 ? movie.directors.map((d) => d.name).join(', ') : 'N/A'}</p>
+          <p>Режисер: {movie.directors && movie.directors.length > 0 ? movie.directors.map((d) => d.name).join(', ') : 'N/A'}</p>
           {trailerUrl && (
             <div>
-              <h3>Trailer:</h3>
+              <h3>Трейлер:</h3>
               <iframe
                 width="560"
                 height="315"

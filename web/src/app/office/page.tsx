@@ -121,12 +121,11 @@ const Home = () => {
 
 
         <li>
-          <h4 className="text-lg font-semibold mt-4">Вихід</h4>
           <button
             className="w-full text-left p-2 hover:bg-gray-700"
             onClick={handleLogout}
           >
-            Вийти
+            Вийти з особистого кабінету
           </button>
         </li>
 
