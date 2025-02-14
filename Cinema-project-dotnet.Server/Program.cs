@@ -54,6 +54,7 @@ builder.Services.AddScoped<ISessionService, SessionService>();
 builder.Services.AddScoped<IBookingService, BookingService>();
 builder.Services.AddScoped<ITransactionService, TransactionService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<MovieDataSeeder>();
 
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
@@ -117,6 +118,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
     
 var app = builder.Build();
+
+// Get the MovieDataSeeder service and run the seed method
+var scope = app.Services.CreateScope();
+var seeder = scope.ServiceProvider.GetRequiredService<MovieDataSeeder>();
+await seeder.SeedDatabaseAsync();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
