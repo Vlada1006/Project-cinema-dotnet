@@ -6,6 +6,7 @@ using FluentValidation;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 
 namespace Cinema_project_dotnet.Server.Controllers
 {
@@ -15,11 +16,16 @@ namespace Cinema_project_dotnet.Server.Controllers
     {
         private readonly ISessionService _sessionService;
         private readonly IValidator<SessionDTO> _validator;
+        private readonly IHubContext<NotificationHub> _hubContext;
+        private readonly IBookingService _bookingService;
 
-        public SessionsController(ISessionService sessionService, IValidator<SessionDTO> validator)
+        public SessionsController(ISessionService sessionService, IValidator<SessionDTO> validator, 
+            IHubContext<NotificationHub> hubContext, IBookingService bookingService)
         {
             _sessionService = sessionService;
             _validator = validator;
+            _hubContext = hubContext;
+            _bookingService = bookingService;
         }
 
         [HttpGet]
@@ -64,7 +70,17 @@ namespace Cinema_project_dotnet.Server.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult> DeleteSession(int id)
         {
+            var bookings = await _bookingService.GetBookingsBySessionIdAsync(id);
+
             await _sessionService.DeleteSessionAsync(id);
+
+            foreach (var booking in bookings)
+            {
+                await _bookingService.CancelBookingAsync(booking.Id, "Session deleted");
+
+                await _hubContext.Clients.User(booking.UserId.ToString()).SendAsync("ReceiveNotification",
+                    $"Your booking for session {id} has been canceled as the session has been deleted.");
+            }
             return Ok(new { message = $"Session  with id {id} successfully deleted" });
         }
 

@@ -23,7 +23,6 @@ namespace Cinema_project_dotnet.Server.Controllers
             _bookingService = bookingService;
             _validator = validator;
             _hubContext = hubContext;
-
         }
 
         [HttpGet]
@@ -54,9 +53,7 @@ namespace Cinema_project_dotnet.Server.Controllers
             await _hubContext.Clients.User(bookingDTO.UserId.ToString()).SendAsync("ReceiveNotification",
                 $"Booking confirmed! Your seat {bookingDTO.SeatId} for session {bookingDTO.SessionId} is reserved.");
 
-            return Ok(new { message = "Booking successfully created" });
-
-            
+            return Ok(new { message = "Booking successfully created" });            
         }
 
         [HttpPut("{id}")]
@@ -66,6 +63,10 @@ namespace Cinema_project_dotnet.Server.Controllers
             if (!validationResult.IsValid) return BadRequest(validationResult);
 
             await _bookingService.UpdateBookingAsync(id, bookingDTO);
+
+            await _hubContext.Clients.User(bookingDTO.UserId.ToString()).SendAsync("ReceiveNotification",
+                $"Booking with id {id} successfully updated");
+
             return Ok(new { message = $"Booking with id {id} successfully updated" });
         }
 
@@ -73,7 +74,12 @@ namespace Cinema_project_dotnet.Server.Controllers
         [Authorize(Roles = "Admin,User")]
         public async Task<ActionResult> CancelBooking(int id, string cancellationMessage)
         {
+            var booking = await _bookingService.GetBookingByIdAsync(id);
             await _bookingService.CancelBookingAsync(id, cancellationMessage);
+
+            await _hubContext.Clients.User(booking.UserId.ToString()).SendAsync("ReceiveNotification",
+                $"Booking with id {id} successfully canceled");
+
             return Ok(new { message = $"Booking  with id {id} successfully canceled" });
         }
     }

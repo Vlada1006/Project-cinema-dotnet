@@ -57,6 +57,18 @@ namespace Cinema_project_dotnet.BusinessLogic.Services
             return _mapper.Map<BookingDTO>(booking);
         }
 
+        public async Task<List<BookingDTO>> GetBookingsBySessionIdAsync(int sessionId)
+        {
+            var bookings = await _bookingRepo.GetByConditionAsync(b => b.SessionId == sessionId);
+
+            if (bookings == null || !bookings.Any())
+            {
+                throw new HttpException("No bookings found for the given session", HttpStatusCode.NotFound);
+            }
+
+            return _mapper.Map<List<BookingDTO>>(bookings);
+        }
+
         public async Task CreateBookingAsync(BookingDTO bookingDTO)
         {
             var user = await _userRepo.GetByConditionAsync(u => u.Id == bookingDTO.UserId);

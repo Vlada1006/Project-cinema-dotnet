@@ -181,5 +181,12 @@ namespace Cinema_project_dotnet.BusinessLogic.Services
                              (endTime > s.StartTime && endTime <= s.EndTime) ||
                              (startTime <= s.StartTime && endTime >= s.EndTime)));
         }
+
+        public async Task<List<SessionDTO>> GetSessionsByFilmIdAsync(int filmId)
+        {
+            var sessions = await _sessionRepo.GetByConditionAsync(s => s.FilmId == filmId);
+
+            return _mapper.Map<List<SessionDTO>>(sessions);
+        }
     }
 }
