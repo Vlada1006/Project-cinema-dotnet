@@ -24,9 +24,9 @@ namespace Cinema_project_dotnet.DataAccess
 
         public string CreateJWTToken(User user, List<string> roles)
         {
-            //create claims 
             var claims = new List<Claim>();
             claims.Add(new Claim(ClaimTypes.Email, user.Email));
+            claims.Add(new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()));
 
             foreach (var role in roles) 
             {
