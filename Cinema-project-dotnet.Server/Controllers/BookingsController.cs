@@ -1,4 +1,5 @@
 ﻿using Cinema_project_dotnet.BusinessLogic.DTOs;
+using Cinema_project_dotnet.BusinessLogic.Exeptions;
 using Cinema_project_dotnet.BusinessLogic.Interfaces;
 using Cinema_project_dotnet.BusinessLogic.Services;
 using FluentValidation;
@@ -64,6 +65,14 @@ namespace Cinema_project_dotnet.Server.Controllers
         {
             await _bookingService.CancelBookingAsync(id, cancellationMessage);
             return Ok(new { message = $"Booking  with id {id} successfully canceled" });
+        }
+
+        [HttpGet("user/{userId}")]
+        [Authorize(Roles = "Admin,User")]
+        public async Task<ActionResult<List<BookingDTO>>> GetBookingsByUserId(string userId)
+        {
+            var bookings = await _bookingService.GetBookingsByUserIdAsync(userId);
+            return Ok(new { message = $"Successfully retrieved bookings for user with id {userId}", data = bookings });
         }
     }
 }
