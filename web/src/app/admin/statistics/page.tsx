@@ -14,7 +14,7 @@ const StatisticsPage = () => {
   const [filter, setFilter] = useState("");
 
   useEffect(() => {
-    fetch("https://localhost:7000/api/Films") // Замініть на ваш API для отримання статистики
+    fetch("/api/movies") // Замініть на ваш API для отримання статистики
       .then((response) => response.json())
       .then((data) => setStats(data))
       .catch((error) => console.error("Error fetching statistics:", error));

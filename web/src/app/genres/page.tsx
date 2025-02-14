@@ -1,24 +1,23 @@
-'use client';
+"use client";
 
-
-import React, { useState, useEffect, JSX } from 'react';
+import React, { useState, useEffect, JSX } from "react";
 
 const Genres = () => {
   const [genres, setGenres] = useState<string[]>([]);
-  const [selectedGenre, setSelectedGenre] = useState('');
+  const [selectedGenre, setSelectedGenre] = useState("");
   const [movies, setMovies] = useState<any[]>([]);
 
   useEffect(() => {
     const fetchGenres = async () => {
       try {
-        const response = await fetch('https://localhost:7000/api/Genres'); 
+        const response = await fetch("/api/genres");
         const data = await response.json();
-        setGenres(data.genres || []); 
+        setGenres(data.genres || []);
       } catch (error) {
-        console.error('Помилка завантаження жанрів:', error);
+        console.error("Помилка завантаження жанрів:", error);
       }
     };
-    
+
     fetchGenres();
   }, []);
 
@@ -30,12 +29,14 @@ const Genres = () => {
 
   const fetchMoviesByGenre = async (genre: string) => {
     try {
-      const response = await fetch('https://localhost:7000/api/Genres');
+      const response = await fetch("/api/genres");
       const data = await response.json();
-      const filteredMovies = data.filter((movie: any) => movie.description.includes(genre));
-      setMovies(filteredMovies || []);  
+      const filteredMovies = data.filter((movie: any) =>
+        movie.description.includes(genre)
+      );
+      setMovies(filteredMovies || []);
     } catch (error) {
-      console.error('Помилка завантаження фільмів:', error);
+      console.error("Помилка завантаження фільмів:", error);
     }
   };
 
@@ -50,52 +51,50 @@ const Genres = () => {
           onChange={(e) => setSelectedGenre(e.target.value)}
         >
           <option value="">Всі жанри</option>
-          {
-            
-            (() => {
-              const genreOptions: JSX.Element[] = [];
-              for (let i = 0; i < genres.length; i++) {
-                genreOptions.push(
-                  <option key={genres[i]} value={genres[i]}>
-                    {genres[i]}
-                  </option>
-                );
-              }
-              return genreOptions;
-            })()
-          }
+          {(() => {
+            const genreOptions: JSX.Element[] = [];
+            for (let i = 0; i < genres.length; i++) {
+              genreOptions.push(
+                <option key={genres[i]} value={genres[i]}>
+                  {genres[i]}
+                </option>
+              );
+            }
+            return genreOptions;
+          })()}
         </select>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {
-          
-          (() => {
-            const movieItems: JSX.Element[] = [];
-            if (movies && movies.length > 0) {
-              for (let i = 0; i < movies.length; i++) {
-                movieItems.push(
-                  <div key={movies[i].id} className="bg-gray-800 p-4 rounded-lg">
-                    <img
-                      src={movies[i].image}
-                      alt={movies[i].title}
-                      className="w-full h-64 object-cover rounded"
-                    />
-                    <h3 className="text-xl font-bold mt-2">{movies[i].title}</h3>
-                    <p className="text-sm text-gray-400">{movies[i].release_date}</p>
-                    <p className="mt-2">{movies[i].description.substring(0, 100)}...</p>
-                  </div>
-                );
-              }
-            } else {
+        {(() => {
+          const movieItems: JSX.Element[] = [];
+          if (movies && movies.length > 0) {
+            for (let i = 0; i < movies.length; i++) {
               movieItems.push(
-                <p key="no-movies" className="text-gray-400">
-                  Оберіть жанр, щоб переглянути фільми.
-                </p>
+                <div key={movies[i].id} className="bg-gray-800 p-4 rounded-lg">
+                  <img
+                    src={movies[i].image}
+                    alt={movies[i].title}
+                    className="w-full h-64 object-cover rounded"
+                  />
+                  <h3 className="text-xl font-bold mt-2">{movies[i].title}</h3>
+                  <p className="text-sm text-gray-400">
+                    {movies[i].release_date}
+                  </p>
+                  <p className="mt-2">
+                    {movies[i].description.substring(0, 100)}...
+                  </p>
+                </div>
               );
             }
-            return movieItems;
-          })()
-        }
+          } else {
+            movieItems.push(
+              <p key="no-movies" className="text-gray-400">
+                Оберіть жанр, щоб переглянути фільми.
+              </p>
+            );
+          }
+          return movieItems;
+        })()}
       </div>
     </div>
   );

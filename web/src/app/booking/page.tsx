@@ -1,4 +1,4 @@
-"use client"; 
+"use client";
 
 import React, { useEffect, useState } from "react";
 
@@ -25,14 +25,13 @@ export default function Booking() {
   const rows = 10;
   const cols = 10;
 
- 
   const bookedSeats = [
     [3, 4],
     [5, 6],
   ];
 
   useEffect(() => {
-    fetch("https://localhost:7000/api/Films")
+    fetch("/api/movies")
       .then((response) => response.json())
       .then((data) => {
         setMovies(data);
@@ -44,7 +43,6 @@ export default function Booking() {
       });
   }, []);
 
-  
   useEffect(() => {
     setTotalPrice(selectedSeats.length * ticketPrice);
   }, [selectedSeats]);
@@ -60,17 +58,24 @@ export default function Booking() {
     });
   };
 
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!selectedMovie || !selectedDate || !selectedTime || selectedSeats.length === 0) {
+    if (
+      !selectedMovie ||
+      !selectedDate ||
+      !selectedTime ||
+      selectedSeats.length === 0
+    ) {
       setError("Будь ласка, заповніть усі поля.");
       return;
     }
     setIsModalOpen(true);
   };
 
-  if (loading) return <p className="text-yellow-600 text-center">Завантаження фільмів...</p>;
+  if (loading)
+    return (
+      <p className="text-yellow-600 text-center">Завантаження фільмів...</p>
+    );
   if (error) return <p className="text-red-500 text-center">{error}</p>;
 
   return (
@@ -79,12 +84,19 @@ export default function Booking() {
         <h1 className="text-3xl font-bold">Бронювання квитків</h1>
       </header>
 
-      <form onSubmit={handleSubmit} className="max-w-2xl mx-auto bg-gray-800 p-6 rounded-lg">
+      <form
+        onSubmit={handleSubmit}
+        className="max-w-2xl mx-auto bg-gray-800 p-6 rounded-lg"
+      >
         <div className="mb-6">
-          <label className="block text-lg font-semibold mb-2">Оберіть фільм:</label>
+          <label className="block text-lg font-semibold mb-2">
+            Оберіть фільм:
+          </label>
           <select
             onChange={(e) =>
-              setSelectedMovie(movies.find((movie) => movie.id === e.target.value) || null)
+              setSelectedMovie(
+                movies.find((movie) => movie.id === e.target.value) || null
+              )
             }
             className="w-full p-2 bg-gray-700 text-yellow-600 rounded"
             value={selectedMovie?.id || ""}
@@ -118,7 +130,7 @@ export default function Booking() {
               for (let i = 0; i < 14; i++) {
                 const nextDate = new Date(today);
                 nextDate.setDate(today.getDate() + i);
-                const dateString = nextDate.toISOString().split('T')[0];
+                const dateString = nextDate.toISOString().split("T")[0];
                 dateOptions.push(
                   <option key={dateString} value={dateString}>
                     {dateString}
@@ -144,7 +156,6 @@ export default function Booking() {
         <div className="mb-6">
           <p className="text-lg font-semibold mb-2">Оберіть місця:</p>
 
-        
           <div className="bg-gray-300 text-center text-black font-bold py-2 mb-4 rounded">
             Екран
           </div>
@@ -159,12 +170,15 @@ export default function Booking() {
                       key={`${row}-${col}`}
                       onClick={() => handleSeatSelect(row, col)}
                       type="button"
-                      className={`w-8 h-8 rounded-full ${bookedSeats.some(([r, c]) => r === row && c === col)
+                      className={`w-8 h-8 rounded-full ${
+                        bookedSeats.some(([r, c]) => r === row && c === col)
                           ? "bg-red-600 cursor-not-allowed"
-                          : selectedSeats.some(([r, c]) => r === row && c === col)
+                          : selectedSeats.some(
+                              ([r, c]) => r === row && c === col
+                            )
                           ? "bg-green-500"
                           : "bg-gray-500"
-                        }`}
+                      }`}
                     ></button>
                   );
                 }
@@ -173,23 +187,28 @@ export default function Booking() {
             })()}
           </div>
 
-        
           <div className="mt-4 text-center text-yellow-600">
             <p className="mb-2">
-              <span className="w-4 h-4 inline-block rounded-full bg-green-500"></span> — Вибране місце
+              <span className="w-4 h-4 inline-block rounded-full bg-green-500"></span>{" "}
+              — Вибране місце
             </p>
             <p className="mb-2">
-              <span className="w-4 h-4 inline-block rounded-full bg-yellow-600"></span> — Заброньоване місце
+              <span className="w-4 h-4 inline-block rounded-full bg-yellow-600"></span>{" "}
+              — Заброньоване місце
             </p>
             <p>
-              <span className="w-4 h-4 inline-block rounded-full bg-gray-500"></span> — Доступне місце
+              <span className="w-4 h-4 inline-block rounded-full bg-gray-500"></span>{" "}
+              — Доступне місце
             </p>
           </div>
         </div>
 
         <div className="flex justify-between items-center">
           <p className="text-xl font-bold">Ціна: {totalPrice} грн</p>
-          <button type="submit" className="px-4 py-2 bg-yellow-600 rounded text-white">
+          <button
+            type="submit"
+            className="px-4 py-2 bg-yellow-600 rounded text-white"
+          >
             Оплатити
           </button>
         </div>
@@ -202,7 +221,10 @@ export default function Booking() {
             <p>Фільм: {selectedMovie?.title}</p>
             <p>Дата: {selectedDate}</p>
             <p>Час: {selectedTime}</p>
-            <p>Місця: {selectedSeats.map(([r, c]) => `[${r + 1},${c + 1}]`).join(", ")}</p>
+            <p>
+              Місця:{" "}
+              {selectedSeats.map(([r, c]) => `[${r + 1},${c + 1}]`).join(", ")}
+            </p>
             <p>Загальна ціна: {totalPrice} грн</p>
             <button
               onClick={() => setIsModalOpen(false)}
