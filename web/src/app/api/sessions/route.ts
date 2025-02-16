@@ -3,16 +3,9 @@ import { NextRequest, NextResponse } from "next/server";
 import { authOptions } from "../auth/[...nextauth]/constants";
 
 export async function GET(req: NextRequest) {
-  const { token } = (await getServerSession(authOptions)) as any;
-
   try {
     const sessionsApiResponse = await fetch(
-      `https://localhost:7000/Api/Sessions`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
+      `https://localhost:7000/Api/Sessions`
     );
 
     if (!sessionsApiResponse.ok) {

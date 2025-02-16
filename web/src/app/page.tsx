@@ -3,10 +3,10 @@
 import React, { JSX, useCallback, useEffect, useState } from "react";
 import Sidebar from "react-sidebar";
 import { useRouter } from "next/navigation";
-import { signOut, useSession } from "next-auth/react";
+import { signOut } from "next-auth/react";
 import { useAppDispatch, useAppSelector } from "@/stores/hooks";
 import { clearUserStore } from "@/stores/user/user.slice";
-import { selectUserEmail } from "@/stores/user/selectors";
+import { selectUserEmail, selectUserRoles } from "@/stores/user/selectors";
 
 interface Movie {
   id: string;
@@ -28,8 +28,8 @@ const Home = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
 
-  const session = useSession();
   const userEmailFromStore = useAppSelector(selectUserEmail);
+  const userRolesFromStore = useAppSelector(selectUserRoles);
 
   const handleMovieClick = (id: string) => {
     router.push(`/movie/${id}`);
@@ -117,14 +117,16 @@ const Home = () => {
             ✖
           </button>
         </li>
-        <li>
-          <button
-            className="w-full text-left p-2 hover:bg-gray-700"
-            onClick={() => router.push("/office")}
-          >
-            Особистий кабінет
-          </button>
-        </li>
+        {userEmailFromStore && (
+          <li>
+            <button
+              className="w-full text-left p-2 hover:bg-gray-700"
+              onClick={() => router.push("/office")}
+            >
+              Особистий кабінет
+            </button>
+          </li>
+        )}
         <li>
           <button
             className="w-full text-left p-2 hover:bg-gray-700"
@@ -165,6 +167,16 @@ const Home = () => {
             Переглянути календар показів
           </button>
         </li>
+        {userRolesFromStore && userRolesFromStore.includes("Admin") && (
+          <li>
+            <button
+              className="w-full text-left p-2 hover:bg-gray-700"
+              onClick={() => router.push("/admin/dashboard")}
+            >
+              Адмін панель
+            </button>
+          </li>
+        )}
         <li>
           {userEmailFromStore ? (
             <button

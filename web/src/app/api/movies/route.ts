@@ -3,14 +3,8 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]/constants";
 
 export async function GET(req: NextRequest) {
-  const { token } = (await getServerSession(authOptions)) as any;
-
   try {
-    const filmsApiResponse = await fetch(`https://localhost:7000/Api/Films`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const filmsApiResponse = await fetch(`https://localhost:7000/Api/Films`);
 
     if (!filmsApiResponse.ok) {
       return NextResponse.json(

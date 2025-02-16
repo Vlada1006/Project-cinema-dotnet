@@ -1,17 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getToken } from "next-auth/jwt";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]/constants";
 
 export async function GET(req: NextRequest) {
-  const { token } = (await getServerSession(authOptions)) as any;
-
   try {
-    const genresApiResponse = await fetch(`https://localhost:7000/Api/Genres`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const genresApiResponse = await fetch(`https://localhost:7000/Api/Genres`);
 
     if (!genresApiResponse.ok) {
       return NextResponse.json(
