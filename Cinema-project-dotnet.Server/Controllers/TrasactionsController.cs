@@ -22,8 +22,8 @@ namespace Cinema_project_dotnet.Server.Controllers
         [Authorize(Roles = "Admin, User")]
         public async Task<ActionResult> PayBooking(decimal amount)
         {
-            await _transactionService.PayBooking(amount);
-            return Ok(new { message = "Payment was successful." });
+            var transaction = await _transactionService.PayBooking(amount);
+            return Ok(new { message = "Payment was successful.", data = transaction });
         }
     }
 }

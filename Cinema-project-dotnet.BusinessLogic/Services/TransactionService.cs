@@ -12,7 +12,7 @@ namespace Cinema_project_dotnet.BusinessLogic.Services
             _transactionRepo = transactionRepo;
         }
 
-        public async Task PayBooking(decimal amount)
+        public async Task<int> PayBooking(decimal amount)
         {
             var transaction = new Transaction{
                 Status = "Success",
@@ -21,6 +21,8 @@ namespace Cinema_project_dotnet.BusinessLogic.Services
             };
 
             await _transactionRepo.AddAsync(transaction);
+
+            return transaction.Id;
         }
     }
 }
