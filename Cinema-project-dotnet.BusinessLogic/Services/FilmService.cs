@@ -1,10 +1,12 @@
 ﻿using AutoMapper;
+using Cinema_project_dotnet.BusinessLogic.DTOs;
 using Cinema_project_dotnet.BusinessLogic.DTOs.FilmDTO;
 using Cinema_project_dotnet.BusinessLogic.Entities;
 using Cinema_project_dotnet.BusinessLogic.Exeptions;
 using Cinema_project_dotnet.BusinessLogic.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
+using System.Net.Sockets;
 
 namespace Cinema_project_dotnet.BusinessLogic.Services
 {
@@ -13,20 +15,23 @@ namespace Cinema_project_dotnet.BusinessLogic.Services
         private readonly IGenericRepository<Film> _filmRepo;
         private readonly IGenericRepository<Genre> _genreRepo;
         private readonly IGenericRepository<Director> _directorRepo;
+        private readonly IGenericRepository<Booking> _bookingRepo;
         private readonly IMapper _mapper;
-        
+
         public FilmService(
             IGenericRepository<Film> filmRepo,
             IGenericRepository<Genre> genreRepo,
             IGenericRepository<Director> directorRepo,
+            IGenericRepository<Booking> bookingRepo,
             IMapper mapper)
         {
             this._filmRepo = filmRepo;
             this._genreRepo = genreRepo;
             this._directorRepo = directorRepo;
+            this._bookingRepo = bookingRepo;
             this._mapper = mapper;
         }
-        
+
         public async Task<List<FilmGetDTO>> GetAllFilmsAsync()
         {
             var films = await _filmRepo.GetAllAsync(query => query
@@ -37,7 +42,7 @@ namespace Cinema_project_dotnet.BusinessLogic.Services
 
             return _mapper.Map<List<FilmGetDTO>>(films);
         }
-        
+
         public async Task<FilmGetDTO> GetFilmByIdAsync(int id)
         {
             var film = await _filmRepo.GetByIdAsync(id, query => query
@@ -173,5 +178,24 @@ namespace Cinema_project_dotnet.BusinessLogic.Services
 
             await _filmRepo.UpdateAsync(film);
         }
+
+
+        public async Task<List<FilmStatisticsDTO>> GetFilmStatisticsAsync()
+        {
+            var films = await _filmRepo.GetAllAsync(); 
+            var bookings = await _bookingRepo.GetAllAsync(); 
+
+            var statistics = films.Select(film => new FilmStatisticsDTO
+            {
+                Id = film.Id,
+                Title = film.Title,
+                TicketsSold = bookings.Count(b => b.Id == film.Id) 
+            })
+            .OrderByDescending(f => f.TicketsSold)
+            .ToList();
+
+            return statistics;
+        }
     }
 }
+

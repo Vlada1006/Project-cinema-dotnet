@@ -1,4 +1,5 @@
-﻿using Cinema_project_dotnet.BusinessLogic.DTOs.FilmDTO;
+﻿using Cinema_project_dotnet.BusinessLogic.DTOs;
+using Cinema_project_dotnet.BusinessLogic.DTOs.FilmDTO;
 
 namespace Cinema_project_dotnet.BusinessLogic.Interfaces
 {
@@ -9,5 +10,6 @@ namespace Cinema_project_dotnet.BusinessLogic.Interfaces
         Task CreateFilmAsync(FilmCreateUpdateDTO filmDTO);
         Task UpdateFilmAsync(int id, FilmCreateUpdateDTO filmDTO);
         Task DeleteFilmAsync(int id);
+        Task<List<FilmStatisticsDTO>> GetFilmStatisticsAsync();
     }
 }
