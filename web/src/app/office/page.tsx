@@ -132,7 +132,7 @@ const Home = () => {
         <li>
           <button
             className="w-full text-left p-2 hover:bg-gray-700"
-            onClick={() => (window.location.href = "/account")}
+            onClick={() => (window.location.href = "/popular")}
           >
             Переглянути популярні фільми
           </button>

@@ -1,7 +1,6 @@
 "use client";
 import { useAppDispatch } from "@/stores/hooks";
-import { fetchUser, setUser } from "@/stores/user/user.slice";
-import { getServerSession } from "next-auth";
+import { fetchUser } from "@/stores/user/user.slice";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
