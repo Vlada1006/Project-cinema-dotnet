@@ -5,12 +5,12 @@ import React, { useState, useEffect } from "react";
 // Оголошення інтерфейсів для типів
 interface Genre {
   id: number;
-  name: string;
+  name?: string;
 }
 
 interface Director {
   id: number;
-  name: string;
+  name?: string;
 }
 
 interface Movie {
@@ -179,7 +179,7 @@ const MoviesPage = () => {
   const addNewGenre = () => {
     if (newGenre.trim()) {
       const genreExists = allGenres.some(
-        (genre) => genre.name.toLowerCase() === newGenre.toLowerCase()
+        (genre) => genre.name?.toLowerCase() === newGenre.toLowerCase()
       );
 
       if (!genreExists) {
@@ -204,7 +204,7 @@ const MoviesPage = () => {
           .catch((error) => console.error("Error adding genre:", error));
       } else {
         const existingGenre = allGenres.find(
-          (genre) => genre.name.toLowerCase() === newGenre.toLowerCase()
+          (genre) => genre.name?.toLowerCase() === newGenre.toLowerCase()
         );
         if (existingGenre) {
           setNewMovie((prev) => ({
@@ -220,7 +220,7 @@ const MoviesPage = () => {
   const addNewDirector = () => {
     if (newDirector.trim()) {
       const directorExists = allDirectors.some(
-        (director) => director.name.toLowerCase() === newDirector.toLowerCase()
+        (director) => director.name?.toLowerCase() === newDirector.toLowerCase()
       );
 
       if (!directorExists) {
@@ -238,7 +238,7 @@ const MoviesPage = () => {
       } else {
         const existingDirector = allDirectors.find(
           (director) =>
-            director.name.toLowerCase() === newDirector.toLowerCase()
+            director.name?.toLowerCase() === newDirector.toLowerCase()
         );
         if (existingDirector) {
           setNewMovie((prev) => ({

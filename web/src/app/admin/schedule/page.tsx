@@ -505,7 +505,9 @@ const SchedulePage = () => {
                 const movie = movies.find(
                   (movie) => movie.id === session.filmId
                 );
-                const hall = halls.find((hall) => hall.id === session.roomId); // Зміна з hall на roomId
+                const hall = halls.find(
+                  (hall) => hall.id === Number(session.roomId)
+                ); // Зміна з hall на roomId
                 return (
                   <tr key={session.id}>
                     <td className="py-2 px-4">

@@ -34,7 +34,7 @@ export default function Booking() {
     fetch("/api/movies")
       .then((response) => response.json())
       .then((data) => {
-        setMovies(data);
+        setMovies(data.data);
         setLoading(false);
       })
       .catch(() => {
@@ -93,27 +93,21 @@ export default function Booking() {
             Оберіть фільм:
           </label>
           <select
-            onChange={(e) =>
+            onChange={(e) => {
+              console.log(e.target.value, movies);
               setSelectedMovie(
-                movies.find((movie) => movie.id === e.target.value) || null
-              )
-            }
+                movies.find((movie) => movie.id == e.target.value) || null
+              );
+            }}
             className="w-full p-2 bg-gray-700 text-yellow-600 rounded"
             value={selectedMovie?.id || ""}
           >
             <option value="">-- Виберіть фільм --</option>
-            {(() => {
-              const movieOptions = [];
-              for (let i = 0; i < movies.length; i++) {
-                const movie = movies[i];
-                movieOptions.push(
-                  <option key={movie.id} value={movie.id}>
-                    {movie.title}
-                  </option>
-                );
-              }
-              return movieOptions;
-            })()}
+            {movies.map((movie) => (
+              <option key={movie.id} value={movie.id}>
+                {movie.title}
+              </option>
+            ))}
           </select>
         </div>
 

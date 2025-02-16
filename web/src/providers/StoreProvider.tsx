@@ -21,7 +21,7 @@ export default function StoreProvider({
     <SessionProvider>
       <Provider store={storeRef.current}>
         <PersistGate loading={null} persistor={storeRef.current.__persistor}>
-          {children}{" "}
+          {children}
         </PersistGate>
       </Provider>
     </SessionProvider>

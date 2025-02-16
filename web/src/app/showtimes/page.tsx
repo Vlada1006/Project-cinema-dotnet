@@ -3,10 +3,12 @@
 import React, { useState, useEffect } from "react";
 
 interface Showtime {
-  movieId: number;
-  movieTitle: string;
+  id: number;
   startTime: string;
   endTime: string;
+  price: number;
+  filmId: number;
+  roomId: string;
 }
 
 interface ShowtimesData {
@@ -29,10 +31,31 @@ const ShowtimesCalendar = () => {
         }
         const { data } = await response.json();
 
-        if (Array.isArray(data)) {
-          setCalendarData(data);
-          if (data.length > 0) {
-            setSelectedDate(data[0].date);
+        const showTimesMap: Map<string, Showtime[]> =
+          data &&
+          data.reduce((acc: Map<string, Showtime[]>, showtime: Showtime) => {
+            const dateKey = new Date(showtime.startTime).toDateString();
+
+            if (acc.has(dateKey)) {
+              acc.get(dateKey)?.push(showtime);
+            } else {
+              acc.set(dateKey, [showtime]);
+            }
+
+            return acc;
+          }, new Map<string, Showtime[]>());
+
+        const calendarData: ShowtimesData[] =
+          showTimesMap &&
+          Array.from(showTimesMap.entries()).map(([date, showTimes]) => ({
+            date,
+            showtimes: showTimes,
+          }));
+
+        if (Array.isArray(calendarData)) {
+          setCalendarData(calendarData);
+          if (calendarData.length > 0) {
+            setSelectedDate(calendarData[0].date);
           }
         } else {
           throw new Error("Неправильний формат даних з API");
@@ -90,12 +113,14 @@ const ShowtimesCalendar = () => {
           <ul className="space-y-4">
             {selectedData.showtimes.map((showtime, index) => (
               <li key={index} className="bg-gray-800 p-4 rounded-lg">
-                <h3 className="text-xl font-semibold">{showtime.movieTitle}</h3>
+                <h3 className="text-xl font-semibold">
+                  FilmId: {showtime.filmId}
+                </h3>
                 <p className="text-gray-400">
-                  Час початку:{" "}
+                  Час початку:
                   {new Date(showtime.startTime).toLocaleTimeString()}
                   <br />
-                  Час завершення:{" "}
+                  Час завершення:
                   {new Date(showtime.endTime).toLocaleTimeString()}
                 </p>
               </li>
