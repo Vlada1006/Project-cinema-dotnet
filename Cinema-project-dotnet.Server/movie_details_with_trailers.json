@@ -1,0 +1,1317 @@
+[
+  {
+    "Title": "Ваяна 2",
+    "Description": "Ваяна та Мауї знову відправляються у захопливу подорож разом з командою не зовсім звичайних моряків. Пригода починається з несподіваного поклику від пращурів-мандрівників, який веде Ваяну до далеких морів Океанії. У давно забутих і небезпечних водах на неї чекають надзвичайні пригоди!",
+    "ReleaseDate": "2024-11-21",
+    "Rating": 7.2,
+    "Duration": 100,
+    "Language": "en",
+    "PosterUrl": "https://image.tmdb.org/t/p/w500/crDALXiyHVZg2xIIErMaBmTC3e3.jpg",
+    "Genres": [
+      {
+        "name": "Мультфільм"
+      },
+      {
+        "name": "Пригоди"
+      },
+      {
+        "name": "Сімейний"
+      },
+      {
+        "name": "Комедія"
+      }
+    ],
+    "Directors": [
+      {
+        "name": "David G. Derrick Jr."
+      },
+      {
+        "name": "Jason Hand"
+      },
+      {
+        "name": "Dana Ledoux Miller"
+      }
+    ],
+    "TrailerUrl": "https://www.youtube.com/watch?v=c40yI1R1aXA"
+  },
+  {
+    "Title": "Їжак Сонік 3",
+    "Description": "Сонік, Наклз і Тейлз повертаються для нової грандіозної пригоди. Команда возз'єднується, щоб протистояти новому грізному ворогу — Шедоу, таємничому їжаку, який володіє неймовірними здібностями. Команді Соніка доведеться укласти несподіваний союз, якщо вони прагнуть зупинити Шедоу і врятувати планету.",
+    "ReleaseDate": "2024-12-19",
+    "Rating": 7.773,
+    "Duration": 110,
+    "Language": "en",
+    "PosterUrl": "https://image.tmdb.org/t/p/w500/9U8WEuITXagHQWFQW48egF8oZeb.jpg",
+    "Genres": [
+      {
+        "name": "Бойовик"
+      },
+      {
+        "name": "Фантастика"
+      },
+      {
+        "name": "Комедія"
+      },
+      {
+        "name": "Сімейний"
+      }
+    ],
+    "Directors": [
+      {
+        "name": "Jeff Fowler"
+      }
+    ],
+    "TrailerUrl": "https://www.youtube.com/watch?v=bDIUaKYV_Tg"
+  },
+  {
+    "Title": "Панда патруль",
+    "Description": "Джекі Чан, легендарна зірка кунг-фу, є опікуном маленької панди. Але шахраї намагаються вкрасти миле звірятко, щоб зірвати великий куш. Джекі не може залишатися осторонь і вирушає в незабутню пригоду, щоб врятувати панду.",
+    "ReleaseDate": "2024-10-01",
+    "Rating": 6.552,
+    "Duration": 99,
+    "Language": "zh",
+    "PosterUrl": "https://image.tmdb.org/t/p/w500/rO62kjEpxKoi22euZlM11o2hRJe.jpg",
+    "Genres": [
+      {
+        "name": "Бойовик"
+      },
+      {
+        "name": "Комедія"
+      }
+    ],
+    "Directors": [
+      {
+        "name": "Zhang Luan"
+      }
+    ],
+    "TrailerUrl": "https://www.youtube.com/watch?v=DBqHt6iNKxg"
+  },
+  {
+    "Title": "Крейвен-мисливець",
+    "Description": "Сергій Кравінов - мисливець на велику дичину, який приймає магічну сироватку, що дає йому надлюдські здібності та подовжує життя.",
+    "ReleaseDate": "2024-12-11",
+    "Rating": 6.614,
+    "Duration": 127,
+    "Language": "en",
+    "PosterUrl": "https://image.tmdb.org/t/p/w500/tzWswZ7gL6A8Znw0dFGjnBdsUXW.jpg",
+    "Genres": [
+      {
+        "name": "Бойовик"
+      },
+      {
+        "name": "Пригоди"
+      },
+      {
+        "name": "Трилер"
+      }
+    ],
+    "Directors": [
+      {
+        "name": "J.C. Chandor"
+      }
+    ],
+    "TrailerUrl": "https://www.youtube.com/watch?v=fjyKbnjlBkQ"
+  },
+  {
+    "Title": "Капітан Америка: Чудесний новий світ",
+    "Description": "Після зустрічі з новообраним президентом США Таддеусом Россом, Сем опиняється в епіцентрі міжнародного скандалу. Він має з'ясувати мету підступної глобальної змови до того як її справжній лідер змусить весь світ червоніти від люті.",
+    "ReleaseDate": "2025-02-12",
+    "Rating": 6.203,
+    "Duration": 119,
+    "Language": "en",
+    "PosterUrl": "https://image.tmdb.org/t/p/w500/cIcuEFbydR7PUWMGN9jHNXno3KW.jpg",
+    "Genres": [
+      {
+        "name": "Трилер"
+      },
+      {
+        "name": "Бойовик"
+      },
+      {
+        "name": "Фантастика"
+      }
+    ],
+    "Directors": [
+      {
+        "name": "Julius Onah"
+      }
+    ],
+    "TrailerUrl": "https://www.youtube.com/watch?v=D_-FtB9xV2o"
+  },
+  {
+    "Title": "Знову в дії",
+    "Description": "П’ятнадцять років тому вони втекли із ЦРУ, щоб стати батьками. Але їх прикриття розкрито, і двоє елітних агентів повертаються у світ шпіонажу.",
+    "ReleaseDate": "2025-01-15",
+    "Rating": 6.6,
+    "Duration": 114,
+    "Language": "en",
+    "PosterUrl": "https://image.tmdb.org/t/p/w500/mjy629jsdIXyuC9kIC2M6JRSd1h.jpg",
+    "Genres": [
+      {
+        "name": "Бойовик"
+      },
+      {
+        "name": "Комедія"
+      }
+    ],
+    "Directors": [
+      {
+        "name": "Seth Gordon"
+      }
+    ],
+    "TrailerUrl": "https://www.youtube.com/watch?v=XjLPNk3v8dQ"
+  },
+  {
+    "Title": "Веном: Останній танець",
+    "Description": "Едді та Веном змушені тікати, адже тепер їх переслідує два світи, які закручують усе в одну павутину. Тож вони повинні прийняти доленосне рішення, яке стане їхнім останнім танцем.",
+    "ReleaseDate": "2024-10-22",
+    "Rating": 6.8,
+    "Duration": 109,
+    "Language": "en",
+    "PosterUrl": "https://image.tmdb.org/t/p/w500/88pz7b8x2ZZ6UuG2LXrEzqP6HCh.jpg",
+    "Genres": [
+      {
+        "name": "Бойовик"
+      },
+      {
+        "name": "Фантастика"
+      },
+      {
+        "name": "Пригоди"
+      }
+    ],
+    "Directors": [
+      {
+        "name": "Kelly Marcel"
+      }
+    ],
+    "TrailerUrl": "https://www.youtube.com/watch?v=JkG12Q-AlaI"
+  },
+  {
+    "Title": "Типу вагітна",
+    "Description": "План Лейні одружитися й завести сімʼю летить шкереберть, тож вона бреше всім, що вагітна... А потім закохується в чоловіка своєї мрії.",
+    "ReleaseDate": "2025-02-04",
+    "Rating": 5.6,
+    "Duration": 97,
+    "Language": "en",
+    "PosterUrl": "https://image.tmdb.org/t/p/w500/eCDe2JfwGZ4lk0o0Gl5Lp0A3ALa.jpg",
+    "Genres": [
+      {
+        "name": "Комедія"
+      },
+      {
+        "name": "Мелодрама"
+      }
+    ],
+    "Directors": [
+      {
+        "name": "Tyler Spindel"
+      }
+    ],
+    "TrailerUrl": "https://www.youtube.com/watch?v=upKpM1ut9PE"
+  },
+  {
+    "Title": "Гладіатор II",
+    "Description": "«Гладіатор II» продовжує епічну сагу про владу, помсту та інтриги, події якої відбуваються в Стародавньому Римі. Декілька років тому Луцій став свідком вбивства Максимуса від рук свого дядька. Тепер він змушений увійти в Колізей після того як його дім було зруйновано імператорами-тиранами, які тепер керують Римом. Оскільки на карту поставлено майбутнє імперії, Луцій повинен знайти у собі сили забути минуле та повернути Риму і його народу колишню славу.",
+    "ReleaseDate": "2024-11-05",
+    "Rating": 6.758,
+    "Duration": 148,
+    "Language": "en",
+    "PosterUrl": "https://image.tmdb.org/t/p/w500/nOjIxy29fpVTirwG4zlAxNzfw8q.jpg",
+    "Genres": [
+      {
+        "name": "Бойовик"
+      },
+      {
+        "name": "Пригоди"
+      },
+      {
+        "name": "Драма"
+      }
+    ],
+    "Directors": [
+      {
+        "name": "Ridley Scott"
+      }
+    ],
+    "TrailerUrl": "https://www.youtube.com/watch?v=UJ6fn4fb3hY"
+  },
+  {
+    "Title": "Муфаса: Король Лев",
+    "Description": "Історія розповідає про левеня-сирітку Муфасу. Він загублений і самотній, але його життя змінюється після знайомства з чуйним левом на ім'я Така – спадкоємцем королівського роду. Ця випадкова зустріч розпочинає захопливу подорож незвичайної групи аутсайдерів, які шукають своє призначення. Їхня дружба пройде чимало випробувань, серед яких втеча від небезпечного і кровожерливого ворога.",
+    "ReleaseDate": "2024-12-18",
+    "Rating": 7.4,
+    "Duration": 118,
+    "Language": "en",
+    "PosterUrl": "https://image.tmdb.org/t/p/w500/421dFTYWrrSRHFESzawTErn2pPg.jpg",
+    "Genres": [
+      {
+        "name": "Пригоди"
+      },
+      {
+        "name": "Сімейний"
+      },
+      {
+        "name": "Мультфільм"
+      }
+    ],
+    "Directors": [
+      {
+        "name": "Barry Jenkins"
+      }
+    ],
+    "TrailerUrl": "https://www.youtube.com/watch?v=C9HH62c7BGE"
+  },
+  {
+    "Title": "Носферату",
+    "Description": "Готична історія про пристрасті між переслідуваною молодою жінкою та жахливим вампіром, який захопився нею, сіючи невимовний жах на своєму шляху.",
+    "ReleaseDate": "2024-12-25",
+    "Rating": 6.667,
+    "Duration": 132,
+    "Language": "en",
+    "PosterUrl": "https://image.tmdb.org/t/p/w500/jtsJ0B0CXWVob325mYuw4lJlP1u.jpg",
+    "Genres": [
+      {
+        "name": "Жахи"
+      },
+      {
+        "name": "Фентезі"
+      }
+    ],
+    "Directors": [
+      {
+        "name": "Robert Eggers"
+      }
+    ],
+    "TrailerUrl": "https://www.youtube.com/watch?v=gHINtD2Nrmw"
+  },
+  {
+    "Title": "Субстанція",
+    "Description": "У минулому Елізабет Спаркс була зіркою Голлівуду, а тепер веде найпопулярніший фітнес-проєкт. Незабаром на її шоу збираються взяти нову зірку, тож героїня вирішує спробувати унікальний засіб під назвою Субстанція. Таким чином, замість артистки з'являється сексуальна і молода жінка Сью, якій доведеться розплатитися за все, що відбувається.",
+    "ReleaseDate": "2024-09-07",
+    "Rating": 7.14,
+    "Duration": 141,
+    "Language": "en",
+    "PosterUrl": "https://image.tmdb.org/t/p/w500/6t6Rbw7XD8LkH2HtBnRd4OlFxSv.jpg",
+    "Genres": [
+      {
+        "name": "Жахи"
+      },
+      {
+        "name": "Фантастика"
+      }
+    ],
+    "Directors": [
+      {
+        "name": "Coralie Fargeat"
+      }
+    ],
+    "TrailerUrl": "https://www.youtube.com/watch?v=7ZdtL9Nc0MI"
+  },
+  {
+    "Title": "Ера перевертнів",
+    "Description": "Двоє вчених намагаються зупинити мутацію, яка перетворює людей на перевертнів.",
+    "ReleaseDate": "2024-12-04",
+    "Rating": 6.2,
+    "Duration": 120,
+    "Language": "en",
+    "PosterUrl": "https://image.tmdb.org/t/p/w500/axY8Iy4cPdd1C6D4jabXZUkPqrs.jpg",
+    "Genres": [
+      {
+        "name": "Бойовик"
+      },
+      {
+        "name": "Жахи"
+      },
+      {
+        "name": "Трилер"
+      }
+    ],
+    "Directors": [
+      {
+        "name": "Steven C. Miller"
+      }
+    ],
+    "TrailerUrl": "https://www.youtube.com/watch?v=qdfbyMgc_x0"
+  },
+  {
+    "Title": "Субстанція",
+    "Description": "У минулому Елізабет Спаркс була зіркою Голлівуду, а тепер веде найпопулярніший фітнес-проєкт. Незабаром на її шоу збираються взяти нову зірку, тож героїня вирішує спробувати унікальний засіб під назвою Субстанція. Таким чином, замість артистки з'являється сексуальна і молода жінка Сью, якій доведеться розплатитися за все, що відбувається.",
+    "ReleaseDate": "2024-09-07",
+    "Rating": 7.14,
+    "Duration": 141,
+    "Language": "en",
+    "PosterUrl": "https://image.tmdb.org/t/p/w500/6t6Rbw7XD8LkH2HtBnRd4OlFxSv.jpg",
+    "Genres": [
+      {
+        "name": "Жахи"
+      },
+      {
+        "name": "Фантастика"
+      }
+    ],
+    "Directors": [
+      {
+        "name": "Coralie Fargeat"
+      }
+    ],
+    "TrailerUrl": "https://www.youtube.com/watch?v=7ZdtL9Nc0MI"
+  },
+  {
+    "Title": "Кодове ім'я «Червоний»",
+    "Description": "Санта Клауса - Кодове ім'я: Червоний - було викрадено. Начальник служби безпеки Північного полюса мусить об'єднатися з найвідомішим у світі мисливцем за головами. Разом вони розпочинають буремну кругосвітню місію, щоб врятувати Різдво.",
+    "ReleaseDate": "2024-10-31",
+    "Rating": 7.071,
+    "Duration": 124,
+    "Language": "en",
+    "PosterUrl": "https://image.tmdb.org/t/p/w500/oLSTSlXSCu6O6fp5OmgLuvRiED.jpg",
+    "Genres": [
+      {
+        "name": "Бойовик"
+      },
+      {
+        "name": "Фентезі"
+      },
+      {
+        "name": "Комедія"
+      }
+    ],
+    "Directors": [
+      {
+        "name": "Jake Kasdan"
+      }
+    ],
+    "TrailerUrl": "https://www.youtube.com/watch?v=tGKOy4EKXLE"
+  },
+  {
+    "Title": "Тільки я візьму новий рівень -Повторне пробудження-",
+    "Description": "Минуло більше десяти років відтоді, як шлях, який називається «ворота», що з’єднує цей світ з іншим виміром раптово з’явився, і пробудив людей з надлюдськими силами, які називаються «мисливцями». Вони використовують ці сили, щоб підкорювати підземелля всередині воріт і заробляти таким чином на життя. Одного разу Сонг ДжінУ, який вважається Найслабшим Мисливцем всього людства, потрапляє у подвійне підземелля високого рівня, заховане всередині підземелля низького рівня. Перед важко пораненим ДжінУ з’являється таємниче вікно квесту. На порозі смерті, ДжінУ вирішує вирушити у квест, який перетворює його на єдину людину, яка здатна переходити на наступні рівні.",
+    "ReleaseDate": "2024-11-26",
+    "Rating": 7.1,
+    "Duration": 121,
+    "Language": "ja",
+    "PosterUrl": "https://image.tmdb.org/t/p/w500/y8scaXqgpraU2Oc5xeNvMJJtP23.jpg",
+    "Genres": [
+      {
+        "name": "Бойовик"
+      },
+      {
+        "name": "Пригоди"
+      },
+      {
+        "name": "Фентезі"
+      },
+      {
+        "name": "Мультфільм"
+      }
+    ],
+    "Directors": [
+      {
+        "name": "Shunsuke Nakashige"
+      }
+    ],
+    "TrailerUrl": "https://www.youtube.com/watch?v=seTcVYizxy4"
+  },
+  {
+    "Title": "Володар перснів: Війна рогіримів",
+    "Description": "Сюжет розповідає про долю Дому Гельма Молоторукого, легендарного короля Рогану. На нього несподівано нападає Вулф – кмітливий і безжальний володар Дунланду, що прагне помститися за смерть свого батька. Він змушує Гельма і його людей вступити у ризикований останній бій у стародавній фортеці Горнбурґ, яка згодом стане відомою як Гельмовий Яр. Опинившись у безвихідному становищі, Гера, дочка Гельма, повинна зібратися з духом, щоб очолити опір проти смертоносного ворога, який жадає їхнього цілковитого винищення.",
+    "ReleaseDate": "2024-12-05",
+    "Rating": 6.6,
+    "Duration": 134,
+    "Language": "en",
+    "PosterUrl": "https://image.tmdb.org/t/p/w500/aDh6wtJ5pLtWehZvIlTHagASlbI.jpg",
+    "Genres": [
+      {
+        "name": "Мультфільм"
+      },
+      {
+        "name": "Фентезі"
+      },
+      {
+        "name": "Пригоди"
+      },
+      {
+        "name": "Сімейний"
+      },
+      {
+        "name": "Бойовик"
+      }
+    ],
+    "Directors": [
+      {
+        "name": "Kenji Kamiyama"
+      }
+    ],
+    "TrailerUrl": "https://www.youtube.com/watch?v=E0csrBTW63A"
+  },
+  {
+    "Title": "Дикий робот",
+    "Description": "Епічна пригода про мандрівку робота ROZZUM 7134, скорочено «Роз», що зазнала корабельної аварії на безлюдному острові. Тепер їй доведеться пристосуватися до суворих умов навколишнього середовища, поступово налагодити стосунки з тваринами на острові та навіть замінити батьків осиротілому гусеняті.",
+    "ReleaseDate": "2024-09-12",
+    "Rating": 8.3,
+    "Duration": 120,
+    "Language": "en",
+    "PosterUrl": "https://image.tmdb.org/t/p/w500/2e2S5mAxx3zBJgy6762sDPHkv7K.jpg",
+    "Genres": [
+      {
+        "name": "Мультфільм"
+      },
+      {
+        "name": "Фантастика"
+      },
+      {
+        "name": "Сімейний"
+      }
+    ],
+    "Directors": [
+      {
+        "name": "Chris Sanders"
+      }
+    ],
+    "TrailerUrl": "https://www.youtube.com/watch?v=RDLgITKlNJQ"
+  },
+  {
+    "Title": "Хороша погана дівчинка",
+    "Description": "Впливова генеральна директорка Ромі відчуває, що їй недостатньо сексуального життя з самим лише своїм чоловіком, театральним режисером Джейкобом. Після знайомства із зухвалим, значно молодшим за неї інтерном Семюелом, вона вступає з ним у напружені, садомазохістські сексуальні відносини.",
+    "ReleaseDate": "2024-12-25",
+    "Rating": 5.726,
+    "Duration": 115,
+    "Language": "en",
+    "PosterUrl": "https://image.tmdb.org/t/p/w500/is6dRAXxdzJJ6BW9cCchEt6i987.jpg",
+    "Genres": [
+      {
+        "name": "Драма"
+      }
+    ],
+    "Directors": [
+      {
+        "name": "Halina Reijn"
+      }
+    ],
+    "TrailerUrl": "https://www.youtube.com/watch?v=w82E--dxy_0"
+  },
+  {
+    "Title": "Дедпул і Росомаха",
+    "Description": "Безпорадний Вейд Вілсон тяжко трудиться у цивільному житті. Його дні як найманця з гнучкими моральними орієнтирами Дедпула позаду. Коли його рідний світ стикається зі Среальною загрозою, Вейд неохоче знову вдягає костюм, як і значно більш неохочий… неохочіший? Найнеохочіший? Він повинен розвести упертого Росомаху на сек...Секундочку, ці синопсиси такі тупі...",
+    "ReleaseDate": "2024-07-24",
+    "Rating": 7.628,
+    "Duration": 128,
+    "Language": "en",
+    "PosterUrl": "https://image.tmdb.org/t/p/w500/sNU43yslcx0a7QNu15TT7QW1CeU.jpg",
+    "Genres": [
+      {
+        "name": "Бойовик"
+      },
+      {
+        "name": "Комедія"
+      },
+      {
+        "name": "Фантастика"
+      }
+    ],
+    "Directors": [
+      {
+        "name": "Shawn Levy"
+      }
+    ],
+    "TrailerUrl": "https://www.youtube.com/watch?v=BM_t61n0_1U"
+  },
+  {
+    "Title": "Wicked: Чародійка",
+    "Description": "Події розгортаються у країні Оз. Зеленошкіра дівчина Ельфаба вступає на навчання до університету Шиз. Її сусідкою по кімнаті стає тендітна Галінда. Різні за вдачею дівчата швидко знаходять спільну мову. На їхню дружбу чекають випробування, тож характер кожної проявиться у повній мірі.",
+    "ReleaseDate": "2024-11-20",
+    "Rating": 6.9,
+    "Duration": 160,
+    "Language": "en",
+    "PosterUrl": "https://image.tmdb.org/t/p/w500/fiMBvj4SBHX0MNTrAV2wszoFzdn.jpg",
+    "Genres": [
+      {
+        "name": "Драма"
+      },
+      {
+        "name": "Мелодрама"
+      },
+      {
+        "name": "Фентезі"
+      }
+    ],
+    "Directors": [
+      {
+        "name": "Jon M. Chu"
+      }
+    ],
+    "TrailerUrl": "https://www.youtube.com/watch?v=SWfrtzNa8kY"
+  },
+  {
+    "Title": "Погані хлопці: Все або нічого",
+    "Description": "Цього літа Вілл Сміт та Мартін Лоуренс повертаються у продовженні культового бойовика! Ще більше відбірного екшну та гострого гумору на чолі з нестримними копами-напарниками!",
+    "ReleaseDate": "2024-06-05",
+    "Rating": 7.394,
+    "Duration": 115,
+    "Language": "en",
+    "PosterUrl": "https://image.tmdb.org/t/p/w500/qLqWXPAeq4RwwtbhU2fvnsurBXb.jpg",
+    "Genres": [
+      {
+        "name": "Бойовик"
+      },
+      {
+        "name": "Комедія"
+      },
+      {
+        "name": "Кримінал"
+      },
+      {
+        "name": "Трилер"
+      },
+      {
+        "name": "Пригоди"
+      }
+    ],
+    "Directors": [
+      {
+        "name": "Adil El Arbi"
+      },
+      {
+        "name": "Bilall Fallah"
+      }
+    ],
+    "TrailerUrl": "https://www.youtube.com/watch?v=kpM2mXklu48"
+  },
+  {
+    "Title": "Потік. Останній кіт на Землі",
+    "Description": "Кіт - тварина-самітник, але оскільки його дім зруйнований великою повінню, він знаходить притулок на човні, населеному різними видами тварин, і йому доведеться об'єднатися з ними, незважаючи на їхні розбіжності.",
+    "ReleaseDate": "2024-08-29",
+    "Rating": 8.335,
+    "Duration": 85,
+    "Language": "lv",
+    "PosterUrl": "https://image.tmdb.org/t/p/w500/tUbWwUwwDb2EZt4tk1SwZM98V1a.jpg",
+    "Genres": [
+      {
+        "name": "Мультфільм"
+      },
+      {
+        "name": "Фентезі"
+      },
+      {
+        "name": "Пригоди"
+      }
+    ],
+    "Directors": [
+      {
+        "name": "Gints Zilbalodis"
+      }
+    ],
+    "TrailerUrl": "https://www.youtube.com/watch?v=Y84hODzqENE"
+  },
+  {
+    "Title": "Чужий: Ромул",
+    "Description": "Під час розчищення занедбаної космічної станції група молодих космічних колонізаторів зіштовхується з найстрашнішою формою життя у Всесвіті.",
+    "ReleaseDate": "2024-08-13",
+    "Rating": 7.221,
+    "Duration": 119,
+    "Language": "en",
+    "PosterUrl": "https://image.tmdb.org/t/p/w500/sfyALwlA5qSi1vTOl5TuclWUUiV.jpg",
+    "Genres": [
+      {
+        "name": "Жахи"
+      },
+      {
+        "name": "Фантастика"
+      }
+    ],
+    "Directors": [
+      {
+        "name": "Fede Álvarez"
+      }
+    ],
+    "TrailerUrl": "https://www.youtube.com/watch?v=-81xhl_KirM"
+  },
+  {
+    "Title": "Думками навиворіт 2",
+    "Description": "Продовження мультфільму від Disney та Pixar повертає глядачів у свідомість новоспеченої підлітки Райлі. Головна контора у голові дівчини зіштовхується з раптовим виселенням, щоб звільнити місце для чогось вкрай несподіваного: нових Емоцій! Радість, Печаль, Гнів, Страх та Відраза вже давно успішно працюють разом. Тому вони не знають, що відчувати, коли зʼявляється Тривожність. І, схоже, вона прийшла не сама.",
+    "ReleaseDate": "2024-06-11",
+    "Rating": 7.6,
+    "Duration": 97,
+    "Language": "en",
+    "PosterUrl": "https://image.tmdb.org/t/p/w500/autXcUPWwlIROSOwzLSwe0NDTuK.jpg",
+    "Genres": [
+      {
+        "name": "Мультфільм"
+      },
+      {
+        "name": "Пригоди"
+      },
+      {
+        "name": "Комедія"
+      },
+      {
+        "name": "Сімейний"
+      }
+    ],
+    "Directors": [
+      {
+        "name": "Kelsey Mann"
+      }
+    ],
+    "TrailerUrl": "https://www.youtube.com/watch?v=b8kB5Zhzx0I"
+  },
+  {
+    "Title": "Інтерстеллар",
+    "Description": "Наш час на Землі дійшов кінця, команда дослідників бере на себе найважливішу місію в історії людства — вирушити в подорож за межі нашої галактики, щоб дізнатися, чи є в людства майбутнє серед зірок.",
+    "ReleaseDate": "2014-11-05",
+    "Rating": 8.451,
+    "Duration": 169,
+    "Language": "en",
+    "PosterUrl": "https://image.tmdb.org/t/p/w500/9d1sCoMSGJZtghS2X9us1h9u8lW.jpg",
+    "Genres": [
+      {
+        "name": "Пригоди"
+      },
+      {
+        "name": "Драма"
+      },
+      {
+        "name": "Фантастика"
+      }
+    ],
+    "Directors": [
+      {
+        "name": "Christopher Nolan"
+      }
+    ],
+    "TrailerUrl": "https://www.youtube.com/watch?v=_DQ-lqOhwIM"
+  },
+  {
+    "Title": "Єретик",
+    "Description": "Двоє юних місіонерок змушені доводити свою віру, коли постукавши не в ті двері, їх зустрічає диявольський містер Рід, і вони потрапляють в пастку його смертоносної гри в кішки-мишки.",
+    "ReleaseDate": "2024-10-31",
+    "Rating": 7.174,
+    "Duration": 111,
+    "Language": "en",
+    "PosterUrl": "https://image.tmdb.org/t/p/w500/lPiZIfGu0xjRXYit0FI0YAkNu90.jpg",
+    "Genres": [
+      {
+        "name": "Жахи"
+      },
+      {
+        "name": "Трилер"
+      }
+    ],
+    "Directors": [
+      {
+        "name": "Scott Beck"
+      },
+      {
+        "name": "Bryan Woods"
+      }
+    ],
+    "TrailerUrl": "https://www.youtube.com/watch?v=3W2j8272zME"
+  },
+  {
+    "Title": "Жахаючий 3",
+    "Description": "«Жахаючий 3» — це нова глава в історії жахливого клоуна Арта, якого знову блискуче втілив актор Девід Говард Торнтон. Події фільму розгортаються під час різдвяних свят, створюючи моторошний контраст між атмосферою свята і жорстокими, кривавими сценами. На цей раз Арт повертається не сам — йому допомагає одержима Вікторія Хейз, роль якої виконує Саманта Скаффіді. Разом ця смертельна пара перетворює Різдво на справжній кошмар.",
+    "ReleaseDate": "2024-10-09",
+    "Rating": 6.9,
+    "Duration": 125,
+    "Language": "en",
+    "PosterUrl": "https://image.tmdb.org/t/p/w500/5jbCnDREJeciL3KR7ZWdSotEgzG.jpg",
+    "Genres": [
+      {
+        "name": "Жахи"
+      },
+      {
+        "name": "Трилер"
+      }
+    ],
+    "Directors": [
+      {
+        "name": "Damien Leone"
+      }
+    ],
+    "TrailerUrl": "https://www.youtube.com/watch?v=BzcKUda5KNU"
+  },
+  {
+    "Title": "Азраїл: Світ тиші",
+    "Description": "Світ, де всі зберігають мовчання. Релігійна громада з жінкою на чолі полює на дівчину, яка втекла з ув'язнення. Схоплена, вона має стати жертвою, що вгамує давнє зло, але навіть у цій безнадійній ситуації вона продовжує боротьбу за власне виживання. Боротьбу, що штовхне її в епіцентр боротьби сил добра та зла.",
+    "ReleaseDate": "2024-09-27",
+    "Rating": 6.1,
+    "Duration": 85,
+    "Language": "en",
+    "PosterUrl": "https://image.tmdb.org/t/p/w500/ymE6FbhwaPtdX8UTjyTR5pX43Nv.jpg",
+    "Genres": [
+      {
+        "name": "Бойовик"
+      },
+      {
+        "name": "Жахи"
+      },
+      {
+        "name": "Трилер"
+      }
+    ],
+    "Directors": [
+      {
+        "name": "E.L. Katz"
+      }
+    ],
+    "TrailerUrl": "https://www.youtube.com/watch?v=ubmQqiq5tW8"
+  },
+  {
+    "Title": "Компаньйон",
+    "Description": "Таємничий напружений трилер, у якому історія кохання перетворюється на криваві та сповнені насилля стосунки.",
+    "ReleaseDate": "2025-01-22",
+    "Rating": 7.1,
+    "Duration": 97,
+    "Language": "en",
+    "PosterUrl": "https://image.tmdb.org/t/p/w500/vCn46j7PFy9rpwDr0SkjJev655E.jpg",
+    "Genres": [
+      {
+        "name": "Жахи"
+      },
+      {
+        "name": "Фантастика"
+      },
+      {
+        "name": "Трилер"
+      }
+    ],
+    "Directors": [
+      {
+        "name": "Drew Hancock"
+      }
+    ],
+    "TrailerUrl": "https://www.youtube.com/watch?v=Gj4cdX01Gb4"
+  },
+  {
+    "Title": "Злодії 2: Пантера",
+    "Description": "Викрадачі діамантів замислюють неймовірно зухвале пограбування. Їх плани може зіпсувати лише шериф О'Браєн.",
+    "ReleaseDate": "2025-01-08",
+    "Rating": 6.7,
+    "Duration": 144,
+    "Language": "en",
+    "PosterUrl": "https://image.tmdb.org/t/p/w500/eIGtsfTtp3cJVEfdgPx06Ru3dYl.jpg",
+    "Genres": [
+      {
+        "name": "Бойовик"
+      },
+      {
+        "name": "Кримінал"
+      },
+      {
+        "name": "Трилер"
+      }
+    ],
+    "Directors": [
+      {
+        "name": "Christian Gudegast"
+      }
+    ],
+    "TrailerUrl": "https://www.youtube.com/watch?v=4qdNO6S7zAw"
+  },
+  {
+    "Title": "Трансформери: Початок",
+    "Description": "Нова частина масштабної історії розкаже про походження Кібертрону — батьківщини автоботів і десептиконів. Анімаційна картина продемонструє справжнє походження вічного протистояння між Оптимусом Праймом та Мегатроном.",
+    "ReleaseDate": "2024-09-11",
+    "Rating": 8.105,
+    "Duration": 104,
+    "Language": "en",
+    "PosterUrl": "https://image.tmdb.org/t/p/w500/v6mwiRp3ppnIePKC6jIqMqdDIbd.jpg",
+    "Genres": [
+      {
+        "name": "Мультфільм"
+      },
+      {
+        "name": "Фантастика"
+      },
+      {
+        "name": "Пригоди"
+      },
+      {
+        "name": "Сімейний"
+      }
+    ],
+    "Directors": [
+      {
+        "name": "Josh Cooley"
+      }
+    ],
+    "TrailerUrl": "https://www.youtube.com/watch?v=8vMpjnvpNtE"
+  },
+  {
+    "Title": "Бруталіст",
+    "Description": "Залишаючи повоєнну Європу в 1947 році, архітектор-візіонер Лазло Тот разом із дружиною Ержебет стають свідками народження сучасної Америки, а їхні життя назавжди змінює зустріч із загадковим заможним клієнтом.",
+    "ReleaseDate": "2024-12-20",
+    "Rating": 6.9,
+    "Duration": 215,
+    "Language": "en",
+    "PosterUrl": "https://image.tmdb.org/t/p/w500/rG7XsI9FDT781AFffj32tflGfmn.jpg",
+    "Genres": [
+      {
+        "name": "Драма"
+      }
+    ],
+    "Directors": [
+      {
+        "name": "Brady Corbet"
+      }
+    ],
+    "TrailerUrl": "https://www.youtube.com/watch?v=M6rPB3_EDmo"
+  },
+  {
+    "Title": "Їжак Сонік 2",
+    "Description": "Поселившись у Грін-Гіллз, Сонік прагне довести, що він має все необхідне, щоб стати справжнім героєм. Його випробування приходить, коли доктор Роботнік повертається, цього разу з новим партнером, Наклзом, у пошуках смарагду, який має силу знищувати цивілізації.  Сонік об’єднується зі своїм другом Тейлзом, і разом вони вирушають у подорож по земній кулі, щоб знайти смарагд, перш ніж він потрапить у чужі руки.",
+    "ReleaseDate": "2022-03-30",
+    "Rating": 7.5,
+    "Duration": 125,
+    "Language": "en",
+    "PosterUrl": "https://image.tmdb.org/t/p/w500/nTTR524PBfs1iE0MC2aMQK2ZeYc.jpg",
+    "Genres": [
+      {
+        "name": "Бойовик"
+      },
+      {
+        "name": "Пригоди"
+      },
+      {
+        "name": "Сімейний"
+      },
+      {
+        "name": "Комедія"
+      }
+    ],
+    "Directors": [
+      {
+        "name": "Jeff Fowler"
+      }
+    ],
+    "TrailerUrl": "https://www.youtube.com/watch?v=0ZNs-OdGTrs"
+  },
+  {
+    "Title": "Бріджит Джонс закохана у хлопця",
+    "Description": "Культова романтична комедія про Бріджит Джонс знову на великих екранах! Ще більше кохання, гумору та романтики до Дня всіх закоханих!",
+    "ReleaseDate": "2025-02-12",
+    "Rating": 7.2,
+    "Duration": 120,
+    "Language": "en",
+    "PosterUrl": "https://image.tmdb.org/t/p/w500/w1gCVQmIymTxkDu1SaB7gwF8RZR.jpg",
+    "Genres": [
+      {
+        "name": "Комедія"
+      },
+      {
+        "name": "Драма"
+      },
+      {
+        "name": "Мелодрама"
+      }
+    ],
+    "Directors": [
+      {
+        "name": "Michael Morris"
+      }
+    ],
+    "TrailerUrl": "https://www.youtube.com/watch?v=_KkEusLczPo"
+  },
+  {
+    "Title": "Компаньйон",
+    "Description": "Таємничий напружений трилер, у якому історія кохання перетворюється на криваві та сповнені насилля стосунки.",
+    "ReleaseDate": "2025-01-22",
+    "Rating": 7.1,
+    "Duration": 97,
+    "Language": "en",
+    "PosterUrl": "https://image.tmdb.org/t/p/w500/vCn46j7PFy9rpwDr0SkjJev655E.jpg",
+    "Genres": [
+      {
+        "name": "Жахи"
+      },
+      {
+        "name": "Фантастика"
+      },
+      {
+        "name": "Трилер"
+      }
+    ],
+    "Directors": [
+      {
+        "name": "Drew Hancock"
+      }
+    ],
+    "TrailerUrl": "https://www.youtube.com/watch?v=Gj4cdX01Gb4"
+  },
+  {
+    "Title": "Месники: Війна нескінченності",
+    "Description": "Поки Месники та їхні союзники продовжували захищати світ від загроз, надто великих для героїв поодинці, із космічних тіней виникла нова небезпека: Танос. Деспот міжгалактичної ганебності, його мета - зібрати всі шість Камнів Вічності, артефакти немислимої сили, і використати їх, щоб накласти свою перекручену волю на всю реальність. Все, за що боролися Месники, призвело до цього моменту - доля Землі та самого існування ніколи не була більш невизначеною.",
+    "ReleaseDate": "2018-04-25",
+    "Rating": 8.2,
+    "Duration": 149,
+    "Language": "en",
+    "PosterUrl": "https://image.tmdb.org/t/p/w500/uUAD59mJPtbqRZa3eFRPsqFdYhM.jpg",
+    "Genres": [
+      {
+        "name": "Пригоди"
+      },
+      {
+        "name": "Бойовик"
+      },
+      {
+        "name": "Фантастика"
+      }
+    ],
+    "Directors": [
+      {
+        "name": "Joe Russo"
+      },
+      {
+        "name": "Anthony Russo"
+      }
+    ],
+    "TrailerUrl": "https://www.youtube.com/watch?v=Bvhv0ZoujFU"
+  },
+  {
+    "Title": "Їжак Сонік",
+    "Description": "Одна далека та не схожа на Землю планета в небезпеці. Щоб її врятувати неймовірно швидкий, веселий і по-справжньому відважний їжак Сонік телепортувався до нашого рідного дому, а саме до США. Стрибок напруги після того, як енергійний їжак приземлився у нас, привів до зникнення електрики на всьому Північно-Західному узбережжі країни, що не пройшло повз увагу Пентагону. За Соніком уже почала полювання влада, і головний мисливець — доктор Роботник, який хоче захопити весь світ. Але першою людиною, що зустрілася їжаку, був Том Вачовськи. Це звичайний хлопець, який вирішив допомогти Соніку та не дати Роботнику здійснити свій жахливий план.",
+    "ReleaseDate": "2020-02-12",
+    "Rating": 7.3,
+    "Duration": 100,
+    "Language": "en",
+    "PosterUrl": "https://image.tmdb.org/t/p/w500/57zY2jnmTwxAn9mN2q729xCBBSV.jpg",
+    "Genres": [
+      {
+        "name": "Бойовик"
+      },
+      {
+        "name": "Фантастика"
+      },
+      {
+        "name": "Комедія"
+      },
+      {
+        "name": "Сімейний"
+      }
+    ],
+    "Directors": [
+      {
+        "name": "Jeff Fowler"
+      }
+    ],
+    "TrailerUrl": "https://www.youtube.com/watch?v=pUubR_HUT-g"
+  },
+  {
+    "Title": "Еммануель",
+    "Description": "Еммануель шукає втрачене задоволення. У неї робоча поїздка до Гонконгу. В цьому величезному місті жінка примножує свій чуттєвий досвід та зустрічає загадкового чоловіка, який постійно вислизає з її рук.",
+    "ReleaseDate": "2024-09-25",
+    "Rating": 5.2,
+    "Duration": 107,
+    "Language": "en",
+    "PosterUrl": "https://image.tmdb.org/t/p/w500/8bIcUfIyvvwrIfUyoz0huo8sMqH.jpg",
+    "Genres": [
+      {
+        "name": "Мелодрама"
+      },
+      {
+        "name": "Драма"
+      }
+    ],
+    "Directors": [
+      {
+        "name": "Audrey Diwan"
+      }
+    ],
+    "TrailerUrl": "https://www.youtube.com/watch?v=6f_Y6PgvZ0g"
+  },
+  {
+    "Title": "Форсаж Х",
+    "Description": "Домінік Торето відійшов від справ та спокійненько собі живе разом з дружиною Летті й сином Браяном. Однак насичене минуле ніяк не лишить його у спокої. Данте Реєс хоче помститися Дому за свого батька. Ернан Реєс був наркобароном та загинув через дії команди Торето. Саме його сейф із грошима якось тягли по місту Домінік та Брайан.",
+    "ReleaseDate": "2023-05-17",
+    "Rating": 7.059,
+    "Duration": 141,
+    "Language": "en",
+    "PosterUrl": "https://image.tmdb.org/t/p/w500/jotrmwciqTzDvIi8qeVGwuxX2sG.jpg",
+    "Genres": [
+      {
+        "name": "Бойовик"
+      },
+      {
+        "name": "Кримінал"
+      },
+      {
+        "name": "Трилер"
+      }
+    ],
+    "Directors": [
+      {
+        "name": "Louis Leterrier"
+      }
+    ],
+    "TrailerUrl": "https://www.youtube.com/watch?v=cWjUNDFqHCM"
+  },
+  {
+    "Title": "Дюна: Частина друга",
+    "Description": "«Дюна: Частина друга» розкаже про міфічну подорож Пола Атріда та фременів на шляху помсти заколотникам, які знищили його родину. Між коханням усього свого життя та долею відомого всесвіту він обирає боротьбу проти жахливого майбутнього, яке лиш він може передбачити.",
+    "ReleaseDate": "2024-02-27",
+    "Rating": 8.2,
+    "Duration": 167,
+    "Language": "en",
+    "PosterUrl": "https://image.tmdb.org/t/p/w500/nYTnWYIZEtNImDs7N8gsq5xTYMx.jpg",
+    "Genres": [
+      {
+        "name": "Фантастика"
+      },
+      {
+        "name": "Пригоди"
+      }
+    ],
+    "Directors": [
+      {
+        "name": "Denis Villeneuve"
+      }
+    ],
+    "TrailerUrl": "https://www.youtube.com/watch?v=aZSqdax1uC0"
+  },
+  {
+    "Title": "Воллес і Ґроміт: Перната відплата",
+    "Description": "Найкращий пес Ґроміт береться за порятунок господаря, коли високотехнологічний винахід Воллеса виходить із-під контролю і його звинувачують у серії підозрілих злочинів.",
+    "ReleaseDate": "2024-12-18",
+    "Rating": 7.6,
+    "Duration": 79,
+    "Language": "en",
+    "PosterUrl": "https://image.tmdb.org/t/p/w500/5JFoEdNrzxXV8zI6r2lE3KlodTO.jpg",
+    "Genres": [
+      {
+        "name": "Мультфільм"
+      },
+      {
+        "name": "Комедія"
+      },
+      {
+        "name": "Сімейний"
+      },
+      {
+        "name": "Пригоди"
+      }
+    ],
+    "Directors": [
+      {
+        "name": "Merlin Crossingham"
+      },
+      {
+        "name": "Nick Park"
+      }
+    ],
+    "TrailerUrl": "https://www.youtube.com/watch?v=n4YgaFRuaS0"
+  },
+  {
+    "Title": "Людина-павук: Додому шляху нема",
+    "Description": "Уперше за всю кіноісторію Людини-павука улюбленого супергероя викрито. Пітер Паркер більше не в змозі поєднувати звичайне життя та супергеройські обов’язки. Щоб повернути все назад, він звертається по допомогу до Доктора Стренджа.",
+    "ReleaseDate": "2021-12-15",
+    "Rating": 7.949,
+    "Duration": 148,
+    "Language": "en",
+    "PosterUrl": "https://image.tmdb.org/t/p/w500/6dBqIUrUXgOSApmbEedSqhUqAlW.jpg",
+    "Genres": [
+      {
+        "name": "Бойовик"
+      },
+      {
+        "name": "Пригоди"
+      },
+      {
+        "name": "Фантастика"
+      }
+    ],
+    "Directors": [
+      {
+        "name": "Jon Watts"
+      }
+    ],
+    "TrailerUrl": "https://www.youtube.com/watch?v=SpjOeVrhAh8"
+  },
+  {
+    "Title": "Конклав",
+    "Description": "Після смерті Папи Римського кардиналу Лоуренсу треба терміново організувати Конклав, на якому католицькі кардинали з усього світу повинні обрати нового голову Церкви. Під час організації та проведення Конклаву Лоуренсу доведеться впоратися з інтригами Ватикану та не дати секретам Церкви проникнути у пресу. Але кардинал також дізнається про шокуючу таємницю померлого Папи, від якого залежить майбутнє престолу.",
+    "ReleaseDate": "2024-10-25",
+    "Rating": 7.075,
+    "Duration": 120,
+    "Language": "en",
+    "PosterUrl": "https://image.tmdb.org/t/p/w500/cW7tMdJIUmyvCvpsU9yiNGuADg6.jpg",
+    "Genres": [
+      {
+        "name": "Драма"
+      },
+      {
+        "name": "Детектив"
+      },
+      {
+        "name": "Трилер"
+      }
+    ],
+    "Directors": [
+      {
+        "name": "Edward Berger"
+      }
+    ],
+    "TrailerUrl": "https://www.youtube.com/watch?v=t0kZWxV-DTQ"
+  },
+  {
+    "Title": "Світ Юрського періоду 3: Домініон",
+    "Description": "Культова франшиза продовжиться! Нова глава з життя динозаврів у ХХІ столітті. Давні ящери і сучасні люди намагаються співіснувати в одній екосистемі. Та час це призводить до фатальних наслідків.",
+    "ReleaseDate": "2022-06-01",
+    "Rating": 6.7,
+    "Duration": 147,
+    "Language": "en",
+    "PosterUrl": "https://image.tmdb.org/t/p/w500/bm7TuFVqUBLZ2nPMiVm2zBYnNuL.jpg",
+    "Genres": [
+      {
+        "name": "Пригоди"
+      },
+      {
+        "name": "Бойовик"
+      },
+      {
+        "name": "Фантастика"
+      }
+    ],
+    "Directors": [
+      {
+        "name": "Colin Trevorrow"
+      }
+    ],
+    "TrailerUrl": "https://www.youtube.com/watch?v=zAc6A6PSFmU"
+  },
+  {
+    "Title": "Топ Ґан: Меверік",
+    "Description": "Довгоочікуване повернення культової стрічки з Томом Крузом у головній ролі. Нові часи потребують нових героїв і породжують нових ворогів. Які виклики постануть перед безстрашним пілотом Меверіком цього разу?",
+    "ReleaseDate": "2022-05-21",
+    "Rating": 8.188,
+    "Duration": 131,
+    "Language": "en",
+    "PosterUrl": "https://image.tmdb.org/t/p/w500/eYZrF3xCQaMYVD5VZa6YQGqWWzw.jpg",
+    "Genres": [
+      {
+        "name": "Бойовик"
+      },
+      {
+        "name": "Драма"
+      }
+    ],
+    "Directors": [
+      {
+        "name": "Joseph Kosinski"
+      }
+    ],
+    "TrailerUrl": "https://www.youtube.com/watch?v=3_78ozuGRMo"
+  },
+  {
+    "Title": "Ґодзілла та Конґ: Нова імперія",
+    "Description": "Цього разу нова небачена сила протистоїть могутньому Конґу та безстрашному Ґодзіллі, що загрожуватиме не лише їхньому існуванню, а й існуванню усього світу. Фільм заглибиться в історію походження цих Титанів, таємниці Острова Черепа, а також міфічну битву, яка допомогла створити цих неймовірних істот і повʼязала їх навіки із людством.",
+    "ReleaseDate": "2024-03-27",
+    "Rating": 7.1,
+    "Duration": 115,
+    "Language": "en",
+    "PosterUrl": "https://image.tmdb.org/t/p/w500/pCWdMjB00wzB6yTRKwJZ9IvwyNJ.jpg",
+    "Genres": [
+      {
+        "name": "Бойовик"
+      },
+      {
+        "name": "Пригоди"
+      },
+      {
+        "name": "Фантастика"
+      }
+    ],
+    "Directors": [
+      {
+        "name": "Adam Wingard"
+      }
+    ],
+    "TrailerUrl": "https://www.youtube.com/watch?v=qdOAhIeX79Q"
+  },
+  {
+    "Title": "Титанік",
+    "Description": "Джек і Роуз, юні коханці розділені класовими забобонами, по велінню долі що знайшли один одного в першій подорожі «непотоплюваного» Титаніка. Але коли приречений, розкішний лайнер стикається з айсбергом в крижаній Північній Антлантиці, їх пристрасний роман перетворюється на захоплюючу гонку на виживання. На що здатне кохання? Чи врятуються вони... Історія торжествування забороненої любові і мужності перед лицем катастрофи, від легендарного режисера, багатократного лауреата премії Оскар Джеймса Камерона визнана справжнім кінематографічним шедевром.",
+    "ReleaseDate": "1997-11-18",
+    "Rating": 7.9,
+    "Duration": 194,
+    "Language": "en",
+    "PosterUrl": "https://image.tmdb.org/t/p/w500/yjAsTAJWKpWQy6lMH4sthbFv4mj.jpg",
+    "Genres": [
+      {
+        "name": "Драма"
+      },
+      {
+        "name": "Мелодрама"
+      }
+    ],
+    "Directors": [
+      {
+        "name": "James Cameron"
+      }
+    ],
+    "TrailerUrl": "https://www.youtube.com/watch?v=RHRzbAdKYeo"
+  },
+  {
+    "Title": "Людина-павук: Крізь всесвіт",
+    "Description": "Цього разу на Майлза Моралеса чекає несподівана подорож крізь всесвіт, у якій він об’єднає зусилля з Ґвен Стейсі та новою командою «павуків», щоби протистояти наймогутнішому лиходію, котрого вони коли-небудь зустрічали.",
+    "ReleaseDate": "2023-05-31",
+    "Rating": 8.3,
+    "Duration": 140,
+    "Language": "en",
+    "PosterUrl": "https://image.tmdb.org/t/p/w500/cuyJr2cqv9slYWciehTGXVeGugv.jpg",
+    "Genres": [
+      {
+        "name": "Мультфільм"
+      },
+      {
+        "name": "Бойовик"
+      },
+      {
+        "name": "Пригоди"
+      },
+      {
+        "name": "Фантастика"
+      }
+    ],
+    "Directors": [
+      {
+        "name": "Justin K. Thompson"
+      },
+      {
+        "name": "Kemp Powers"
+      },
+      {
+        "name": "Joaquim Dos Santos"
+      }
+    ],
+    "TrailerUrl": "https://www.youtube.com/watch?v=SCp11zIBXlM"
+  },
+  {
+    "Title": "Земля після",
+    "Description": "Якось звичайна сім'я вирушає на прогулянку під вітрилом і бачить незвичайне природне явище, коли океан відступає і земля оголюється на тисячі кілометрів. Тим, хто вижив, доводиться боротися з чудовиськами, що живуть на дні моря, а також один з одним. Щоправда, новий приплив стане останнім моментом у житті людини...",
+    "ReleaseDate": "2024-06-19",
+    "Rating": 5.8,
+    "Duration": 90,
+    "Language": "fr",
+    "PosterUrl": "https://image.tmdb.org/t/p/w500/2VQZQIvIN4esEZ5YqTgJVrDpJU5.jpg",
+    "Genres": [
+      {
+        "name": "Фантастика"
+      },
+      {
+        "name": "Трилер"
+      },
+      {
+        "name": "Пригоди"
+      },
+      {
+        "name": "Бойовик"
+      }
+    ],
+    "Directors": [
+      {
+        "name": "Frédéric Jardin"
+      }
+    ],
+    "TrailerUrl": "https://www.youtube.com/watch?v=ahq1LWXCeng"
+  }
+]
