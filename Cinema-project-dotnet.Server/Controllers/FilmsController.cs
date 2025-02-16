@@ -27,7 +27,6 @@ namespace Cinema_project_dotnet.Server.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin,User")]
         public async Task<ActionResult<List<FilmGetDTO>>> GetFilms()
         {
             var films = await _filmService.GetAllFilmsAsync();
@@ -35,7 +34,6 @@ namespace Cinema_project_dotnet.Server.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize(Roles = "Admin,User")]
         public async Task<ActionResult<FilmGetDTO>> GetFilm(int id) 
         {
             var film = await _filmService.GetFilmByIdAsync(id);

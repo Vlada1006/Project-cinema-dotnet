@@ -20,7 +20,6 @@ namespace Cinema_project_dotnet.Server.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin,User")]
         public async Task<ActionResult<List<DirectorDTO>>> GetDirectors()
         {
             var directors = await _directorService.GetAllDirectorsAsync();
@@ -28,7 +27,6 @@ namespace Cinema_project_dotnet.Server.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize(Roles = "Admin,User")]
         public async Task<ActionResult<DirectorDTO>> GetDirector(int id)
         {
             var director = await _directorService.GetDirectorByIdAsync(id);
