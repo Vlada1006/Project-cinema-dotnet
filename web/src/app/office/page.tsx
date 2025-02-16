@@ -1,8 +1,10 @@
-'use client';
+"use client";
 
-import React, { JSX, useEffect, useState } from 'react';
-import Sidebar from 'react-sidebar';
-import { useRouter } from 'next/navigation';
+import React, { JSX, useEffect, useState } from "react";
+import Sidebar from "react-sidebar";
+import { useRouter } from "next/navigation";
+import { useAppSelector } from "@/stores/hooks";
+import { selectUserEmail } from "@/stores/user/selectors";
 
 interface Movie {
   id: string;
@@ -21,11 +23,13 @@ interface User {
 const Home = () => {
   const [formattedMovies, setFormattedMovies] = useState<Movie[]>([]);
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedGenre, setSelectedGenre] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedGenre, setSelectedGenre] = useState("");
   const [minRating, setMinRating] = useState(0);
   const [watchlist, setWatchlist] = useState<string[]>([]);
-  const [user, setUser] = useState<User | null>(null); 
+  const [user, setUser] = useState<User | null>(null);
+
+  const userEmail = useAppSelector(selectUserEmail);
 
   const router = useRouter();
 
@@ -36,17 +40,17 @@ const Home = () => {
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        console.log('Requesting films...');
-        const response = await fetch('https://localhost:7000/api/Films');
+        console.log("Requesting films...");
+        const response = await fetch("/api/movies");
 
         if (!response.ok) {
           throw new Error(`HTTP Error! Status: ${response.status}`);
         }
 
-        const result = await response.json(); 
-        const data = result.data; 
-        console.log('API Response:', result); 
-        console.log('Response data:', data); 
+        const result = await response.json();
+        const data = result.data;
+        console.log("API Response:", result);
+        console.log("Response data:", data);
 
         const movies: Movie[] = [];
         for (let i = 0; i < data.length; i++) {
@@ -54,7 +58,9 @@ const Home = () => {
           console.log(movie);
           movies.push({
             id: movie.id.toString(),
-            posterUrl: movie.posterUrl.startsWith('https://') ? movie.posterUrl : `https://localhost:7000${movie.posterUrl}`,
+            posterUrl: movie.posterUrl.startsWith("https://")
+              ? movie.posterUrl
+              : `https://localhost:7000${movie.posterUrl}`,
             title: movie.title,
             description: movie.description,
             release_date: movie.release_date,
@@ -63,17 +69,11 @@ const Home = () => {
         }
         setFormattedMovies(movies);
       } catch (error) {
-        console.error('Error fetching movies:', error);
+        console.error("Error fetching movies:", error);
       }
     };
 
     fetchMovies();
-
-    
-    const loggedInUser = JSON.parse(localStorage.getItem('loggedInUser') || 'null');
-    if (loggedInUser) {
-      setUser(loggedInUser); 
-    }
   }, []);
 
   const addToWatchlist = (id: string) => {
@@ -95,8 +95,8 @@ const Home = () => {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('loggedInUser');
-    router.push('/'); 
+    localStorage.removeItem("loggedInUser");
+    router.push("/");
   };
 
   const sidebarContent = (
@@ -112,13 +112,13 @@ const Home = () => {
           </button>
         </li>
 
-      
         {user && (
           <li className="text-lg font-semibold mt-4">
-            <p>Привіт, {user.name} {user.surname}!</p>
+            <p>
+              Привіт, {user.name} {user.surname}!
+            </p>
           </li>
         )}
-
 
         <li>
           <button
@@ -129,11 +129,10 @@ const Home = () => {
           </button>
         </li>
 
-   
         <li>
           <button
             className="w-full text-left p-2 hover:bg-gray-700"
-            onClick={() => (window.location.href = '/account')}
+            onClick={() => (window.location.href = "/account")}
           >
             Переглянути популярні фільми
           </button>
@@ -141,15 +140,15 @@ const Home = () => {
         <li>
           <button
             className="w-full text-left p-2 hover:bg-gray-700"
-            onClick={() => (window.location.href = '/genres')}
+            onClick={() => (window.location.href = "/genres")}
           >
             Фільтрувати за жанром
           </button>
         </li>
-       <li>
+        <li>
           <button
             className="w-full text-left p-2 hover:bg-gray-700"
-            onClick={() => (window.location.href = '/director')}
+            onClick={() => (window.location.href = "/director")}
           >
             Пошук за режисером
           </button>
@@ -157,7 +156,7 @@ const Home = () => {
         <li>
           <button
             className="w-full text-left p-2 hover:bg-gray-700"
-            onClick={() => (window.location.href = '/sortdate')}
+            onClick={() => (window.location.href = "/sortdate")}
           >
             Сортувати за тривалістю
           </button>
@@ -165,17 +164,16 @@ const Home = () => {
         <li>
           <button
             className="w-full text-left p-2 hover:bg-gray-700"
-            onClick={() => (window.location.href = '/showtimes')}
+            onClick={() => (window.location.href = "/showtimes")}
           >
             Переглянути календар показів
           </button>
         </li>
 
-    
         <li>
           <button
             className="w-full text-left p-2 hover:bg-gray-700"
-            onClick={() => (window.location.href = '/booking')}
+            onClick={() => (window.location.href = "/booking")}
           >
             Бронювання квитків
           </button>
@@ -183,7 +181,7 @@ const Home = () => {
         <li>
           <button
             className="w-full text-left p-2 hover:bg-gray-700"
-            onClick={() => (window.location.href = '/purchased-tickets')}
+            onClick={() => (window.location.href = "/purchased-tickets")}
           >
             Перегляд куплених квитків
           </button>
@@ -192,12 +190,12 @@ const Home = () => {
     </div>
   );
 
-
   const movieElements: JSX.Element[] = [];
   for (let i = 0; i < formattedMovies.length; i++) {
     const movie = formattedMovies[i];
 
-    if (!movie.title.toLowerCase().includes(searchQuery.toLowerCase())) continue;
+    if (!movie.title.toLowerCase().includes(searchQuery.toLowerCase()))
+      continue;
     if (selectedGenre && !movie.title.includes(selectedGenre)) continue;
     if (movie.rating < minRating) continue;
 
@@ -208,7 +206,7 @@ const Home = () => {
         className="cursor-pointer p-4 bg-gray-800 rounded-lg hover:bg-gray-700 transition text-center"
       >
         <img
-          src={movie.posterUrl || 'path/to/default-image.jpg'}
+          src={movie.posterUrl || "path/to/default-image.jpg"}
           alt={movie.title}
           className="rounded-lg w-56 h-80 object-contain mx-auto"
         />
@@ -222,7 +220,7 @@ const Home = () => {
       sidebar={sidebarContent}
       open={sidebarOpen}
       onSetOpen={setSidebarOpen}
-      styles={{ sidebar: { background: 'gray' } }}
+      styles={{ sidebar: { background: "gray" } }}
       pullRight={true}
     >
       <div className="p-6 bg-gray-900 text-yellow-600 min-h-screen">
@@ -237,7 +235,10 @@ const Home = () => {
               onChange={(e) => setSearchQuery(e.target.value)}
             />
             <button className="p-2 bg-gray-700 rounded">🔍</button>
-            <button className="p-2 bg-gray-900 rounded" onClick={() => setSidebarOpen(!sidebarOpen)}>
+            <button
+              className="p-2 bg-gray-900 rounded"
+              onClick={() => setSidebarOpen(!sidebarOpen)}
+            >
               ☰
             </button>
           </div>
@@ -245,9 +246,7 @@ const Home = () => {
 
         <section className="mt-8">
           <h2 className="text-xl font-semibold mb-4">Зараз у прокаті</h2>
-          <div className="grid grid-cols-3 gap-6">
-            {movieElements}
-          </div>
+          <div className="grid grid-cols-3 gap-6">{movieElements}</div>
         </section>
       </div>
     </Sidebar>

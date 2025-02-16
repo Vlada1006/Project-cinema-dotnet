@@ -60,7 +60,7 @@ const SchedulePage = () => {
   const [totalSeats, setTotalSeats] = useState(0);
 
   useEffect(() => {
-    fetch("https://localhost:7000/api/Films")
+    fetch("/api/movies")
       .then((response) => response.json())
       .then((data) => {
         if (Array.isArray(data.data)) {
@@ -71,18 +71,23 @@ const SchedulePage = () => {
       })
       .catch((error) => console.error("Error fetching movies:", error));
 
-    fetch("https://localhost:7000/api/Rooms")
+    fetch("/api/rooms")
       .then((response) => response.json())
       .then((data) => {
         if (Array.isArray(data.data)) {
-          setHalls(data.data.map((hall: { id: number; name: string }) => ({ id: hall.id, name: hall.name })));
+          setHalls(
+            data.data.map((hall: { id: number; name: string }) => ({
+              id: hall.id,
+              name: hall.name,
+            }))
+          );
         } else {
           console.error("Received halls data is not an array:", data);
         }
       })
       .catch((error) => console.error("Error fetching halls:", error));
 
-    fetch("https://localhost:7000/api/Sessions")
+    fetch("/api/sessions")
       .then((response) => response.json())
       .then((data) => {
         if (Array.isArray(data.data)) {
@@ -116,8 +121,8 @@ const SchedulePage = () => {
         (session) =>
           session.roomId === hall && // Зміна з hall на roomId
           ((startTime >= session.startTime && startTime < session.endTime) ||
-           (endTime > session.startTime && endTime <= session.endTime) ||
-           (startTime <= session.startTime && endTime >= session.endTime))
+            (endTime > session.startTime && endTime <= session.endTime) ||
+            (startTime <= session.startTime && endTime >= session.endTime))
       )
     );
 
@@ -132,7 +137,12 @@ const SchedulePage = () => {
   const addSession = () => {
     console.log("Додавання сесії...");
 
-    if (!newSession.startTime || !newSession.endTime || !newSession.filmId || !newSession.hall) {
+    if (
+      !newSession.startTime ||
+      !newSession.endTime ||
+      !newSession.filmId ||
+      !newSession.hall
+    ) {
       alert("Будь ласка, заповніть усі поля.");
       return;
     }
@@ -153,7 +163,7 @@ const SchedulePage = () => {
 
     console.log("Payload for POST:", newSessionPayload);
 
-    fetch("https://localhost:7000/api/Sessions", {
+    fetch("/api/sessions", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(newSessionPayload),
@@ -210,7 +220,7 @@ const SchedulePage = () => {
       roomId: newSession.hall, // Зміна з hall на roomId
     };
 
-    fetch(`https://localhost:7000/api/Sessions/${editingSession.id}`, {
+    fetch(`/api/sessions/${editingSession.id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(updatedSessionPayload),
@@ -225,7 +235,9 @@ const SchedulePage = () => {
       })
       .then((data) => {
         setSessions((prevSessions) =>
-          prevSessions.map((session) => (session.id === editingSession.id ? data.session : session))
+          prevSessions.map((session) =>
+            session.id === editingSession.id ? data.session : session
+          )
         );
 
         setEditingSession(null);
@@ -246,7 +258,7 @@ const SchedulePage = () => {
   };
 
   const deleteSession = (sessionId: number) => {
-    fetch(`https://localhost:7000/api/Sessions/${sessionId}`, {
+    fetch(`/api/sessions/${sessionId}`, {
       method: "DELETE",
     })
       .then((response) => {
@@ -255,7 +267,9 @@ const SchedulePage = () => {
             throw new Error(errorText);
           });
         }
-        setSessions((prevSessions) => prevSessions.filter((session) => session.id !== sessionId));
+        setSessions((prevSessions) =>
+          prevSessions.filter((session) => session.id !== sessionId)
+        );
         alert("Сеанс успішно видалено!");
       })
       .catch((error) => {
@@ -285,7 +299,7 @@ const SchedulePage = () => {
 
     console.log("Payload for adding new hall:", newHallPayload);
 
-    fetch("https://localhost:7000/api/Rooms", {
+    fetch("/api/rooms", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(newHallPayload),
@@ -294,7 +308,9 @@ const SchedulePage = () => {
         console.log("Response status:", response.status);
         if (!response.ok) {
           return response.text().then((errorText) => {
-            throw new Error(`HTTP error! status: ${response.status} - ${errorText}`);
+            throw new Error(
+              `HTTP error! status: ${response.status} - ${errorText}`
+            );
           });
         }
         return response.json();
@@ -302,7 +318,10 @@ const SchedulePage = () => {
       .then((data) => {
         console.log("Server response for hall addition:", data);
         if (data.success || data.message === "Room successfully created") {
-          setHalls((prevHalls) => [...prevHalls, { id: data.roomId, name: newHall }]);
+          setHalls((prevHalls) => [
+            ...prevHalls,
+            { id: data.roomId, name: newHall },
+          ]);
           setNewHall("");
           setHallType("");
           setRowsCount(0);
@@ -342,11 +361,15 @@ const SchedulePage = () => {
           <select
             className="w-full p-3 bg-gray-800 text-white rounded"
             value={newSession.filmId}
-            onChange={(e) => setNewSession({ ...newSession, filmId: parseInt(e.target.value) })}
+            onChange={(e) =>
+              setNewSession({ ...newSession, filmId: parseInt(e.target.value) })
+            }
           >
             <option value={0}>Оберіть фільм</option>
             {movies.map((movie) => (
-              <option key={movie.id} value={movie.id}>{movie.title}</option>
+              <option key={movie.id} value={movie.id}>
+                {movie.title}
+              </option>
             ))}
           </select>
 
@@ -355,7 +378,9 @@ const SchedulePage = () => {
             type="datetime-local"
             className="w-full p-3 bg-gray-800 text-white rounded"
             value={newSession.startTime}
-            onChange={(e) => setNewSession({ ...newSession, startTime: e.target.value })}
+            onChange={(e) =>
+              setNewSession({ ...newSession, startTime: e.target.value })
+            }
           />
 
           <label className="text-gray-400">Час завершення:</label>
@@ -363,7 +388,9 @@ const SchedulePage = () => {
             type="datetime-local"
             className="w-full p-3 bg-gray-800 text-white rounded"
             value={newSession.endTime}
-            onChange={(e) => setNewSession({ ...newSession, endTime: e.target.value })}
+            onChange={(e) =>
+              setNewSession({ ...newSession, endTime: e.target.value })
+            }
           />
 
           <label className="text-gray-400">Ціна квитка (грн):</label>
@@ -371,14 +398,21 @@ const SchedulePage = () => {
             type="number"
             className="w-full p-3 bg-gray-800 text-white rounded"
             value={newSession.price}
-            onChange={(e) => setNewSession({ ...newSession, price: Math.max(0, parseFloat(e.target.value)) })}
+            onChange={(e) =>
+              setNewSession({
+                ...newSession,
+                price: Math.max(0, parseFloat(e.target.value)),
+              })
+            }
           />
 
           <label className="text-gray-400">Оберіть зал:</label>
           <select
             className="w-full p-3 bg-gray-800 text-white rounded"
             value={newSession.hall}
-            onChange={(e) => setNewSession({ ...newSession, hall: e.target.value })}
+            onChange={(e) =>
+              setNewSession({ ...newSession, hall: e.target.value })
+            }
           >
             <option value="">Оберіть зал</option>
             {halls.map((hall) => (
@@ -411,7 +445,9 @@ const SchedulePage = () => {
             type="number"
             className="w-full p-3 bg-gray-800 text-white rounded"
             value={rowsCount}
-            onChange={(e) => setRowsCount(Math.max(0, parseInt(e.target.value)))}
+            onChange={(e) =>
+              setRowsCount(Math.max(0, parseInt(e.target.value)))
+            }
           />
 
           <label className="text-gray-400">Місць в ряді:</label>
@@ -419,7 +455,9 @@ const SchedulePage = () => {
             type="number"
             className="w-full p-3 bg-gray-800 text-white rounded"
             value={seatsPerRow}
-            onChange={(e) => setSeatsPerRow(Math.max(0, parseInt(e.target.value)))}
+            onChange={(e) =>
+              setSeatsPerRow(Math.max(0, parseInt(e.target.value)))
+            }
           />
 
           <label className="text-gray-400">Загальна кількість місць:</label>
@@ -427,7 +465,9 @@ const SchedulePage = () => {
             type="number"
             className="w-full p-3 bg-gray-800 text-white rounded"
             value={totalSeats}
-            onChange={(e) => setTotalSeats(Math.max(0, parseInt(e.target.value)))}
+            onChange={(e) =>
+              setTotalSeats(Math.max(0, parseInt(e.target.value)))
+            }
           />
 
           <button
@@ -446,7 +486,9 @@ const SchedulePage = () => {
         </div>
 
         <div className="mt-6">
-          <h2 className="text-2xl font-semibold text-yellow-600">Список сеансів</h2>
+          <h2 className="text-2xl font-semibold text-yellow-600">
+            Список сеансів
+          </h2>
           <table className="w-full table-auto mt-4">
             <thead>
               <tr>
@@ -460,15 +502,25 @@ const SchedulePage = () => {
             </thead>
             <tbody>
               {sessions.map((session) => {
-                const movie = movies.find(movie => movie.id === session.filmId);
-                const hall = halls.find(hall => hall.id === session.roomId); // Зміна з hall на roomId
+                const movie = movies.find(
+                  (movie) => movie.id === session.filmId
+                );
+                const hall = halls.find((hall) => hall.id === session.roomId); // Зміна з hall на roomId
                 return (
                   <tr key={session.id}>
-                    <td className="py-2 px-4">{movie ? movie.title : "Невідомий фільм"}</td>
-                    <td className="py-2 px-4">{new Date(session.startTime).toLocaleString()}</td>
-                    <td className="py-2 px-4">{new Date(session.endTime).toLocaleString()}</td>
+                    <td className="py-2 px-4">
+                      {movie ? movie.title : "Невідомий фільм"}
+                    </td>
+                    <td className="py-2 px-4">
+                      {new Date(session.startTime).toLocaleString()}
+                    </td>
+                    <td className="py-2 px-4">
+                      {new Date(session.endTime).toLocaleString()}
+                    </td>
                     <td className="py-2 px-4">{session.price} грн</td>
-                    <td className="py-2 px-4">{hall ? hall.name : "Невідомий зал"}</td>
+                    <td className="py-2 px-4">
+                      {hall ? hall.name : "Невідомий зал"}
+                    </td>
                     <td className="py-2 px-4">
                       <button
                         className="text-yellow-500 hover:underline"
@@ -492,17 +544,26 @@ const SchedulePage = () => {
 
         {editingSession && (
           <div className="mt-6">
-            <h2 className="text-2xl font-semibold text-yellow-600">Редагувати сеанс</h2>
+            <h2 className="text-2xl font-semibold text-yellow-600">
+              Редагувати сеанс
+            </h2>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
               <label className="text-gray-400">Оберіть фільм:</label>
               <select
                 className="w-full p-3 bg-gray-800 text-white rounded"
                 value={newSession.filmId}
-                onChange={(e) => setNewSession({ ...newSession, filmId: parseInt(e.target.value) })}
+                onChange={(e) =>
+                  setNewSession({
+                    ...newSession,
+                    filmId: parseInt(e.target.value),
+                  })
+                }
               >
                 <option value={0}>Оберіть фільм</option>
                 {movies.map((movie) => (
-                  <option key={movie.id} value={movie.id}>{movie.title}</option>
+                  <option key={movie.id} value={movie.id}>
+                    {movie.title}
+                  </option>
                 ))}
               </select>
 
@@ -511,7 +572,9 @@ const SchedulePage = () => {
                 type="datetime-local"
                 className="w-full p-3 bg-gray-800 text-white rounded"
                 value={newSession.startTime}
-                onChange={(e) => setNewSession({ ...newSession, startTime: e.target.value })}
+                onChange={(e) =>
+                  setNewSession({ ...newSession, startTime: e.target.value })
+                }
               />
 
               <label className="text-gray-400">Час завершення:</label>
@@ -519,7 +582,9 @@ const SchedulePage = () => {
                 type="datetime-local"
                 className="w-full p-3 bg-gray-800 text-white rounded"
                 value={newSession.endTime}
-                onChange={(e) => setNewSession({ ...newSession, endTime: e.target.value })}
+                onChange={(e) =>
+                  setNewSession({ ...newSession, endTime: e.target.value })
+                }
               />
 
               <label className="text-gray-400">Ціна квитка (грн):</label>
@@ -527,14 +592,21 @@ const SchedulePage = () => {
                 type="number"
                 className=" w-full p-3 bg-gray-800 text-white rounded"
                 value={newSession.price}
-                onChange={(e) => setNewSession({ ...newSession, price: Math.max(0, parseFloat(e.target.value)) })}
+                onChange={(e) =>
+                  setNewSession({
+                    ...newSession,
+                    price: Math.max(0, parseFloat(e.target.value)),
+                  })
+                }
               />
 
               <label className="text-gray-400">Оберіть зал:</label>
               <select
                 className="w-full p-3 bg-gray-800 text-white rounded"
                 value={newSession.hall}
-                onChange={(e) => setNewSession({ ...newSession, hall: e.target.value })}
+                onChange={(e) =>
+                  setNewSession({ ...newSession, hall: e.target.value })
+                }
               >
                 <option value="">Оберіть зал</option>
                 {halls.map((hall) => (

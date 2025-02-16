@@ -1,8 +1,7 @@
+"use client";
 
-'use client';
-
-import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 
 interface Movie {
   id: string;
@@ -16,9 +15,9 @@ interface Movie {
 const PopularFilms = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string>('');
-  const [sortOrder, setSortOrder] = useState<'desc' | 'asc'>('desc');
-  
+  const [error, setError] = useState<string>("");
+  const [sortOrder, setSortOrder] = useState<"desc" | "asc">("desc");
+
   const router = useRouter();
 
   const handleMovieClick = (id: string) => {
@@ -28,17 +27,17 @@ const PopularFilms = () => {
   useEffect(() => {
     const fetchMovies = async () => {
       try {
-        const response = await fetch('https://localhost:7000/api/Films');
+        const response = await fetch("/api/movies");
         if (!response.ok) {
-          throw new Error('Помилка завантаження фільмів');
+          throw new Error("Помилка завантаження фільмів");
         }
         const data = await response.json();
-    
+
         if (data.data && Array.isArray(data.data)) {
           const fetchedMovies: Movie[] = data.data.map((movie: any) => ({
             id: movie.id.toString(),
             title: movie.title,
-            posterUrl: movie.posterUrl.startsWith('https://')
+            posterUrl: movie.posterUrl.startsWith("https://")
               ? movie.posterUrl
               : `https://localhost:7000${movie.posterUrl}`,
             description: movie.description,
@@ -47,7 +46,7 @@ const PopularFilms = () => {
           }));
           setMovies(fetchedMovies);
         } else {
-          throw new Error('Невірний формат відповіді');
+          throw new Error("Невірний формат відповіді");
         }
       } catch (err: any) {
         setError(err.message);
@@ -62,13 +61,13 @@ const PopularFilms = () => {
   useEffect(() => {
     if (movies.length > 0) {
       const sortedMovies = [...movies].sort((a, b) => {
-        return sortOrder === 'desc' ? b.rating - a.rating : a.rating - b.rating;
+        return sortOrder === "desc" ? b.rating - a.rating : a.rating - b.rating;
       });
       setMovies(sortedMovies);
     }
   }, [sortOrder]);
 
-  const handleSortChange = (order: 'desc' | 'asc') => {
+  const handleSortChange = (order: "desc" | "asc") => {
     setSortOrder(order);
   };
 
@@ -86,13 +85,13 @@ const PopularFilms = () => {
         <h1 className="text-4xl font-bold text-center">Популярні фільми</h1>
         <div className="flex justify-center mt-4">
           <button
-            onClick={() => handleSortChange('desc')}
+            onClick={() => handleSortChange("desc")}
             className="bg-yellow-600 text-black px-4 py-2 rounded mx-2"
           >
             За спаданням
           </button>
           <button
-            onClick={() => handleSortChange('asc')}
+            onClick={() => handleSortChange("asc")}
             className="bg-yellow-600 text-black px-4 py-2 rounded mx-2"
           >
             За зростанням
@@ -102,9 +101,9 @@ const PopularFilms = () => {
       <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {movies.length > 0 ? (
           movies.map((movie) => (
-            <div 
-              key={movie.id} 
-              onClick={() => handleMovieClick(movie.id)} 
+            <div
+              key={movie.id}
+              onClick={() => handleMovieClick(movie.id)}
               className="bg-gray-800 p-4 rounded-lg shadow-md cursor-pointer hover:bg-gray-700 transition"
             >
               <img

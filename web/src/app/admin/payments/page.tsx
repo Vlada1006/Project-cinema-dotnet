@@ -16,7 +16,7 @@ const PaymentsPage = () => {
   const [filter, setFilter] = useState("");
 
   useEffect(() => {
-    fetch("https://localhost:7000/api/Films")
+    fetch("/api/movies")
       .then((response) => response.json())
       .then((data) => {
         console.log("Fetched payments:", data); // Log the data
@@ -32,7 +32,7 @@ const PaymentsPage = () => {
   }, []);
 
   const updatePaymentStatus = (id: number, status: string) => {
-    fetch(`https://localhost:7000/api/Films/${id}`, {
+    fetch(`/api/movies/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ status }),
@@ -48,7 +48,7 @@ const PaymentsPage = () => {
   };
 
   const processRefund = (id: number) => {
-    fetch(`https://localhost:7000/api/Films/${id}/refund`, {
+    fetch(`/api/movies/${id}/refund`, {
       method: "POST",
     })
       .then(() => {
@@ -61,9 +61,10 @@ const PaymentsPage = () => {
       .catch((error) => console.error("Error processing refund:", error));
   };
 
-  const filteredPayments = payments.filter((payment) =>
-    payment.user.toLowerCase().includes(filter.toLowerCase()) ||
-    payment.filmTitle.toLowerCase().includes(filter.toLowerCase())
+  const filteredPayments = payments.filter(
+    (payment) =>
+      payment.user.toLowerCase().includes(filter.toLowerCase()) ||
+      payment.filmTitle.toLowerCase().includes(filter.toLowerCase())
   );
 
   return (
@@ -102,7 +103,9 @@ const PaymentsPage = () => {
                 <select
                   className="p-2 bg-gray-700 text-white rounded"
                   value={payment.status}
-                  onChange={(e) => updatePaymentStatus(payment.id, e.target.value)}
+                  onChange={(e) =>
+                    updatePaymentStatus(payment.id, e.target.value)
+                  }
                 >
                   <option value="Pending">Очікується</option>
                   <option value="Completed">Завершено</option>

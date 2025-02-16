@@ -45,7 +45,13 @@ const MoviesPage = () => {
 
   const [formError, setFormError] = useState<string | null>(null); // для помилки форми
 
-  const languages = ["Англійська", "Українська", "Іспанська", "Французька", "Німецька"];
+  const languages = [
+    "Англійська",
+    "Українська",
+    "Іспанська",
+    "Французька",
+    "Німецька",
+  ];
 
   const [allGenres, setAllGenres] = useState<Genre[]>([]);
   const [newGenre, setNewGenre] = useState<string>("");
@@ -54,30 +60,38 @@ const MoviesPage = () => {
   const [newDirector, setNewDirector] = useState<string>("");
 
   useEffect(() => {
-    fetch("https://localhost:7000/api/Films")
+    fetch("/api/movies")
       .then((response) => response.json())
       .then((data) => setMovies(data.data))
       .catch((error) => console.error("Error fetching movies:", error));
-  
+
     // Fetching genres
-    fetch("https://localhost:7000/api/Genres")
+    fetchGenres();
+
+    // Fetching directors
+    fetchDirectors();
+  }, []);
+
+  const fetchGenres = async () => {
+    fetch("/api/genres")
       .then((response) => response.json())
       .then((data) => {
         console.log("Fetched genres:", data.data); // Debug log
         setAllGenres(data.data);
       })
       .catch((error) => console.error("Error fetching genres:", error));
-  
-    // Fetching directors
-    fetch("https://localhost:7000/api/Directors")
+  };
+
+  const fetchDirectors = async () => {
+    fetch("/api/directors")
       .then((response) => response.json())
       .then((data) => {
         console.log("Fetched directors:", data.data); // Debug log
         setAllDirectors(data.data);
       })
       .catch((error) => console.error("Error fetching directors:", error));
-  }, []);
-  
+  };
+
   const addMovie = () => {
     if (
       !newMovie.title.trim() ||
@@ -95,18 +109,18 @@ const MoviesPage = () => {
       setFormError("Всі поля, позначені зірочкою, обов'язкові для заповнення.");
       return;
     }
-  
+
     const releaseDateUtc = new Date(newMovie.releaseDate).toISOString();
     const movieWithUtcDate = {
       ...newMovie,
       releaseDate: releaseDateUtc,
-      genres: newMovie.genres.map(genre => genre.id), // Передаємо тільки id жанрів
-      directors: newMovie.directors.map(director => director.id), // Передаємо тільки id режисерів
+      genres: newMovie.genres.map((genre) => genre.id), // Передаємо тільки id жанрів
+      directors: newMovie.directors.map((director) => director.id), // Передаємо тільки id режисерів
     };
 
     console.log("Movie data to be sent:", movieWithUtcDate); // Логування даних перед відправкою
 
-    fetch("https://localhost:7000/api/Films", {
+    fetch("/api/movies", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(movieWithUtcDate),
@@ -117,7 +131,7 @@ const MoviesPage = () => {
         }
         const responseData = await response.json();
         console.log("Movie added response:", responseData);
-        return fetch("https://localhost:7000/api/Films");
+        return fetch("/api/movies");
       })
       .then((response) => response.json())
       .then((data) => {
@@ -126,7 +140,7 @@ const MoviesPage = () => {
         }
       })
       .catch((error) => console.error("Error adding movie:", error));
-  
+
     setNewMovie({
       id: 0,
       title: "",
@@ -146,7 +160,7 @@ const MoviesPage = () => {
   };
 
   const removeMovie = (id: number) => {
-    fetch(`https://localhost:7000/api/Films/${id}`, { method: "DELETE" })
+    fetch(`/api/movies/${id}`, { method: "DELETE" })
       .then((response) => {
         if (!response.ok) {
           throw new Error(`Failed to delete movie with ID ${id}`);
@@ -164,12 +178,14 @@ const MoviesPage = () => {
 
   const addNewGenre = () => {
     if (newGenre.trim()) {
-      const genreExists = allGenres.some((genre) => genre.name.toLowerCase() === newGenre.toLowerCase());
-  
+      const genreExists = allGenres.some(
+        (genre) => genre.name.toLowerCase() === newGenre.toLowerCase()
+      );
+
       if (!genreExists) {
         const newGenreData = { name: newGenre.trim() };
-  
-        fetch("https://localhost:7000/api/Genres", {
+
+        fetch("/api/genres", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(newGenreData),
@@ -180,25 +196,16 @@ const MoviesPage = () => {
             }
             const responseData = await response.json();
             console.log("Genre added response:", responseData);
-        
-            if (!responseData.data || !responseData.data.id) {
-              throw new Error("Invalid response structure from server");
-            }
-        
-            const addedGenre = { id: responseData.data.id, name: newGenre.trim() };
-            setAllGenres((prev) => [...prev, addedGenre]);
-        
-            setNewMovie((prev) => ({
-              ...prev,
-              genres: [...prev.genres, addedGenre],
-            }));
-        
+
+            fetchGenres();
+
             setNewGenre("");
           })
           .catch((error) => console.error("Error adding genre:", error));
-        
       } else {
-        const existingGenre = allGenres.find((genre) => genre.name.toLowerCase() === newGenre.toLowerCase());
+        const existingGenre = allGenres.find(
+          (genre) => genre.name.toLowerCase() === newGenre.toLowerCase()
+        );
         if (existingGenre) {
           setNewMovie((prev) => ({
             ...prev,
@@ -212,19 +219,27 @@ const MoviesPage = () => {
 
   const addNewDirector = () => {
     if (newDirector.trim()) {
-      const directorExists = allDirectors.some((director) => director.name.toLowerCase() === newDirector.toLowerCase());
-  
+      const directorExists = allDirectors.some(
+        (director) => director.name.toLowerCase() === newDirector.toLowerCase()
+      );
+
       if (!directorExists) {
-        const newDirectorData = { id: allDirectors.length + 1, name: newDirector.trim() };
-  
+        const newDirectorData = {
+          id: allDirectors.length + 1,
+          name: newDirector.trim(),
+        };
+
         setAllDirectors((prev) => [...prev, newDirectorData]);
-  
+
         setNewMovie((prev) => ({
           ...prev,
           directors: [...prev.directors, newDirectorData],
         }));
       } else {
-        const existingDirector = allDirectors.find((director) => director.name.toLowerCase() === newDirector.toLowerCase());
+        const existingDirector = allDirectors.find(
+          (director) =>
+            director.name.toLowerCase() === newDirector.toLowerCase()
+        );
         if (existingDirector) {
           setNewMovie((prev) => ({
             ...prev,
@@ -232,7 +247,7 @@ const MoviesPage = () => {
           }));
         }
       }
-  
+
       setNewDirector("");
     }
   };
@@ -241,7 +256,9 @@ const MoviesPage = () => {
     <div className="min-h-screen bg-gray-900 text-white p-6">
       <div className="max-w-6xl mx-auto bg-gray-800 rounded-lg p-6 shadow-lg">
         <div className="bg-gray-700 p-6 rounded-lg mb-8">
-          <h2 className="text-xl font-bold text-yellow-600 mb-4">Додати новий фільм</h2>
+          <h2 className="text-xl font-bold text-yellow-600 mb-4">
+            Додати новий фільм
+          </h2>
           {formError && <p className="text-red-600 mb-4">{formError}</p>}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
@@ -252,7 +269,9 @@ const MoviesPage = () => {
                 type="text"
                 className="w-full p-3 bg-gray-800 text-white rounded"
                 value={newMovie.title}
-                onChange={(e) => setNewMovie({ ...newMovie, title: e.target.value })}
+                onChange={(e) =>
+                  setNewMovie({ ...newMovie, title: e.target.value })
+                }
                 maxLength={255}
               />
             </div>
@@ -263,7 +282,9 @@ const MoviesPage = () => {
               <textarea
                 className="w-full p-3 bg-gray-800 text-white rounded"
                 value={newMovie.description}
-                onChange={(e) => setNewMovie({ ...newMovie, description: e.target.value })}
+                onChange={(e) =>
+                  setNewMovie({ ...newMovie, description: e.target.value })
+                }
               />
             </div>
             <div>
@@ -274,7 +295,9 @@ const MoviesPage = () => {
                 type="date"
                 className="w-full p-3 bg-gray-800 text-white rounded"
                 value={newMovie.releaseDate}
-                onChange={(e) => setNewMovie({ ...newMovie, releaseDate: e.target.value })}
+                onChange={(e) =>
+                  setNewMovie({ ...newMovie, releaseDate: e.target.value })
+                }
               />
             </div>
             <div>
@@ -288,7 +311,12 @@ const MoviesPage = () => {
                 step="0.1"
                 className="w-full p-3 bg-gray-800 text-white rounded"
                 value={newMovie.rating}
-                onChange={(e) => setNewMovie({ ...newMovie, rating: parseFloat(e.target.value) })}
+                onChange={(e) =>
+                  setNewMovie({
+                    ...newMovie,
+                    rating: parseFloat(e.target.value),
+                  })
+                }
               />
             </div>
             <div>
@@ -301,7 +329,12 @@ const MoviesPage = () => {
                 step="10"
                 className="w-full p-3 bg-gray-800 text-white rounded"
                 value={newMovie.duration}
-                onChange={(e) => setNewMovie({ ...newMovie, duration: parseInt(e.target.value) })}
+                onChange={(e) =>
+                  setNewMovie({
+                    ...newMovie,
+                    duration: parseInt(e.target.value),
+                  })
+                }
               />
             </div>
             <div>
@@ -311,7 +344,9 @@ const MoviesPage = () => {
               <select
                 className="w-full p-3 bg-gray-800 text-white rounded"
                 value={newMovie.language}
-                onChange={(e) => setNewMovie({ ...newMovie, language: e.target.value })}
+                onChange={(e) =>
+                  setNewMovie({ ...newMovie, language: e.target.value })
+                }
               >
                 <option value="">Оберіть мову</option>
                 {languages.map((language, index) => (
@@ -330,7 +365,9 @@ const MoviesPage = () => {
                 className="w-full p-3 bg-gray-800 text-white rounded"
                 placeholder="https://example.com"
                 value={newMovie.posterUrl}
-                onChange={(e) => setNewMovie({ ...newMovie, posterUrl: e.target.value })}
+                onChange={(e) =>
+                  setNewMovie({ ...newMovie, posterUrl: e.target.value })
+                }
               />
             </div>
             <div>
@@ -342,7 +379,9 @@ const MoviesPage = () => {
                 className="w-full p-3 bg-gray-800 text-white rounded"
                 placeholder="https://example.com"
                 value={newMovie.trailerUrl}
-                onChange={(e) => setNewMovie({ ...newMovie, trailerUrl: e.target.value })}
+                onChange={(e) =>
+                  setNewMovie({ ...newMovie, trailerUrl: e.target.value })
+                }
               />
             </div>
             <div>
@@ -350,22 +389,28 @@ const MoviesPage = () => {
                 Жанри <span className="text-red-600">*</span>
               </label>
               <div className="mb-2">
-              <select
-  className="w-full p-3 bg-gray-800 text-white rounded"
-  multiple
-  value={newMovie.genres.map((genre) => genre.id.toString())} // Convert to string
-  onChange={(e) => {
-    const selectedGenreIds = Array.from(e.target.selectedOptions, (option) => parseInt(option.value)); // Отримуємо тільки id жанрів
-    console.log("Selected genre IDs:", selectedGenreIds); // Логування вибраних id жанрів
-    setNewMovie({ ...newMovie, genres: selectedGenreIds.map(id => ({ id })) }); // Форматування для збереження id
-  }}
->
-  {allGenres.map((genre) => (
-    <option key={genre.id} value={genre.id.toString()}>
-      {genre.name}
-    </option>
-  ))}
-</select>
+                <select
+                  className="w-full p-3 bg-gray-800 text-white rounded"
+                  multiple
+                  value={newMovie.genres.map((genre) => genre.id.toString())} // Convert to string
+                  onChange={(e) => {
+                    const selectedGenreIds = Array.from(
+                      e.target.selectedOptions,
+                      (option) => parseInt(option.value)
+                    ); // Отримуємо тільки id жанрів
+                    console.log("Selected genre IDs:", selectedGenreIds); // Логування вибраних id жанрів
+                    setNewMovie({
+                      ...newMovie,
+                      genres: selectedGenreIds.map((id) => ({ id })),
+                    }); // Форматування для збереження id
+                  }}
+                >
+                  {allGenres.map((genre) => (
+                    <option key={genre.id} value={genre.id.toString()}>
+                      {genre.name}
+                    </option>
+                  ))}
+                </select>
               </div>
               <input
                 type="text"
@@ -388,22 +433,30 @@ const MoviesPage = () => {
                 Режисери <span className="text-red-600">*</span>
               </label>
               <div className="mb-2">
-              <select
-  className="w-full p-3 bg-gray-800 text-white rounded"
-  multiple
-  value={newMovie.directors.map((director) => director.id.toString())} // Convert to string
-  onChange={(e) => {
-    const selectedDirectorIds = Array.from(e.target.selectedOptions, (option) => parseInt(option.value)); // Отримуємо тільки id режисерів
-    console.log("Selected director IDs:", selectedDirectorIds); // Логування вибраних id режисерів
-    setNewMovie({ ...newMovie, directors: selectedDirectorIds.map(id => ({ id })) }); // Форматування для збереження id
-  }}
->
-  {allDirectors.map((director) => (
-    <option key={director.id} value={director.id.toString()}>
-      {director.name}
-    </option>
-  ))}
-</select>
+                <select
+                  className="w-full p-3 bg-gray-800 text-white rounded"
+                  multiple
+                  value={newMovie.directors.map((director) =>
+                    director.id.toString()
+                  )} // Convert to string
+                  onChange={(e) => {
+                    const selectedDirectorIds = Array.from(
+                      e.target.selectedOptions,
+                      (option) => parseInt(option.value)
+                    ); // Отримуємо тільки id режисерів
+                    console.log("Selected director IDs:", selectedDirectorIds); // Логування вибраних id режисерів
+                    setNewMovie({
+                      ...newMovie,
+                      directors: selectedDirectorIds.map((id) => ({ id })),
+                    }); // Форматування для збереження id
+                  }}
+                >
+                  {allDirectors.map((director) => (
+                    <option key={director.id} value={director.id.toString()}>
+                      {director.name}
+                    </option>
+                  ))}
+                </select>
               </div>
               <input
                 type="text"
@@ -432,10 +485,15 @@ const MoviesPage = () => {
         </div>
 
         {/* Movies list */}
-        <h2 className="text-xl font-bold text-yellow-600 mb-4">Список фільмів</h2>
+        <h2 className="text-xl font-bold text-yellow-600 mb-4">
+          Список фільмів
+        </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {movies.map((movie) => (
-            <div key={movie.id} className="bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+            <div
+              key={movie.id}
+              className="bg-gray-800 rounded-lg shadow-lg overflow-hidden"
+            >
               <div className="relative">
                 <img
                   src={movie.posterUrl}
@@ -453,11 +511,29 @@ const MoviesPage = () => {
               </div>
               <div className="p-4">
                 <h3 className="text-xl font-semibold">{movie.title}</h3>
-                <p><strong>Мова:</strong> {movie.language}</p>
-                <p><strong>Рейтинг:</strong> {movie.rating}</p>
-                <p><strong>Тривалість:</strong> {movie.duration} хв</p>
-                <p><strong>Жанри:</strong> {movie.genres && movie.genres.length > 0 ? movie.genres.map((genre) => genre.name).join(", ") : "Немає жанрів"}</p>
-                <p><strong>Режисери:</strong> {movie.directors && movie.directors.length > 0 ? movie.directors.map((director) => director.name).join(", ") : "Немає режисерів"}</p>
+                <p>
+                  <strong>Мова:</strong> {movie.language}
+                </p>
+                <p>
+                  <strong>Рейтинг:</strong> {movie.rating}
+                </p>
+                <p>
+                  <strong>Тривалість:</strong> {movie.duration} хв
+                </p>
+                <p>
+                  <strong>Жанри:</strong>{" "}
+                  {movie.genres && movie.genres.length > 0
+                    ? movie.genres.map((genre) => genre.name).join(", ")
+                    : "Немає жанрів"}
+                </p>
+                <p>
+                  <strong>Режисери:</strong>{" "}
+                  {movie.directors && movie.directors.length > 0
+                    ? movie.directors
+                        .map((director) => director.name)
+                        .join(", ")
+                    : "Немає режисерів"}
+                </p>
                 <div>
                   <button
                     className="text-yellow-500 mt-2"
@@ -467,7 +543,9 @@ const MoviesPage = () => {
                   </button>
                   {expanded[movie.id] && (
                     <div className="mt-2">
-                      <p><strong>Опис:</strong> {movie.description}</p>
+                      <p>
+                        <strong>Опис:</strong> {movie.description}
+                      </p>
                     </div>
                   )}
                 </div>

@@ -6,14 +6,6 @@ import { useRouter } from "next/navigation";
 export default function DashboardPage() {
   const router = useRouter();
 
-  // Перевірка токена
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      router.push("/admin");
-    }
-  }, [router]);
-
   // Функція для навігації між підсторінками
   const handleNavigate = (path: string) => {
     router.push(`/admin/${path}`);
