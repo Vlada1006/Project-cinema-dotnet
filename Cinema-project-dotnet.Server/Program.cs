@@ -17,6 +17,21 @@ var builder = WebApplication.CreateBuilder(args);
 
 var configuration = builder.Configuration;
 
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
+// Add cors
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(name: MyAllowSpecificOrigins,
+                      policy =>
+                      {
+                          policy.WithOrigins("http://localhost:3000")
+                                .AllowAnyMethod()
+                                .AllowAnyHeader()
+                                .AllowCredentials();
+                      });
+});
+
 // Add services to the container.
 builder.Services.AddControllers();
 builder.Services.AddSignalR();
@@ -115,6 +130,8 @@ app.UseHttpsRedirection();
 
 // Add Exception Handler middleware
 app.UseMiddleware<ExceptionMiddleware>();
+
+app.UseCors(MyAllowSpecificOrigins);
 
 app.UseAuthentication();
 

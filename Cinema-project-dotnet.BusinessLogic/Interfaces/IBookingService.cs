@@ -10,5 +10,6 @@ namespace Cinema_project_dotnet.BusinessLogic.Interfaces
         Task CreateBookingAsync(BookingDTO bookingDTO);
         Task UpdateBookingAsync(int id, BookingDTO bookingDTO);
         Task CancelBookingAsync(int id, string cancellationMessage);
+        Task<List<BookingDTO>> GetBookingsByUserIdAsync(string userId);
     }
 }

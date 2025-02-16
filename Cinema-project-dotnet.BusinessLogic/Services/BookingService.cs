@@ -171,5 +171,17 @@ namespace Cinema_project_dotnet.BusinessLogic.Services
 
             await _bookingRepo.DeleteAsync(id);
         }
+
+        public async Task<List<BookingDTO>> GetBookingsByUserIdAsync(string userId)
+        {
+            var bookings = await _bookingRepo.GetByConditionAsync(b => b.UserId == userId);
+
+            if (bookings.Count() == 0)
+            {
+                throw new HttpException("No bookings found for this user", HttpStatusCode.NotFound);
+            }
+
+            return _mapper.Map<List<BookingDTO>>(bookings);
+        }
     }
 }
