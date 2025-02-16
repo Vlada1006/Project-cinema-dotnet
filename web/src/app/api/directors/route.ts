@@ -4,14 +4,10 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../auth/[...nextauth]/constants";
 
 export async function GET(req: NextRequest) {
-  const { token } = (await getServerSession(authOptions)) as any;
-
   try {
-    const directorsApiResponse = await fetch(`https://localhost:7000/Api/Directors`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const directorsApiResponse = await fetch(
+      `https://localhost:7000/Api/Directors`
+    );
 
     if (!directorsApiResponse.ok) {
       return NextResponse.json(
@@ -38,14 +34,17 @@ export async function POST(req: NextRequest) {
   const payload = await req.json();
 
   try {
-    const directorsApiResponse = await fetch(`https://localhost:7000/Api/Directors`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    });
+    const directorsApiResponse = await fetch(
+      `https://localhost:7000/Api/Directors`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      }
+    );
     console.log(directorsApiResponse);
 
     if (!directorsApiResponse.ok) {

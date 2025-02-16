@@ -6,18 +6,11 @@ export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> }
 ) {
-  const { token } = (await getServerSession(authOptions)) as any;
-
   const { id } = await params;
 
   try {
     const filmsApiResponse = await fetch(
-      `https://localhost:7000/Api/Films/${id}`,
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
+      `https://localhost:7000/Api/Films/${id}`
     );
 
     if (!filmsApiResponse.ok) {
