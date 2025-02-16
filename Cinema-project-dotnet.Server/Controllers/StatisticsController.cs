@@ -1,22 +1,27 @@
 ﻿using Cinema_project_dotnet.BusinessLogic.DTOs;
-using Cinema_project_dotnet.BusinessLogic.Interfaces;
+using Cinema_project_dotnet.BusinessLogic.Services;
 using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 [ApiController]
 [Route("api/admin/statistics")]
 public class StatisticsController : ControllerBase
 {
-    private readonly IFilmService _filmService;
+    private readonly StatisticsService _statisticsService;
 
-    public StatisticsController(IFilmService filmService)
+    public StatisticsController(StatisticsService statisticsService)
     {
-        _filmService = filmService;
+        _statisticsService = statisticsService;
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<FilmStatisticsDTO>>> GetFilmStatistics()
+    public async Task<ActionResult<List<FilmStatisticsDTO>>> GetFilmStatistics(
+        [FromQuery] DateTime? startDate,
+        [FromQuery] DateTime? endDate)
     {
-        var statistics = await _filmService.GetFilmStatisticsAsync();
+        var statistics = await _statisticsService.GetFilmStatisticsAsync(startDate, endDate);
         return Ok(statistics);
     }
 }

@@ -180,22 +180,33 @@ namespace Cinema_project_dotnet.BusinessLogic.Services
         }
 
 
-        public async Task<List<FilmStatisticsDTO>> GetFilmStatisticsAsync()
+        public async Task<List<FilmStatisticsDTO>> GetFilmStatisticsAsync(DateTime? startDate, DateTime? endDate)
         {
             var films = await _filmRepo.GetAllAsync(); 
             var bookings = await _bookingRepo.GetAllAsync(); 
+
+            if (startDate.HasValue)
+            {
+                bookings = bookings.Where(b => b.BookingTime >= startDate.Value).ToList();  
+            }
+            if (endDate.HasValue)
+            {
+                bookings = bookings.Where(b => b.BookingTime <= endDate.Value).ToList(); 
+            }
 
             var statistics = films.Select(film => new FilmStatisticsDTO
             {
                 Id = film.Id,
                 Title = film.Title,
-                TicketsSold = bookings.Count(b => b.Id == film.Id) 
+                TicketsSold = bookings.Count(b => b.Id == film.Id)
             })
             .OrderByDescending(f => f.TicketsSold)
             .ToList();
 
             return statistics;
         }
+
+
     }
 }
 
