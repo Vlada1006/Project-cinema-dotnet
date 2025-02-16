@@ -29,7 +29,6 @@ namespace Cinema_project_dotnet.Server.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin,User")]
         public async Task<ActionResult<List<SessionDTO>>> GetSessions()
         {
             var sessions = await _sessionService.GetAllSessionsAsync();
@@ -37,7 +36,6 @@ namespace Cinema_project_dotnet.Server.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize(Roles = "Admin,User")]
         public async Task<ActionResult<SessionDTO>> GetSession(int id)
         {
             var session = await _sessionService.GetSessionByIdAsync(id);

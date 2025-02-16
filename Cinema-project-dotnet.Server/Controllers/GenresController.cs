@@ -18,7 +18,6 @@ namespace Cinema_project_dotnet.Server.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin,User")]
         public async Task<ActionResult<List<GenreDTO>>> GetGenres()
         {
             var genres = await _genreService.GetAllGenrsAsync();
@@ -26,7 +25,6 @@ namespace Cinema_project_dotnet.Server.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize(Roles = "Admin,User")]
         public async Task<ActionResult<GenreDTO>> GetGenre(int id)
         {
             var genre = await _genreService.GetGenreByIdAsync(id);

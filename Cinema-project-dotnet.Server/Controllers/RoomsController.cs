@@ -22,7 +22,6 @@ namespace Cinema_project_dotnet.Server.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Admin,User")]
         public async Task<ActionResult<List<RoomDTO>>> GetRooms()
         {
             var rooms = await _roomService.GetAllRoomsAsync();
@@ -30,7 +29,6 @@ namespace Cinema_project_dotnet.Server.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize(Roles = "Admin,User")]
         public async Task<ActionResult<RoomDTO>> GetRoom(int id)
         {
             var room = await _roomService.GetRoomByIdAsync(id);
