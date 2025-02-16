@@ -1,3 +1,4 @@
+
 "use client";
 
 import React, { useState, useEffect } from "react";
@@ -27,10 +28,22 @@ interface Movie {
   directors: Director[];
 }
 
+interface MovieForCreation {
+  title: string;
+  description: string;
+  releaseDate: string;
+  rating: number;
+  duration: number;
+  language: string;
+  posterUrl: string;
+  trailerUrl: string;
+  genreIds: number[];  
+  directorIds: number[]; 
+}
+
 const MoviesPage = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
-  const [newMovie, setNewMovie] = useState<Movie>({
-    id: 0,
+  const [newMovie, setNewMovie] = useState<MovieForCreation>({
     title: "",
     description: "",
     releaseDate: "",
@@ -39,8 +52,8 @@ const MoviesPage = () => {
     language: "",
     posterUrl: "",
     trailerUrl: "",
-    genres: [],
-    directors: [],
+    genreIds: [],
+    directorIds: [],
   });
 
   const [formError, setFormError] = useState<string | null>(null); // для помилки форми
@@ -103,8 +116,8 @@ const MoviesPage = () => {
       !newMovie.language ||
       !newMovie.posterUrl ||
       !newMovie.trailerUrl ||
-      newMovie.genres.length === 0 ||
-      newMovie.directors.length === 0
+      newMovie.genreIds.length === 0 ||
+      newMovie.directorIds.length === 0
     ) {
       setFormError("Всі поля, позначені зірочкою, обов'язкові для заповнення.");
       return;
@@ -114,8 +127,6 @@ const MoviesPage = () => {
     const movieWithUtcDate = {
       ...newMovie,
       releaseDate: releaseDateUtc,
-      genres: newMovie.genres.map((genre) => genre.id), // Передаємо тільки id жанрів
-      directors: newMovie.directors.map((director) => director.id), // Передаємо тільки id режисерів
     };
 
     console.log("Movie data to be sent:", movieWithUtcDate); // Логування даних перед відправкою
@@ -142,7 +153,6 @@ const MoviesPage = () => {
       .catch((error) => console.error("Error adding movie:", error));
 
     setNewMovie({
-      id: 0,
       title: "",
       description: "",
       releaseDate: "",
@@ -151,8 +161,8 @@ const MoviesPage = () => {
       language: "",
       posterUrl: "",
       trailerUrl: "",
-      genres: [],
-      directors: [],
+      genreIds: [],
+      directorIds: [],
     });
     setFormError(null);
     setNewGenre("");
@@ -209,7 +219,7 @@ const MoviesPage = () => {
         if (existingGenre) {
           setNewMovie((prev) => ({
             ...prev,
-            genres: [...prev.genres, existingGenre],
+            genreIds: [...prev.genreIds, existingGenre.id],
           }));
         }
         setNewGenre("");
@@ -233,7 +243,7 @@ const MoviesPage = () => {
 
         setNewMovie((prev) => ({
           ...prev,
-          directors: [...prev.directors, newDirectorData],
+          directorIds: [...prev.directorIds, newDirectorData.id],
         }));
       } else {
         const existingDirector = allDirectors.find(
@@ -243,7 +253,7 @@ const MoviesPage = () => {
         if (existingDirector) {
           setNewMovie((prev) => ({
             ...prev,
-            directors: [...prev.directors, existingDirector],
+            directorIds: [...prev.directorIds, existingDirector.id],
           }));
         }
       }
@@ -389,28 +399,28 @@ const MoviesPage = () => {
                 Жанри <span className="text-red-600">*</span>
               </label>
               <div className="mb-2">
-                <select
-                  className="w-full p-3 bg-gray-800 text-white rounded"
-                  multiple
-                  value={newMovie.genres.map((genre) => genre.id.toString())} // Convert to string
-                  onChange={(e) => {
-                    const selectedGenreIds = Array.from(
-                      e.target.selectedOptions,
-                      (option) => parseInt(option.value)
-                    ); // Отримуємо тільки id жанрів
-                    console.log("Selected genre IDs:", selectedGenreIds); // Логування вибраних id жанрів
-                    setNewMovie({
-                      ...newMovie,
-                      genres: selectedGenreIds.map((id) => ({ id })),
-                    }); // Форматування для збереження id
-                  }}
-                >
-                  {allGenres.map((genre) => (
-                    <option key={genre.id} value={genre.id.toString()}>
-                      {genre.name}
-                    </option>
-                  ))}
-                </select>
+              <select
+                className="w-full p-3 bg-gray-800 text-white rounded"
+                multiple
+                value={newMovie.genreIds.map((genreId) => genreId.toString())} // Зберігаємо лише id жанрів у масиві
+                onChange={(e) => {
+                  const selectedGenreIds = Array.from(
+                    e.target.selectedOptions,
+                    (option) => parseInt(option.value)
+                  ); // Отримуємо тільки id жанрів
+                  console.log("Selected genre IDs:", selectedGenreIds); // Логування вибраних id жанрів
+                  setNewMovie({
+                    ...newMovie,
+                    genreIds: selectedGenreIds, // Оновлюємо genresIds замість genres
+                  });
+                }}
+              >
+                {allGenres.map((genre) => (
+                  <option key={genre.id} value={genre.id.toString()}>
+                    {genre.name}
+                  </option>
+                ))}
+              </select>
               </div>
               <input
                 type="text"
@@ -436,9 +446,7 @@ const MoviesPage = () => {
                 <select
                   className="w-full p-3 bg-gray-800 text-white rounded"
                   multiple
-                  value={newMovie.directors.map((director) =>
-                    director.id.toString()
-                  )} // Convert to string
+                  value={newMovie.directorIds.map((directorId) => directorId.toString())} // Зберігаємо тільки id режисерів у масиві
                   onChange={(e) => {
                     const selectedDirectorIds = Array.from(
                       e.target.selectedOptions,
@@ -447,8 +455,8 @@ const MoviesPage = () => {
                     console.log("Selected director IDs:", selectedDirectorIds); // Логування вибраних id режисерів
                     setNewMovie({
                       ...newMovie,
-                      directors: selectedDirectorIds.map((id) => ({ id })),
-                    }); // Форматування для збереження id
+                      directorIds: selectedDirectorIds, // Оновлюємо directorIds замість directors
+                    });
                   }}
                 >
                   {allDirectors.map((director) => (
