@@ -10,5 +10,6 @@ namespace Cinema_project_dotnet.BusinessLogic.Interfaces
         Task UpdateSessionAsync(int id, SessionDTO sessionDTO);
         Task DeleteSessionAsync(int id);
         Task<List<SeatDTO>> GetAllSeatsForSessionAsync(int id);
+        Task<List<SessionDTO>> GetSessionsByFilmIdAsync(int filmId);
     }
 }
