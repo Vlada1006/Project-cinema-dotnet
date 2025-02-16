@@ -178,6 +178,14 @@ const Home = () => {
           </li>
         )}
         <li>
+      <button
+        className="w-full text-left p-2 hover:bg-gray-700"
+        onClick={() => (window.location.href = "/booking")}
+      >
+        Бронювання квитків
+      </button>
+    </li>
+        <li>
           {userEmailFromStore ? (
             <button
               className="w-full text-left p-2 hover:bg-gray-700"
@@ -190,7 +198,7 @@ const Home = () => {
               className="w-full text-left p-2 hover:bg-gray-700"
               onClick={() => router.push("/auth/login")}
             >
-              Увійти
+              Увійти/Зареєструватися
             </button>
           )}
         </li>
