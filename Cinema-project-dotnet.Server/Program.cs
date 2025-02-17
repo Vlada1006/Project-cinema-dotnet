@@ -56,8 +56,6 @@ builder.Services.AddScoped<IBookingService, BookingService>();
 builder.Services.AddScoped<ITransactionService, TransactionService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<MovieDataSeeder>();
-builder.Services.AddScoped<StatisticsService>();
-
 
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
