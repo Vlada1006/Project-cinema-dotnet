@@ -3,6 +3,7 @@ import { FETCH_USER_ACTION } from "./constants";
 import { UserResponse, UserStore } from "./types";
 
 const initialState: UserStore = {
+  id: null,
   email: null,
   roles: null,
 };
@@ -12,7 +13,8 @@ export const userSlice = createSlice({
   initialState,
   reducers: {
     setUser: (state, action: PayloadAction<UserResponse>) => {
-      const { email, roles } = action.payload;
+      const { email, roles, id } = action.payload;
+      state.id = id;
       state.email = email;
       state.roles = roles;
     },

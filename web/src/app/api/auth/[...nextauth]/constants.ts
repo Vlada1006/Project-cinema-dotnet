@@ -42,6 +42,7 @@ export const authOptions: AuthOptions = {
         const decodedToken: any = jwt.decode(authResponseBody.jwtToken);
         if (!decodedToken) return null;
 
+        console.log(authResponseBody, decodedToken);
         const userEmail =
           decodedToken[
             "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress"
@@ -50,13 +51,17 @@ export const authOptions: AuthOptions = {
           decodedToken[
             "http://schemas.microsoft.com/ws/2008/06/identity/claims/role"
           ];
+        let id =
+          decodedToken[
+            "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"
+          ];
 
         if (typeof userRoles === "string") {
           userRoles = [userRoles];
         }
 
         return {
-          id: undefined,
+          id: id,
           email: userEmail,
           roles: userRoles,
           token: authResponseBody.jwtToken,
@@ -75,6 +80,7 @@ export const authOptions: AuthOptions = {
 
     async session({ session, token }) {
       if (session.user) {
+        (session.user as any).id = token.sub;
         (session.user as any).roles = token.roles;
         (session as any).token = token.token;
       }
