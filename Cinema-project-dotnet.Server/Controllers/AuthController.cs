@@ -40,33 +40,6 @@ namespace Cinema_project_dotnet.Server.Controllers
         // POST: /api/Auth/Login
         [HttpPost]
         [Route("Login")]
-
-        //public async Task<IActionResult> Login([FromBody] LoginRequestDTO loginRequestDTO)
-        //{
-        //    var user = await _userManager.FindByEmailAsync(loginRequestDTO.Username);
-
-        //    if (user != null)
-        //    {
-        //        var checkedPassword = await _userManager.CheckPasswordAsync(user, loginRequestDTO.Password);
-
-        //        if (checkedPassword)
-        //        {
-        //            var roles = await _userManager.GetRolesAsync(user);
-        //            if(roles != null)
-        //            {
-        //                var jwtToken = _tokenRepository.CreateJWTToken(user, roles.ToList());
-
-        //                var response = new LoginResponseDTO
-        //                {
-        //                    JwtToken = jwtToken
-        //                };
-        //                return Ok(response);
-        //            }                    
-        //        }                
-        //    }
-        //    return BadRequest("Неправильний логін або пароль");
-        //}
-
         public async Task<IActionResult> Login([FromBody] LoginRequestDTO loginRequestDTO)
         {
             var response = await _authService.LoginUser(loginRequestDTO.Username, loginRequestDTO.Password);
