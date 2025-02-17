@@ -21,5 +21,7 @@
         public Transaction? Transaction { get; set; }
 
         public DateTime BookingTime { get; set; }
+
+        public Film Film { get; set; }
     }
 }
