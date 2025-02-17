@@ -8,6 +8,6 @@ export async function GET() {
   if (!session) {
     return NextResponse.json({ user: null });
   }
-
+  console.log("session", session);
   return NextResponse.json({ user: session.user });
 }
