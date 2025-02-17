@@ -42,14 +42,21 @@ interface Room {
   rows: number;
   seatsPerRow: number;
 }
+interface Seat{
+  id:number;
+  row:number;
+  number:number;
+  isAvailable:boolean;
+  roomId:number;
+}
 
 const BookingPage = () => {
   const [movie, setMovie] = useState<Movie | null>(null);
   const [sessions, setSessions] = useState<Session[]>([]);
   const [selectedSession, setSelectedSession] = useState<Session | null>(null);
   const [room, setRoom] = useState<Room | null>(null);
-  const [seatingLayout, setSeatingLayout] = useState<string[][]>([]);
-  const [selectedSeats, setSelectedSeats] = useState<Set<string>>(new Set());
+  const [seatingLayout, setSeatingLayout] = useState<Seat[][]>([]);
+  const [selectedSeat, setSelectedSeat] = useState<string | null>(null);
   const [totalPrice, setTotalPrice] = useState<number>(0);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const searchParams = useSearchParams();
@@ -62,6 +69,25 @@ const BookingPage = () => {
     }
   }, [movieId]);
 
+  useEffect(() => {
+   
+
+    fetchSeats();
+  }, [selectedSession?.id]);
+  const fetchSeats = async () => {
+    if (selectedSession===null) return;
+    try {
+      const response = await fetch(`/api/sessions/seats/${selectedSession.id}`);
+      const data = await response.json();
+      if (room){
+        generateSeatingLayout(room, data.data);
+      }
+   
+    } catch (error) {
+      console.error("Error fetching movie details:", error);
+      setMovie(null);
+    }
+  };
   // Fetch movie details
   const fetchMovieDetails = async (id: string) => {
     try {
@@ -116,7 +142,7 @@ const BookingPage = () => {
       const data = await response.json();
       if (data && data.data) {
         setRoom(data.data);
-        generateSeatingLayout(data.data);
+       
       } else {
         setRoom(null);
       }
@@ -127,14 +153,15 @@ const BookingPage = () => {
   };
 
   // Generate seating layout
-  const generateSeatingLayout = (room: Room) => {
-    const layout: string[][] = [];
+  const generateSeatingLayout = (room:Room, seats:Seat[]) => {
+    console.log(seats)
+    const layout: Seat[][] = [];
     for (let i = 0; i < room.rows; i++) {
       const row: string[] = [];
-      for (let j = 0; j < room.seatsPerRow; j++) {
-        row.push(`seat-${i}+${j}`);
-      }
-      layout.push(row);
+    //  for (let j = 0; j < room.seatsPerRow; j++) {
+      //  row.push(`seat-${i}+${j}`);
+    //  }
+      layout.push(seats.slice(room.seatsPerRow*i, room.seatsPerRow*(i + 1)))
     }
     setSeatingLayout(layout);
   };
@@ -149,23 +176,19 @@ const BookingPage = () => {
 
   // Handle clicking a seat
   const handleSeatClick = (seatId: string) => {
-    const updatedSeats = new Set(selectedSeats);
-    if (updatedSeats.has(seatId)) {
-      updatedSeats.delete(seatId);
-    } else {
-      updatedSeats.add(seatId);
-    }
-    setSelectedSeats(updatedSeats);
+   
+    
+    setSelectedSeat(seatId);
 
     const price = selectedSession ? selectedSession.price : 0;
-    setTotalPrice(updatedSeats.size * price);
+    setTotalPrice( price);
   };
 
   // Handle booking
   const userId = useSelector(selectUserId); // Отримання userId із Redux
 
   const handleBooking = async () => {
-    if (selectedSession && selectedSeats.size > 0) {
+    if (selectedSession && selectedSeat) {
       if (!userId) {
         setErrorMessage("You must be logged in to book seats.");
         return;
@@ -183,7 +206,7 @@ const BookingPage = () => {
         const bookingData = {
           userId,
           sessionId: selectedSession.id,
-          seatId: 1,
+          seatId: selectedSeat,
           transactionId: data,
           bookingTime: new Date().toISOString(),
         };
@@ -199,8 +222,10 @@ const BookingPage = () => {
           body: JSON.stringify(bookingData),
         });
   console.log(await response.json());
+  fetchSeats();
+  setSelectedSeat(null);
         if (response.ok) {
-          alert(`Booking confirmed! You selected ${selectedSeats.size} seat(s) for session ${selectedSession.id}.`);
+          alert(`Booking confirmed! You selected 1 seat(s) for session ${selectedSession.id}.`);
         } else {
           throw new Error("Failed to book the seats");
         }
@@ -272,10 +297,10 @@ const BookingPage = () => {
                       {row.map((seat, seatIndex) => (
                         <span
                           key={seatIndex}
-                          className={`bg-gray-700 text-yellow-600 px-4 py-2 rounded-full cursor-pointer ${selectedSeats.has(seat) ? "bg-yellow-600" : ""}`}
-                          onClick={() => handleSeatClick(seat)}
+                          className={`bg-gray-700 text-yellow-600 px-4 py-2 rounded-full cursor-pointer ${selectedSeat===seat.id.toString() ? "bg-yellow-600" : ""} ${!seat.isAvailable && "bg-red-600" }`}
+                          onClick={() => handleSeatClick(seat.id.toString())}
                         >
-                          {seat.split('-')[2]}
+                          {seat.number}
                         </span>
                       ))}
                     </div>
@@ -289,7 +314,7 @@ const BookingPage = () => {
             onClick={handleBooking}
             className="mt-6 bg-yellow-600 hover:bg-yellow-500 text-gray-900 font-bold py-2 px-4 rounded"
           >
-            {selectedSeats.size > 0
+            {selectedSeat
               ? `Confirm Booking ($${totalPrice})`
               : "Confirm Booking"}
           </button>
