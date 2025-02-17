@@ -111,7 +111,7 @@ const MoviesPage = () => {
       !newMovie.description.trim() ||
       !newMovie.releaseDate ||
       newMovie.rating < 0 ||
-      newMovie.rating > 5 ||
+      newMovie.rating > 10 ||
       newMovie.duration <= 0 ||
       !newMovie.language ||
       !newMovie.posterUrl ||
@@ -312,12 +312,12 @@ const MoviesPage = () => {
             </div>
             <div>
               <label className="block text-yellow-500 mb-2 text-sm">
-                Рейтинг (0-5) <span className="text-red-600">*</span>
+                Рейтинг (0-10) <span className="text-red-600">*</span>
               </label>
               <input
                 type="number"
                 min="0"
-                max="5"
+                max="10"
                 step="0.1"
                 className="w-full p-3 bg-gray-800 text-white rounded"
                 value={newMovie.rating}

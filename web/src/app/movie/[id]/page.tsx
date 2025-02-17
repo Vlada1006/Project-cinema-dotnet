@@ -121,7 +121,7 @@ class MovieDetailsPage extends React.Component<{}, MovieDetailsPageState> {
           <p className="text-yellow-600">
             Дата випуску: {movie.releaseDate || "N/A"}
           </p>
-          <p className="text-yellow-600">Рейтинг: {movie.rating || "N/A"}/5</p>
+          <p className="text-yellow-600">Рейтинг: {movie.rating || "N/A"}/10</p>
           <p>Тривалість фільму : {movie.duration || "N/A"} min</p>
           <p>Мова: {movie.language || "N/A"}</p>
 

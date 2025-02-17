@@ -5,14 +5,14 @@
   "scripts": {
     "dev": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 next dev --turbopack",
     "build": "next build",
-    "start": "NODE_TLS_REJECT_UNAUTHORIZED=0 next start",
+    "start": "cross-env NODE_TLS_REJECT_UNAUTHORIZED=0 next start",
     "lint": "next lint"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.5.1",
     "axios": "^1.7.9",
     "jsonwebtoken": "^9.0.2",
-    "next": "15.1.6",
+    "next": "^15.1.6",
     "next-auth": "^4.24.11",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

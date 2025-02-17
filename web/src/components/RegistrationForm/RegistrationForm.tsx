@@ -56,29 +56,29 @@ export default function RegistrationForm() {
   );
 
   return (
-    <div className="flex flex-col items-center mt-10 gap-10">
-      <h1 className="text-3xl text-white font-semibold italic">Register</h1>
+    <div className="flex flex-col items-center min-h-screen gap-10 bg-gray-900">
+      <h1 className="text-4xl text-yellow-400 font-bold italic">Register</h1>
       <form
         onSubmit={handleSubmit}
-        className="flex flex-col gap-2 mx-auto w-[70%] md:w-[400px] relative"
+        className="flex flex-col gap-4 mx-auto w-[90%] md:w-[400px] relative p-6 bg-gray-800 rounded-lg shadow-lg"
       >
-        <label htmlFor="email-input">Email</label>
+        <label htmlFor="email-input" className="text-lg text-yellow-400">Email</label>
         <input
           id="email-input"
           name="email"
-          className={`px-3 h-10 border border-black rounded-xl ${
-            formError && "border-[#FF0000]"
+          className={`px-4 h-12 border border-yellow-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 ${
+            formError && "border-red-600"
           }`}
           type="email"
           value={emailInputValue}
           onChange={(e) => setEmailInputValue(e.target.value)}
         />
-        <label htmlFor="password-input">Password</label>
+        <label htmlFor="password-input" className="text-lg text-yellow-400">Password</label>
         <input
           id="password-input"
           name="password"
-          className={`px-3 h-10 border border-black rounded-xl ${
-            formError && "border-[#FF0000]"
+          className={`px-4 h-12 border border-yellow-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400 ${
+            formError && "border-red-600"
           }`}
           type="password"
           value={passwordInputValue}
@@ -86,18 +86,18 @@ export default function RegistrationForm() {
         />
         <button
           disabled={isSubmitButtonDisabled}
-          className="mt-20 rounded-2xl bg-white/25 hover:bg-black/25 active:bg-black/50 p-5 disabled:text-[#808080] disabled:bg-[#808080]/50"
+          className="mt-6 rounded-2xl bg-yellow-500 hover:bg-yellow-400 active:bg-yellow-600 p-4 text-white disabled:bg-gray-600"
           type="submit"
         >
           Register
         </button>
         <div className="relative">
-          <p className="absolute text-[#FF0000]">{formError}</p>
+          <p className="absolute text-red-600">{formError}</p>
         </div>
       </form>
-      <h2>
+      <h2 className="text-yellow-400">
         Already have an account?{" "}
-        <Link href="/auth/login" className="underline italic">
+        <Link href="/auth/login" className="underline italic text-yellow-300 hover:text-yellow-200">
           Login
         </Link>
       </h2>

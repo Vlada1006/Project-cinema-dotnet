@@ -7,7 +7,8 @@ import { signOut } from "next-auth/react";
 import { useAppDispatch, useAppSelector } from "@/stores/hooks";
 import { clearUserStore } from "@/stores/user/user.slice";
 import { selectUserEmail, selectUserRoles } from "@/stores/user/selectors";
-
+import Image from 'next/image';
+import logo from './logo.jpg';
 interface Movie {
   id: string;
   posterUrl: string;
@@ -159,14 +160,6 @@ const Home = () => {
             Сортувати за тривалістю
           </button>
         </li>
-        <li>
-          <button
-            className="w-full text-left p-2 hover:bg-gray-700"
-            onClick={() => router.push("/showtimes")}
-          >
-            Переглянути календар показів
-          </button>
-        </li>
         {userRolesFromStore && userRolesFromStore.includes("Admin") && (
           <li>
             <button
@@ -177,14 +170,6 @@ const Home = () => {
             </button>
           </li>
         )}
-        <li>
-      <button
-        className="w-full text-left p-2 hover:bg-gray-700"
-        onClick={() => (window.location.href = "/booking")}
-      >
-        Бронювання квитків
-      </button>
-    </li>
         <li>
           {userEmailFromStore ? (
             <button
@@ -241,7 +226,12 @@ const Home = () => {
     >
       <div className="p-6 bg-gray-900 text-yellow-600 min-h-screen">
         <header className="flex justify-between items-center mb-8">
-          <h1 className="text-4xl font-bold">CinemaHub</h1>
+        <Image
+  src={logo} // Це тепер правильний тип для Image в Next.js
+  alt="CinemaHub Logo"
+  width={130}
+  height={130}
+/>
           <div className="flex gap-4">
             <input
               type="text"
