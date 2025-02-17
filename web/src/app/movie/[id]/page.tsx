@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation"; // Для редиректу
+import { useRouter } from "next/navigation";
 
 interface Genre {
   id: number;
@@ -44,7 +44,8 @@ const MovieDetailsPage = () => {
   const [movieId, setMovieId] = useState<string | null>(null);
   const [showSessions, setShowSessions] = useState(false);
   const [selectedSession, setSelectedSession] = useState<Session | null>(null);
-  const router = useRouter(); // Для редиректу на іншу сторінку
+  const [showBookingButton, setShowBookingButton] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     setIsClient(true);
@@ -80,28 +81,30 @@ const MovieDetailsPage = () => {
       }
       const data = await response.json();
       if (data && data.data) {
-        const filteredSessions = data.data.filter(
-          (session: Session) => session.filmId.toString() === movieId
-        );
+        const filteredSessions = data.data.filter((session: Session) => {
+          const sessionStartTime = new Date(session.startTime);
+          const currentTime = new Date();
+          return session.filmId.toString() === movieId && sessionStartTime >= currentTime;
+        });
+  
         setSessions(filteredSessions);
+        setShowBookingButton(filteredSessions.length > 0);
       } else {
         setSessions([]);
+        setShowBookingButton(false);
       }
     } catch (error) {
       console.error("Error fetching sessions:", error);
       setSessions([]);
+      setShowBookingButton(false);
     }
   };
-
+  
   const handleShowSessions = () => {
     if (movieId) {
       fetchSessions(movieId);
     }
     setShowSessions(true);
-  };
-
-  const handleSelectSession = (session: Session) => {
-    setSelectedSession(session);
   };
 
   const handleBookSession = () => {
@@ -110,11 +113,9 @@ const MovieDetailsPage = () => {
       if (selectedSession) {
         console.log("Booking session:", selectedSession);
         alert(`You booked a session at ${selectedSession.roomId} starting at ${new Date(selectedSession.startTime).toLocaleTimeString()}`);
-        // Перенаправлення на сторінку бронювання з передачею ID фільму
         router.push(`/booking?movieId=${movieId}`);
       }
     } else {
-      // Якщо користувач не авторизований, редирект на форму входу з параметром для переходу на бронювання
       router.push(`/auth/login?redirectTo=/booking?movieId=${movieId}`);
     }
   };
@@ -172,36 +173,35 @@ const MovieDetailsPage = () => {
           </button>
           {showSessions && (
             <div className="mt-6">
-              <h2 className="text-xl font-bold">Sessions:</h2>
+              <h2 className="text-xl font-bold">Available Sessions:</h2>
               {sessions && sessions.length > 0 ? (
-                <ul className="mt-2">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
                   {sessions.map((session) => (
-                    <li
+                    <div
                       key={session.id}
-                      onClick={() => handleSelectSession(session)}
-                      className="cursor-pointer hover:bg-gray-700 p-2 rounded-lg"
+                      className="bg-gray-700 p-4 rounded-lg shadow-lg hover:bg-gray-600 transition-all"
                     >
-                      {new Date(session.startTime).toLocaleString()} - {new Date(session.endTime).toLocaleString()}, {session.roomId}, {session.price} UAH
-                    </li>
+                      <div className="flex justify-between items-center mb-2">
+                        <p className="text-yellow-500">{new Date(session.startTime).toLocaleString()}</p>
+                        <p className="text-yellow-500">{new Date(session.endTime).toLocaleString()}</p>
+                      </div>
+                      <div className="text-gray-300">
+                        <p>Room: {session.roomId}</p>
+                        <p>Price: {session.price} UAH</p>
+                      </div>
+                    </div>
                   ))}
-                </ul>
+                </div>
               ) : (
                 <p>No available sessions</p>
               )}
-              {selectedSession && (
-                <div className="mt-4 bg-gray-700 p-4 rounded-lg">
-                  <h3 className="text-lg font-bold text-yellow-600">Selected Session:</h3>
-                  <p><strong>Start Time:</strong> {new Date(selectedSession.startTime).toLocaleString()}</p>
-                  <p><strong>End Time:</strong> {new Date(selectedSession.endTime).toLocaleString()}</p>
-                  <p><strong>Room:</strong> {selectedSession.roomId}</p>
-                  <p><strong>Price:</strong> {selectedSession.price} UAH</p>
-                  <button
-                    onClick={handleBookSession}
-                    className="mt-4 bg-yellow-600 hover:bg-yellow-500 text-gray-900 font-bold py-2 px-4 rounded"
-                  >
-                    Book Session
-                  </button>
-                </div>
+              {showBookingButton && (
+                <button
+                  onClick={handleBookSession}
+                  className="mt-4 bg-yellow-600 hover:bg-yellow-500 text-gray-900 font-bold py-2 px-4 rounded"
+                >
+                  Book Session
+                </button>
               )}
             </div>
           )}

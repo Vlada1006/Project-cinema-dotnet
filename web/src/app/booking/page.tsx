@@ -1,6 +1,8 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
+import { useSelector } from "react-redux";
+import { selectUserId } from "@/stores/user/selectors";
 
 // Types for movie, session, room, and booking data
 interface Movie {
@@ -85,13 +87,22 @@ const BookingPage = () => {
       }
       const data = await response.json();
       if (data && data.data) {
-        setSessions(data.data);
+        const filteredSessions = data.data.filter((session: Session) => {
+          const sessionStartTime = new Date(session.startTime);
+          const currentTime = new Date();
+          return session.filmId.toString() === movieId && sessionStartTime >= currentTime;
+        });
+  
+        setSessions(filteredSessions);
+        
       } else {
         setSessions([]);
+        
       }
     } catch (error) {
       console.error("Error fetching sessions:", error);
       setSessions([]);
+     
     }
   };
 
@@ -151,46 +162,57 @@ const BookingPage = () => {
   };
 
   // Handle booking
+  const userId = useSelector(selectUserId); // Отримання userId із Redux
+
   const handleBooking = async () => {
     if (selectedSession && selectedSeats.size > 0) {
-      const token = localStorage.getItem("authToken");
-      if (token) {
-        const userId = JSON.parse(atob(token.split('.')[1])).userId;
-
+      if (!userId) {
+        setErrorMessage("You must be logged in to book seats.");
+        return;
+      }
+  
+      try {
+        const trasactionsresponse = await fetch("/api/trasactions", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({amount:150}),
+        });
+        const { data } = await trasactionsresponse.json();
         const bookingData = {
           userId,
           sessionId: selectedSession.id,
-          seatId: Array.from(selectedSeats).join(','),
-          transactionId: Math.floor(Math.random() * 1000000),
+          seatId: 1,
+          transactionId: data,
           bookingTime: new Date().toISOString(),
         };
-
-        try {
-          const response = await fetch("https://localhost:7000/api/Bookings", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(bookingData),
-          });
-
-          if (response.ok) {
-            alert(`Booking confirmed! You selected ${selectedSeats.size} seat(s) for session ${selectedSession.id}.`);
-          } else {
-            throw new Error("Failed to book the seats");
-          }
-        } catch (error) {
-          console.error("Error during booking:", error);
-          alert("Failed to confirm the booking. Please try again.");
+        console.log(bookingData);
+       
+  
+        const response = await fetch("/api/bookings", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            
+          },
+          body: JSON.stringify(bookingData),
+        });
+  console.log(await response.json());
+        if (response.ok) {
+          alert(`Booking confirmed! You selected ${selectedSeats.size} seat(s) for session ${selectedSession.id}.`);
+        } else {
+          throw new Error("Failed to book the seats");
         }
-      } else {
-        setErrorMessage("You must be logged in to book seats.");
+      } catch (error) {
+        console.error("Error during booking:", error);
+        setErrorMessage("An error occurred while booking. Please try again.");
       }
     } else {
       alert("Please select at least one seat before confirming your booking!");
     }
   };
-
+  
   if (!movie) return <p>Loading...</p>;
 
   return (
