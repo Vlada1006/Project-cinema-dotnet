@@ -16,6 +16,7 @@ namespace Cinema_project_dotnet.BusinessLogic.Services
         private readonly IGenericRepository<Genre> _genreRepo;
         private readonly IGenericRepository<Director> _directorRepo;
         private readonly IGenericRepository<Booking> _bookingRepo;
+        private readonly IGenericRepository<Session> _sessionRepo;
         private readonly IMapper _mapper;
 
         public FilmService(
@@ -23,6 +24,7 @@ namespace Cinema_project_dotnet.BusinessLogic.Services
             IGenericRepository<Genre> genreRepo,
             IGenericRepository<Director> directorRepo,
             IGenericRepository<Booking> bookingRepo,
+            IGenericRepository<Session> sessionRepo,
             IMapper mapper)
         {
             this._filmRepo = filmRepo;
@@ -30,6 +32,7 @@ namespace Cinema_project_dotnet.BusinessLogic.Services
             this._directorRepo = directorRepo;
             this._bookingRepo = bookingRepo;
             this._mapper = mapper;
+            this._sessionRepo = sessionRepo;
         }
 
         public async Task<List<FilmGetDTO>> GetAllFilmsAsync()
@@ -182,31 +185,35 @@ namespace Cinema_project_dotnet.BusinessLogic.Services
 
         public async Task<List<FilmStatisticsDTO>> GetFilmStatisticsAsync(DateTime? startDate, DateTime? endDate)
         {
-            var films = await _filmRepo.GetAllAsync(); 
-            var bookings = await _bookingRepo.GetAllAsync(); 
+            var films = await _filmRepo.GetAllAsync();
+            var bookings = await _bookingRepo.GetAllAsync();
 
             if (startDate.HasValue)
             {
-                bookings = bookings.Where(b => b.BookingTime >= startDate.Value).ToList();  
+                bookings = bookings.Where(b => b.BookingTime >= startDate.Value).ToList();
             }
             if (endDate.HasValue)
             {
-                bookings = bookings.Where(b => b.BookingTime <= endDate.Value).ToList(); 
+                bookings = bookings.Where(b => b.BookingTime <= endDate.Value).ToList();
             }
+
+            var sessions = await _sessionRepo.GetAllAsync();
 
             var statistics = films.Select(film => new FilmStatisticsDTO
             {
                 Id = film.Id,
                 Title = film.Title,
-                TicketsSold = bookings.Count(b => b.Id == film.Id)
+                TicketsSold = bookings.Count(b => b.Session.FilmId == film.Id),
+                Revenue = bookings.Where(b => b.Session.FilmId == film.Id)
+                                        .Sum(b => sessions
+                                                   .FirstOrDefault(s => s.Id == b.SessionId)?
+                                                   .Price ?? 0m) 
             })
             .OrderByDescending(f => f.TicketsSold)
             .ToList();
 
             return statistics;
         }
-
-
     }
 }
 
