@@ -4,7 +4,7 @@ import { fetchUser } from "@/stores/user/user.slice";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { FormEvent, useCallback, useState } from "react";
+import { FormEvent, useCallback, useState , useEffect} from "react";
 
 
 export default function LoginForm() {
@@ -17,6 +17,15 @@ export default function LoginForm() {
   const [formError, setFormError] = useState<string>("");
   const [isSubmitButtonDisabled, setIsSubmitButtonDisabled] =
     useState<boolean>(false);
+
+    const [redirectTo, setRedirectTo] = useState<string | null>(null);
+
+    useEffect(() => {
+      // Отримуємо параметр redirectTo з URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const redirectToParam = urlParams.get("redirectTo");
+      setRedirectTo(redirectToParam);
+    }, []);
 
   const handleSubmit = useCallback(
     async (e: FormEvent<HTMLFormElement>) => {
@@ -46,10 +55,13 @@ export default function LoginForm() {
       }
 
       dispatch(fetchUser());
-      router.push("/");
-      router.refresh();
+      if (redirectTo) {
+        router.push(redirectTo); // Перенаправлення на сторінку для бронювання або іншу вказану сторінку
+      } else {
+        router.push("/"); // Якщо параметр не вказаний, перенаправлення на головну сторінку
+      }
     },
-    [router, dispatch]
+    [router, dispatch, redirectTo]
   );
 
   const handleEmailChange = useCallback(
