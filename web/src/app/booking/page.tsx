@@ -1,234 +1,282 @@
 "use client";
+import React, { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 
-import React, { useEffect, useState } from "react";
+// Types for movie, session, room, and booking data
+interface Movie {
+  posterUrl: string;
+  title: string;
+  description: string;
+  releaseDate: string;
+  rating?: number;
+  duration?: number;
+  language?: string;
+  genres?: { name: string }[];
+  directors?: { name: string }[];
+  sessions?: {
+    id: number;
+    startTime: string;
+    endTime: string;
+    price: number;
+    filmId: number;
+    roomId: number;
+  }[];
+}
 
-export default function Booking() {
-  interface Movie {
-    id: string;
-    title: string;
-    image: string;
-    description: string;
-    release_date: string;
-  }
+interface Session {
+  id: number;
+  startTime: string;
+  endTime: string;
+  price: number;
+  filmId: number;
+  roomId: number;
+}
 
-  const [movies, setMovies] = useState<Movie[]>([]);
-  const [selectedMovie, setSelectedMovie] = useState<Movie | null>(null);
-  const [selectedDate, setSelectedDate] = useState<string>("");
-  const [selectedTime, setSelectedTime] = useState<string>("");
-  const [selectedSeats, setSelectedSeats] = useState<number[][]>([]);
-  const [error, setError] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(true);
+interface Room {
+  id: number;
+  name: string;
+  type: string;
+  totalSeats: number;
+  rows: number;
+  seatsPerRow: number;
+}
+
+const BookingPage = () => {
+  const [movie, setMovie] = useState<Movie | null>(null);
+  const [sessions, setSessions] = useState<Session[]>([]);
+  const [selectedSession, setSelectedSession] = useState<Session | null>(null);
+  const [room, setRoom] = useState<Room | null>(null);
+  const [seatingLayout, setSeatingLayout] = useState<string[][]>([]);
+  const [selectedSeats, setSelectedSeats] = useState<Set<string>>(new Set());
   const [totalPrice, setTotalPrice] = useState<number>(0);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-
-  const ticketPrice = 150;
-  const rows = 10;
-  const cols = 10;
-
-  const bookedSeats = [
-    [3, 4],
-    [5, 6],
-  ];
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const searchParams = useSearchParams();
+  const movieId = searchParams.get("movieId");
 
   useEffect(() => {
-    fetch("/api/movies")
-      .then((response) => response.json())
-      .then((data) => {
-        setMovies(data.data);
-        setLoading(false);
-      })
-      .catch(() => {
-        setError("Помилка завантаження фільмів. Спробуйте ще раз.");
-        setLoading(false);
-      });
-  }, []);
-
-  useEffect(() => {
-    setTotalPrice(selectedSeats.length * ticketPrice);
-  }, [selectedSeats]);
-
-  const handleSeatSelect = (row: number, col: number) => {
-    if (bookedSeats.some(([r, c]) => r === row && c === col)) return;
-
-    setSelectedSeats((prev) => {
-      const isSelected = prev.some(([r, c]) => r === row && c === col);
-      return isSelected
-        ? prev.filter(([r, c]) => !(r === row && c === col))
-        : [...prev, [row, col]];
-    });
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (
-      !selectedMovie ||
-      !selectedDate ||
-      !selectedTime ||
-      selectedSeats.length === 0
-    ) {
-      setError("Будь ласка, заповніть усі поля.");
-      return;
+    if (movieId) {
+      fetchMovieDetails(movieId);
+      fetchSessions(movieId);
     }
-    setIsModalOpen(true);
+  }, [movieId]);
+
+  // Fetch movie details
+  const fetchMovieDetails = async (id: string) => {
+    try {
+      const response = await fetch(`/api/movies/${id}`);
+      const data = await response.json();
+      if (data && data.data) {
+        setMovie(data.data);
+      } else {
+        setMovie(null);
+      }
+    } catch (error) {
+      console.error("Error fetching movie details:", error);
+      setMovie(null);
+    }
   };
 
-  if (loading)
-    return (
-      <p className="text-yellow-600 text-center">Завантаження фільмів...</p>
-    );
-  if (error) return <p className="text-red-500 text-center">{error}</p>;
+  // Fetch sessions for the movie
+  const fetchSessions = async (movieId: string) => {
+    try {
+      const response = await fetch(`https://localhost:7000/api/Sessions?filmId=${movieId}`);
+      if (!response.ok) {
+        throw new Error("Failed to fetch sessions");
+      }
+      const data = await response.json();
+      if (data && data.data) {
+        setSessions(data.data);
+      } else {
+        setSessions([]);
+      }
+    } catch (error) {
+      console.error("Error fetching sessions:", error);
+      setSessions([]);
+    }
+  };
+
+  // Fetch room details
+  const fetchRoomDetails = async (roomId: number) => {
+    try {
+      const response = await fetch(`https://localhost:7000/api/Rooms/${roomId}`);
+      if (!response.ok) {
+        throw new Error("Failed to fetch room details");
+      }
+      const data = await response.json();
+      if (data && data.data) {
+        setRoom(data.data);
+        generateSeatingLayout(data.data);
+      } else {
+        setRoom(null);
+      }
+    } catch (error) {
+      console.error("Error fetching room details:", error);
+      setRoom(null);
+    }
+  };
+
+  // Generate seating layout
+  const generateSeatingLayout = (room: Room) => {
+    const layout: string[][] = [];
+    for (let i = 0; i < room.rows; i++) {
+      const row: string[] = [];
+      for (let j = 0; j < room.seatsPerRow; j++) {
+        row.push(`seat-${i}+${j}`);
+      }
+      layout.push(row);
+    }
+    setSeatingLayout(layout);
+  };
+
+  // Handle selecting a session
+  const handleSelectSession = (session: Session) => {
+    setSelectedSession(session);
+    if (session.roomId) {
+      fetchRoomDetails(session.roomId);
+    }
+  };
+
+  // Handle clicking a seat
+  const handleSeatClick = (seatId: string) => {
+    const updatedSeats = new Set(selectedSeats);
+    if (updatedSeats.has(seatId)) {
+      updatedSeats.delete(seatId);
+    } else {
+      updatedSeats.add(seatId);
+    }
+    setSelectedSeats(updatedSeats);
+
+    const price = selectedSession ? selectedSession.price : 0;
+    setTotalPrice(updatedSeats.size * price);
+  };
+
+  // Handle booking
+  const handleBooking = async () => {
+    if (selectedSession && selectedSeats.size > 0) {
+      const token = localStorage.getItem("authToken");
+      if (token) {
+        const userId = JSON.parse(atob(token.split('.')[1])).userId;
+
+        const bookingData = {
+          userId,
+          sessionId: selectedSession.id,
+          seatId: Array.from(selectedSeats).join(','),
+          transactionId: Math.floor(Math.random() * 1000000),
+          bookingTime: new Date().toISOString(),
+        };
+
+        try {
+          const response = await fetch("https://localhost:7000/api/Bookings", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(bookingData),
+          });
+
+          if (response.ok) {
+            alert(`Booking confirmed! You selected ${selectedSeats.size} seat(s) for session ${selectedSession.id}.`);
+          } else {
+            throw new Error("Failed to book the seats");
+          }
+        } catch (error) {
+          console.error("Error during booking:", error);
+          alert("Failed to confirm the booking. Please try again.");
+        }
+      } else {
+        setErrorMessage("You must be logged in to book seats.");
+      }
+    } else {
+      alert("Please select at least one seat before confirming your booking!");
+    }
+  };
+
+  if (!movie) return <p>Loading...</p>;
 
   return (
-    <div className="p-6 bg-gray-900 text-yellow-600 min-h-screen">
-      <header className="flex justify-between items-center mb-6">
-        <h1 className="text-3xl font-bold">Бронювання квитків</h1>
-      </header>
+    <div className="min-h-screen bg-gray-900 text-yellow-600 p-6">
+      <div className="max-w-6xl mx-auto bg-gray-800 rounded-lg p-6 shadow-lg flex flex-col md:flex-row items-center md:items-start">
+        <img
+          src={movie.posterUrl}
+          alt={movie.title}
+          className="w-64 h-96 object-cover rounded-lg shadow-lg mb-4 md:mb-0 md:mr-6"
+        />
+        <div className="flex-1 text-center md:text-left">
+          <h1 className="text-3xl font-bold text-yellow-600 mb-4">{movie.title}</h1>
+          <p className="mb-2">{movie.description}</p>
+          <p className="text-yellow-600">Release Date: {new Date(movie.releaseDate).toLocaleDateString()}</p>
+          <p className="text-yellow-600">Rating: {movie.rating || "N/A"}/10</p>
+          <p>Duration: {movie.duration || "N/A"} minutes</p>
+          <p>Language: {movie.language || "N/A"}</p>
+          <p>Genres: {movie.genres?.length ? movie.genres.map((g) => g.name).join(", ") : "N/A"}</p>
+          <p>Directors: {movie.directors?.length ? movie.directors.map((d) => d.name).join(", ") : "N/A"}</p>
 
-      <form
-        onSubmit={handleSubmit}
-        className="max-w-2xl mx-auto bg-gray-800 p-6 rounded-lg"
-      >
-        <div className="mb-6">
-          <label className="block text-lg font-semibold mb-2">
-            Оберіть фільм:
-          </label>
-          <select
-            onChange={(e) => {
-              console.log(e.target.value, movies);
-              setSelectedMovie(
-                movies.find((movie) => movie.id == e.target.value) || null
-              );
-            }}
-            className="w-full p-2 bg-gray-700 text-yellow-600 rounded"
-            value={selectedMovie?.id || ""}
-          >
-            <option value="">-- Виберіть фільм --</option>
-            {movies.map((movie) => (
-              <option key={movie.id} value={movie.id}>
-                {movie.title}
-              </option>
-            ))}
-          </select>
-        </div>
-
-        <div className="grid grid-cols-2 gap-4 mb-6">
-          <select
-            value={selectedDate}
-            onChange={(e) => setSelectedDate(e.target.value)}
-            className="p-2 bg-gray-700 text-yellow-600 rounded w-full"
-          >
-            <option value="">-- Виберіть дату --</option>
-            {(() => {
-              const dateOptions = [];
-              const today = new Date();
-              for (let i = 0; i < 14; i++) {
-                const nextDate = new Date(today);
-                nextDate.setDate(today.getDate() + i);
-                const dateString = nextDate.toISOString().split("T")[0];
-                dateOptions.push(
-                  <option key={dateString} value={dateString}>
-                    {dateString}
-                  </option>
+          {sessions.length > 0 ? (
+            <ul className="list-none p-0 mt-4">
+              {sessions.map((session) => {
+                const startTime = new Date(session.startTime);
+                const endTime = new Date(session.endTime);
+                return (
+                  <li
+                    key={session.id}
+                    className={`bg-gray-700 text-yellow-600 mb-2 p-4 rounded-lg cursor-pointer ${selectedSession?.id === session.id ? "border-2 border-yellow-600" : ""}`}
+                    onClick={() => handleSelectSession(session)}
+                  >
+                    <div className="flex justify-between">
+                      <span>{startTime.toLocaleTimeString()} - {endTime.toLocaleTimeString()}</span>
+                      <span>Price: ${session.price}</span>
+                    </div>
+                  </li>
                 );
-              }
-              return dateOptions;
-            })()}
-          </select>
+              })}
+            </ul>
+          ) : (
+            <p>No sessions available.</p>
+          )}
 
-          <select
-            value={selectedTime}
-            onChange={(e) => setSelectedTime(e.target.value)}
-            className="p-2 bg-gray-700 text-yellow-600 rounded w-full"
-          >
-            <option value="">-- Виберіть час --</option>
-            <option value="10:00">10:00 </option>
-            <option value="14:00">14:00 </option>
-            <option value="18:00">18:00 </option>
-          </select>
-        </div>
+          {selectedSession && seatingLayout.length > 0 && (
+            <div className="mt-6">
+              <div className="text-center mb-6">
+                <div className="bg-gray-700 text-white py-2 px-6 rounded-md text-xl font-bold w-2/3 mx-auto">
+                  SCREEN
+                </div>
+              </div>
 
-        <div className="mb-6">
-          <p className="text-lg font-semibold mb-2">Оберіть місця:</p>
+              <h2 className="text-2xl mb-4 text-yellow-600">Select Your Seat</h2>
+              <div className="space-y-4">
+                {seatingLayout.map((row, rowIndex) => (
+                  <div key={rowIndex} className="flex justify-center">
+                    <div className="space-x-2">
+                      {row.map((seat, seatIndex) => (
+                        <span
+                          key={seatIndex}
+                          className={`bg-gray-700 text-yellow-600 px-4 py-2 rounded-full cursor-pointer ${selectedSeats.has(seat) ? "bg-yellow-600" : ""}`}
+                          onClick={() => handleSeatClick(seat)}
+                        >
+                          {seat.split('-')[2]}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
-          <div className="bg-gray-300 text-center text-black font-bold py-2 mb-4 rounded">
-            Екран
-          </div>
-
-          <div className="grid grid-cols-10 gap-2 justify-center">
-            {(() => {
-              const seats = [];
-              for (let row = 0; row < rows; row++) {
-                for (let col = 0; col < cols; col++) {
-                  seats.push(
-                    <button
-                      key={`${row}-${col}`}
-                      onClick={() => handleSeatSelect(row, col)}
-                      type="button"
-                      className={`w-8 h-8 rounded-full ${
-                        bookedSeats.some(([r, c]) => r === row && c === col)
-                          ? "bg-red-600 cursor-not-allowed"
-                          : selectedSeats.some(
-                              ([r, c]) => r === row && c === col
-                            )
-                          ? "bg-green-500"
-                          : "bg-gray-500"
-                      }`}
-                    ></button>
-                  );
-                }
-              }
-              return seats;
-            })()}
-          </div>
-
-          <div className="mt-4 text-center text-yellow-600">
-            <p className="mb-2">
-              <span className="w-4 h-4 inline-block rounded-full bg-green-500"></span>{" "}
-              — Вибране місце
-            </p>
-            <p className="mb-2">
-              <span className="w-4 h-4 inline-block rounded-full bg-yellow-600"></span>{" "}
-              — Заброньоване місце
-            </p>
-            <p>
-              <span className="w-4 h-4 inline-block rounded-full bg-gray-500"></span>{" "}
-              — Доступне місце
-            </p>
-          </div>
-        </div>
-
-        <div className="flex justify-between items-center">
-          <p className="text-xl font-bold">Ціна: {totalPrice} грн</p>
           <button
-            type="submit"
-            className="px-4 py-2 bg-yellow-600 rounded text-white"
+            onClick={handleBooking}
+            className="mt-6 bg-yellow-600 hover:bg-yellow-500 text-gray-900 font-bold py-2 px-4 rounded"
           >
-            Оплатити
+            {selectedSeats.size > 0
+              ? `Confirm Booking ($${totalPrice})`
+              : "Confirm Booking"}
           </button>
-        </div>
-      </form>
 
-      {isModalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white text-black p-6 rounded-lg w-96">
-            <h2 className="text-lg font-bold mb-2">Оплата підтверджена!</h2>
-            <p>Фільм: {selectedMovie?.title}</p>
-            <p>Дата: {selectedDate}</p>
-            <p>Час: {selectedTime}</p>
-            <p>
-              Місця:{" "}
-              {selectedSeats.map(([r, c]) => `[${r + 1},${c + 1}]`).join(", ")}
-            </p>
-            <p>Загальна ціна: {totalPrice} грн</p>
-            <button
-              onClick={() => setIsModalOpen(false)}
-              className="px-4 py-2 mt-4 bg-blue-600 rounded text-white"
-            >
-              ОК
-            </button>
-          </div>
+          {errorMessage && <p className="text-red-600 mt-4">{errorMessage}</p>}
         </div>
-      )}
+      </div>
     </div>
   );
-}
+};
+
+export default BookingPage;

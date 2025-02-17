@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";// Додаємо для редиректу
+import { useRouter } from "next/navigation"; // Для редиректу
 
 interface Genre {
   id: number;
@@ -110,13 +110,15 @@ const MovieDetailsPage = () => {
       if (selectedSession) {
         console.log("Booking session:", selectedSession);
         alert(`You booked a session at ${selectedSession.roomId} starting at ${new Date(selectedSession.startTime).toLocaleTimeString()}`);
+        // Перенаправлення на сторінку бронювання з передачею ID фільму
+        router.push(`/booking?movieId=${movieId}`);
       }
     } else {
       // Якщо користувач не авторизований, редирект на форму входу з параметром для переходу на бронювання
-      router.push("/auth/login?redirectTo=/booking");
+      router.push(`/auth/login?redirectTo=/booking?movieId=${movieId}`);
     }
   };
-  
+
   if (!isClient || !movie) return <p>Loading...</p>;
 
   const posterUrl = movie.posterUrl && movie.posterUrl.startsWith("https://")
