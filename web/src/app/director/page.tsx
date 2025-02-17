@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useRouter } from "next/navigation"; // Import useRouter
 
-type Genre = {
+type Director = {
   id: number;
   name: string;
 };
@@ -15,24 +15,24 @@ interface Movie {
   description: string;
   release_date: string;
   rating: number;
-  genres: Genre[]; // Change this to an array of Genre objects
+  directors: Director[]; // Assuming movies have an array of directors
 }
 
-const Genres = () => {
-  const [genres, setGenres] = useState<Genre[]>([]);
-  const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
+const MoviesByDirectors = () => {
+  const [directors, setDirectors] = useState<Director[]>([]);
+  const [searchTerm, setSearchTerm] = useState<string>("");
   const [movies, setMovies] = useState<Movie[]>([]);
   const [allMovies, setAllMovies] = useState<Movie[]>([]); // Store all movies
   const router = useRouter(); // Initialize useRouter
 
   useEffect(() => {
-    const fetchGenres = async () => {
+    const fetchDirectors = async () => {
       try {
-        const response = await fetch("/api/genres");
+        const response = await fetch("/api/directors"); // Fetch directors from the API
         const data = await response.json();
-        setGenres(data.data || []);
+        setDirectors(data.data || []);
       } catch (error) {
-        console.error("Error loading genres:", error);
+        console.error("Error loading directors:", error);
       }
     };
 
@@ -49,7 +49,7 @@ const Genres = () => {
           description: movie.description,
           release_date: movie.release_date,
           rating: movie.rating,
-          genres: movie.genres || [], // Assuming genres are part of the movie data
+          directors: movie.directors || [],
         }));
         setMovies(fetchedMovies);
         setAllMovies(fetchedMovies); // Store all movies
@@ -58,33 +58,21 @@ const Genres = () => {
       }
     };
 
-    fetchGenres();
+    fetchDirectors();
     fetchMovies();
   }, []);
 
   useEffect(() => {
-    if (selectedGenres.length > 0) {
-      const filteredMovies = allMovies.filter((movie) =>
-        selectedGenres.every((selectedGenre) =>
-          movie.genres.some((genre) => genre.name === selectedGenre) // Check if all selected genres are present
-        )
-      );
-      setMovies(filteredMovies);
-    } else {
-      setMovies(allMovies); // Reset to all movies if no genre is selected
-    }
-  }, [selectedGenres, allMovies]);
-
-  const handleGenreChange = (genreName: string) => {
-    setSelectedGenres((prev) =>
-      prev.includes(genreName)
-        ? prev.filter((name) => name !== genreName) // Remove genre if already selected
-        : [...prev, genreName] // Add genre if not selected
+    const filteredMovies = allMovies.filter((movie) =>
+      movie.directors.some((director) =>
+        director.name.toLowerCase().includes(searchTerm.toLowerCase())
+      )
     );
-  };
+    setMovies(filteredMovies);
+  }, [searchTerm, allMovies]);
 
-  const handleClearAll = () => {
-    setSelectedGenres([]); // Clear all selected genres
+  const handleClearSearch = () => {
+    setSearchTerm("");
   };
 
   const handleMovieClick = (id: string) => {
@@ -93,30 +81,30 @@ const Genres = () => {
 
   return (
     <div className="p-6 bg-gray-900 text-yellow-600 min-h-screen">
-      <h1 className="text-4xl font-bold mb-6">Жанри фільмів</h1>
-      <div className="mb-4">
-        <label className="block text-lg mb-2">Оберіть жанри:</label>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-4"> {/* Grid layout for genres */}
-          {genres.map((genre) => (
-            <label key={genre.id} className="flex items-center">
-              <input
-                type="checkbox"
-                value={genre.name}
-                checked={selectedGenres.includes(genre.name)}
-                onChange={() => handleGenreChange(genre.name)}
-                className="mr-2"
-              />
-              {genre.name}
-            </label>
-          ))}
+      <h1 className="text-4xl font-bold mb-6">Фільми за режисерами</h1>
+
+      <div className="mb-4 flex items-center">
+        <label className="block text-lg mb-2 mr-2">Пошук за режисерами:</label>
+        <div className="relative w-full">
+          <input
+            type="text"
+            placeholder="Введіть ім'я режисера..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="p-2 bg-gray-800 rounded w-full"
+          />
+          {searchTerm && (
+            <button
+              onClick={handleClearSearch}
+              className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-200"
+              aria-label="Clear search"
+            >
+              &times; {/* This is the "X" character */}
+            </button>
+          )}
         </div>
-        <button
-          onClick={handleClearAll}
-          className="mt-4 bg-red-600 text-white px-4 py-2 rounded hover:bg-red-500"
-        >
-          Очистити все
-        </button>
       </div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {movies.length > 0 ? (
           movies.map((movie) => (
@@ -134,13 +122,13 @@ const Genres = () => {
               <p className="text-sm text-gray-400">{movie.release_date}</p>
               <p className="mt-2">{movie.description.substring(0, 100)}...</p>
               <p className="mt-2 text-sm text-gray-400">
-                Жанри: {movie.genres.map((g) => g.name).join(", ")}
+                Режисери: {movie.directors.map((d) => d.name).join(", ")}
               </p>
             </div>
           ))
         ) : (
           <p key="no-movies" className="text-gray-400">
-            Оберіть жанри, щоб переглянути фільми.
+            Немає фільмів, що відповідають вашому запиту.
           </p>
         )}
       </div>
@@ -148,4 +136,4 @@ const Genres = () => {
   );
 };
 
-export default Genres;
+export default MoviesByDirectors;

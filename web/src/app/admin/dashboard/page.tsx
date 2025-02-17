@@ -30,7 +30,7 @@ export default function DashboardPage() {
           onClick={() => handleNavigate("payments")}
           className="bg-yellow-600 text-black px-8 py-4 rounded-lg shadow-md hover:bg-yellow-400"
         >
-          💰 Оплати
+          💰 Бронювання
         </button>
         <button
           onClick={() => handleNavigate("statistics")}
