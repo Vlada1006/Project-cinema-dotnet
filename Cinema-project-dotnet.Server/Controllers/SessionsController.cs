@@ -1,5 +1,6 @@
 ﻿using Cinema_project_dotnet.BusinessLogic.DTOs;
 using Cinema_project_dotnet.BusinessLogic.Entities;
+using Cinema_project_dotnet.BusinessLogic.Exeptions;
 using Cinema_project_dotnet.BusinessLogic.Interfaces;
 using Cinema_project_dotnet.BusinessLogic.Services;
 using FluentValidation;
@@ -70,18 +71,28 @@ namespace Cinema_project_dotnet.Server.Controllers
         [Authorize(Roles = "Admin")]
         public async Task<ActionResult> DeleteSession(int id)
         {
-            var bookings = await _bookingService.GetBookingsBySessionIdAsync(id);
-
-            await _sessionService.DeleteSessionAsync(id);
-
-            foreach (var booking in bookings)
+            try
             {
-                await _bookingService.CancelBookingAsync(booking.Id, "Session deleted");
+                var bookings = await _bookingService.GetBookingsBySessionIdAsync(id);
 
-                await _hubContext.Clients.User(booking.UserId.ToString()).SendAsync("ReceiveNotification",
-                    $"Your booking for session {id} has been canceled as the session has been deleted.");
+                foreach (var booking in bookings)
+                {
+                    await _bookingService.CancelBookingAsync(booking.Id, "Session deleted");
+
+                    await _hubContext.Clients.User(booking.UserId.ToString()).SendAsync("ReceiveNotification",
+                        $"Your booking for session {id} has been canceled as the session has been deleted.");
+                }
+
+                await _sessionService.DeleteSessionAsync(id);
+
+                return Ok(new { message = $"Session with id {id} successfully deleted with relation bookings" });
             }
-            return Ok(new { message = $"Session  with id {id} successfully deleted" });
+            catch (HttpException ex)
+            {
+                await _sessionService.DeleteSessionAsync(id);
+
+                return Ok(new { message = $"Session with id {id} successfully deleted" });
+            }
         }
 
         [HttpGet("seats/{id}")]

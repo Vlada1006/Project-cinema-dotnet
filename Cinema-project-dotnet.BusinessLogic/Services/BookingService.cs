@@ -69,6 +69,18 @@ namespace Cinema_project_dotnet.BusinessLogic.Services
             return _mapper.Map<List<BookingDTO>>(bookings);
         }
 
+        public async Task<List<BookingDTO>> GetBookingsByUserIdAsync(string userId)
+        {
+            var bookings = await _bookingRepo.GetByConditionAsync(b => b.UserId == userId);
+
+            if (bookings.Count() == 0)
+            {
+                throw new HttpException("No bookings found for this user", HttpStatusCode.NotFound);
+            }
+
+            return _mapper.Map<List<BookingDTO>>(bookings);
+        }
+
         public async Task CreateBookingAsync(BookingDTO bookingDTO)
         {
             var user = await _userRepo.GetByConditionAsync(u => u.Id == bookingDTO.UserId);
@@ -169,19 +181,21 @@ namespace Cinema_project_dotnet.BusinessLogic.Services
                 throw new HttpException("Booking not found", HttpStatusCode.NotFound);
             }
 
+            var sessionSeatList = await _sessionSeatRepo
+                .GetByConditionAsync(ss => ss.SessionId == booking.SessionId && ss.SeatId == booking.SeatId);
+
+            var sessionSeat = sessionSeatList.FirstOrDefault();
+            if (sessionSeat == null)
+            {
+                throw new HttpException("Session seat not found", HttpStatusCode.NotFound);
+            }
+
+            sessionSeat.IsAvailable = true;
+
+            await _sessionSeatRepo.UpdateAsync(sessionSeat);
+
             await _bookingRepo.DeleteAsync(id);
         }
 
-        public async Task<List<BookingDTO>> GetBookingsByUserIdAsync(string userId)
-        {
-            var bookings = await _bookingRepo.GetByConditionAsync(b => b.UserId == userId);
-
-            if (bookings.Count() == 0)
-            {
-                throw new HttpException("No bookings found for this user", HttpStatusCode.NotFound);
-            }
-
-            return _mapper.Map<List<BookingDTO>>(bookings);
-        }
     }
 }
