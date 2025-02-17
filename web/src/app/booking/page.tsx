@@ -104,7 +104,7 @@ const BookingPage = () => {
     }
   };
 
-  // Fetch sessions for the movie
+  
   const fetchSessions = async (movieId: string) => {
     try {
       const response = await fetch(`https://localhost:7000/api/Sessions?filmId=${movieId}`);
@@ -271,6 +271,7 @@ const BookingPage = () => {
                   >
                     <div className="flex justify-between">
                       <span>{startTime.toLocaleTimeString()} - {endTime.toLocaleTimeString()}</span>
+                      <span className="block text-sm">Date: {startTime.toLocaleDateString()}</span>
                       <span>Price: ${session.price}</span>
                     </div>
                   </li>
@@ -295,13 +296,16 @@ const BookingPage = () => {
                   <div key={rowIndex} className="flex justify-center">
                     <div className="space-x-2">
                       {row.map((seat, seatIndex) => (
-                        <span
-                          key={seatIndex}
-                          className={`bg-gray-700 text-yellow-600 px-4 py-2 rounded-full cursor-pointer ${selectedSeat===seat.id.toString() ? "bg-yellow-600" : ""} ${!seat.isAvailable && "bg-red-600" }`}
-                          onClick={() => handleSeatClick(seat.id.toString())}
-                        >
-                          {seat.number}
-                        </span>
+                        <button
+                        key={seat.id}
+                        className={`w-10 h-10 m-1 text-white font-bold rounded 
+                          ${seat.isAvailable ? "bg-gray-600 hover:bg-gray-800  cursor-pointer" : "bg-yellow-600 cursor-not-allowed"}
+                          ${selectedSeat === seat.id.toString() ? "border-4 border-yellow-500" : ""}`}
+                        onClick={() => seat.isAvailable && handleSeatClick(seat.id.toString())}
+                        disabled={!seat.isAvailable}
+                      >
+                        {seat.number}
+                      </button>
                       ))}
                     </div>
                   </div>

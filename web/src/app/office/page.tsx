@@ -1,67 +1,81 @@
 "use client";
+import React, { useState, useEffect } from "react";
 
-import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { useAppSelector } from "@/stores/hooks";
-import { selectUserEmail } from "@/stores/user/selectors";
-
+// Типи для бронювання
 interface Booking {
-  id: number; 
-  userId: string;
+  id: number;
   sessionId: number;
   seatId: number;
-  transactionId: number;
-  bookingTime: string; 
+  userId: number;
+  bookingTime: string;
+  movieTitle: string;
+  seatNumber: number;
+  sessionStartTime: string;
 }
 
-const PersonalAccount = () => {
+const BookingsPage = () => {
   const [bookings, setBookings] = useState<Booking[]>([]);
-  const userEmail = useAppSelector(selectUserEmail);
-  const router = useRouter();
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    const fetchBookings = async () => {
-      try {
-        const response = await fetch(`/api/bookings?email=${userEmail}`);
-        if (!response.ok) {
-          throw new Error(`HTTP Error! Status: ${response.status}`);
-        }
-        const result = await response.json();
-        setBookings(result.data);
-      } catch (error) {
-        console.error("Error fetching bookings:", error);
-      }
-    };
+    fetchBookings();
+  }, []);
 
-    if (userEmail) {
-      fetchBookings();
-    } else {
-      router.push("/"); 
+  // Функція для отримання всіх бронювань
+  const fetchBookings = async () => {
+    try {
+      const response = await fetch("https://localhost:7000/api/Bookings");
+      if (!response.ok) {
+        throw new Error("Failed to fetch bookings");
+      }
+      const data = await response.json();
+      if (data && data.data) {
+        setBookings(data.data);
+      } else {
+        setBookings([]);
+      }
+    } catch (error) {
+      console.error("Error fetching bookings:", error);
+      setErrorMessage("An error occurred while fetching bookings. Please try again.");
     }
-  }, [userEmail, router]);
+  };
+
+  if (errorMessage) {
+    return <p className="text-red-600">{errorMessage}</p>;
+  }
+
+  if (bookings.length === 0) {
+    return <p>No bookings available.</p>;
+  }
 
   return (
-    <div className="p-6 bg-gray-900 text-yellow-600 min-h-screen">
-      <h1 className="text-4xl font-bold">Вітаємо, це ваш особистий кабінет!</h1>
-      <section className="mt-8">
-        <h2 className="text-xl font-semibold mb-4">Ваші бронювання</h2>
-        {bookings.length === 0 ? (
-          <p>У вас немає бронювань.</p>
-        ) : (
-          <ul className="space-y-4">
+    <div className="min-h-screen bg-gray-900 text-yellow-600 p-6">
+      <div className="max-w-6xl mx-auto bg-gray-800 rounded-lg p-6 shadow-lg">
+        <h1 className="text-3xl font-bold text-yellow-600 mb-4">Your Bookings</h1>
+        <table className="w-full table-auto">
+          <thead>
+            <tr className="bg-gray-700">
+              <th className="text-left p-2">Movie Title</th>
+              <th className="text-left p-2">Session Start Time</th>
+              <th className="text-left p-2">Seat Number</th>
+              <th className="text-left p-2">Booking Time</th>
+            </tr>
+          </thead>
+          <tbody>
             {bookings.map((booking) => (
-              <li key={booking.id} className="p-4 bg-gray-800 rounded-lg">
-                <h3 className="text-lg font-semibold">Бронювання ID: {booking.id}</h3>
-                <p>Час бронювання: {new Date(booking.bookingTime).toLocaleString()}</p>
-                <p>Сесія ID: {booking.sessionId}</p>
-                <p>Місце ID: {booking.seatId}</p>
-              </li>
+              <tr key={booking.id} className="border-t border-gray-600">
+                <td className="p-2">{booking.movieTitle}</td>
+                <td className="p-2">{new Date(booking.sessionStartTime).toLocaleString()}</td>
+                <td className="p-2">{booking.seatNumber}</td>
+                <td className="p-2">{new Date(booking.bookingTime).toLocaleString()}</td>
+              </tr>
             ))}
-          </ul>
-        )}
-      </section>
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };
 
-export default PersonalAccount;
+export default BookingsPage;
+ 
