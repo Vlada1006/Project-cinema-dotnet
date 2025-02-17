@@ -232,23 +232,30 @@ const MoviesPage = () => {
       const directorExists = allDirectors.some(
         (director) => director.name?.toLowerCase() === newDirector.toLowerCase()
       );
-
+  
       if (!directorExists) {
-        const newDirectorData = {
-          id: allDirectors.length + 1,
-          name: newDirector.trim(),
-        };
-
-        setAllDirectors((prev) => [...prev, newDirectorData]);
-
-        setNewMovie((prev) => ({
-          ...prev,
-          directorIds: [...prev.directorIds, newDirectorData.id],
-        }));
+        const newDirectorData = { name: newDirector.trim() };
+  
+        fetch("/api/directors", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(newDirectorData),
+        })
+          .then(async (response) => {
+            if (!response.ok) {
+              throw new Error(Failed to add director: ${response.status});
+            }
+            const responseData = await response.json();
+            console.log("Director added response:", responseData);
+  
+            fetchDirectors(); // Fetch the updated list of directors
+  
+            setNewDirector(""); // Clear the input field
+          })
+          .catch((error) => console.error("Error adding director:", error));
       } else {
         const existingDirector = allDirectors.find(
-          (director) =>
-            director.name?.toLowerCase() === newDirector.toLowerCase()
+          (director) => director.name?.toLowerCase() === newDirector.toLowerCase()
         );
         if (existingDirector) {
           setNewMovie((prev) => ({
@@ -256,9 +263,8 @@ const MoviesPage = () => {
             directorIds: [...prev.directorIds, existingDirector.id],
           }));
         }
+        setNewDirector(""); // Clear the input field
       }
-
-      setNewDirector("");
     }
   };
 
