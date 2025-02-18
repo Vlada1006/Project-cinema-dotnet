@@ -1,11 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35527.113 d17.12
+VisualStudioVersion = 17.12.35527.113
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cinema-project-dotnet.Server", "Cinema-project-dotnet.Server\Cinema-project-dotnet.Server.csproj", "{B24DB0CC-0E08-4FFB-9AAF-27C5D0D8E733}"
-EndProject
-Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "cinema-project-dotnet.client", "cinema-project-dotnet.client\cinema-project-dotnet.client.esproj", "{BAEBCFF3-5E41-4084-B9F3-C2AA8FAD8D57}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Cinema-project-dotnet.BusinessLogic", "Cinema-project-dotnet.BusinessLogic\Cinema-project-dotnet.BusinessLogic.csproj", "{021C5C97-B6B7-44C2-9A9E-C8F64C9C07F5}"
 EndProject
@@ -21,12 +19,6 @@ Global
 		{B24DB0CC-0E08-4FFB-9AAF-27C5D0D8E733}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B24DB0CC-0E08-4FFB-9AAF-27C5D0D8E733}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B24DB0CC-0E08-4FFB-9AAF-27C5D0D8E733}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BAEBCFF3-5E41-4084-B9F3-C2AA8FAD8D57}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BAEBCFF3-5E41-4084-B9F3-C2AA8FAD8D57}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BAEBCFF3-5E41-4084-B9F3-C2AA8FAD8D57}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{BAEBCFF3-5E41-4084-B9F3-C2AA8FAD8D57}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BAEBCFF3-5E41-4084-B9F3-C2AA8FAD8D57}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BAEBCFF3-5E41-4084-B9F3-C2AA8FAD8D57}.Release|Any CPU.Deploy.0 = Release|Any CPU
 		{021C5C97-B6B7-44C2-9A9E-C8F64C9C07F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{021C5C97-B6B7-44C2-9A9E-C8F64C9C07F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{021C5C97-B6B7-44C2-9A9E-C8F64C9C07F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
