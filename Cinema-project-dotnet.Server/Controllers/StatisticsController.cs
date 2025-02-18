@@ -1,6 +1,5 @@
 ﻿using Cinema_project_dotnet.BusinessLogic.DTOs;
 using Cinema_project_dotnet.BusinessLogic.Services;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -18,7 +17,6 @@ public class StatisticsController : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(Roles = "Admin")]
     public async Task<ActionResult<List<FilmStatisticsDTO>>> GetFilmStatistics(
         [FromQuery] DateTime? startDate,
         [FromQuery] DateTime? endDate)
