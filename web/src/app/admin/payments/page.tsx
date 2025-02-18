@@ -1,132 +1,89 @@
 "use client";
-
 import React, { useState, useEffect } from "react";
 
-interface Payment {
+interface Booking {
   id: number;
-  user: string;
-  filmTitle: string;
+  userId: string;
+  sessionId: number;
+  seatId: number;
+  transactionId: number;
   bookingTime: string;
-  amount: number;
-  status: string;
 }
 
-const PaymentsPage = () => {
-  const [payments, setPayments] = useState<Payment[]>([]);
-  const [filter, setFilter] = useState("");
+const AdminBookingPage = () => {
+  const [bookings, setBookings] = useState<Booking[]>([]);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
-    fetch("/api/movies")
-      .then((response) => response.json())
-      .then((data) => {
-        console.log("Fetched payments:", data); // Log the data
-        // Assuming the API returns an object with a 'payments' property
-        if (Array.isArray(data.payments)) {
-          setPayments(data.payments);
-        } else {
-          console.error("Expected an array but got:", data);
-          setPayments([]); // Set to empty array if data is not as expected
-        }
-      })
-      .catch((error) => console.error("Error fetching payments:", error));
+    fetchBookings();
   }, []);
 
-  const updatePaymentStatus = (id: number, status: string) => {
-    fetch(`/api/movies/${id}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ status }),
-    })
-      .then(() => {
-        setPayments(
-          payments.map((payment) =>
-            payment.id === id ? { ...payment, status } : payment
-          )
-        );
-      })
-      .catch((error) => console.error("Error updating payment status:", error));
+  // Функція для отримання всіх бронювань
+  const fetchBookings = async () => {
+    setLoading(true);
+    try {
+      const response = await fetch("/api/bookings");
+      if (!response.ok) {
+        throw new Error("Failed to fetch bookings");
+      }
+      const data = await response.json();
+      if (data && data.data) {
+        setBookings(data.data);
+      } else {
+        setBookings([]);
+      }
+    } catch (error) {
+      console.error("Error fetching bookings:", error);
+      setErrorMessage("An error occurred while fetching bookings.");
+    } finally {
+      setLoading(false);
+    }
   };
 
-  const processRefund = (id: number) => {
-    fetch(`/api/movies/${id}/refund`, {
-      method: "POST",
-    })
-      .then(() => {
-        setPayments(
-          payments.map((payment) =>
-            payment.id === id ? { ...payment, status: "Refunded" } : payment
-          )
-        );
-      })
-      .catch((error) => console.error("Error processing refund:", error));
-  };
 
-  const filteredPayments = payments.filter(
-    (payment) =>
-      payment.user.toLowerCase().includes(filter.toLowerCase()) ||
-      payment.filmTitle.toLowerCase().includes(filter.toLowerCase())
-  );
+  if (loading) {
+    return <p>Loading bookings...</p>;
+  }
+
+  if (errorMessage) {
+    return <p className="text-red-600">{errorMessage}</p>;
+  }
+
+  if (bookings.length === 0) {
+    return <p>No bookings available.</p>;
+  }
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white p-6">
-      <div className="max-w-6xl mx-auto bg-gray-700 shadow-lg rounded-lg p-6">
-        <h1 className="text-3xl font-bold text-yellow-600 text-center mb-6">
-          Оплати за квитки
-        </h1>
-
-        <div className="mb-4">
-          <input
-            type="text"
-            className="w-full p-3 bg-gray-800 text-white rounded"
-            placeholder="Пошук за ім'ям користувача або назвою фільму"
-            value={filter}
-            onChange={(e) => setFilter(e.target.value)}
-          />
-        </div>
-
-        <ul className="space-y-3">
-          {filteredPayments.map((payment) => (
-            <li
-              key={payment.id}
-              className="flex flex-col md:flex-row justify-between items-center bg-gray-800 p-4 rounded border border-gray-700"
-            >
-              <div>
-                <h2 className="text-lg font-bold text-yellow-400">
-                  🎬 {payment.filmTitle}
-                </h2>
-                <p>👤 Користувач: {payment.user}</p>
-                <p>🗓️ Дата: {payment.bookingTime}</p>
-                <p>💵 Сума: {payment.amount} грн</p>
-                <p>📄 Статус: {payment.status}</p>
-              </div>
-              <div className="flex gap-2 mt-3 md:mt-0">
-                <select
-                  className="p-2 bg-gray-700 text-white rounded"
-                  value={payment.status}
-                  onChange={(e) =>
-                    updatePaymentStatus(payment.id, e.target.value)
-                  }
-                >
-                  <option value="Pending">Очікується</option>
-                  <option value="Completed">Завершено</option>
-                  <option value="Cancelled">Скасовано</option>
-                  <option value="Refunded">Повернено</option>
-                </select>
-                {payment.status !== "Refunded" && (
-                  <button
-                    className="bg-red-600 text-white p-2 rounded hover:bg-red-500"
-                    onClick={() => processRefund(payment.id)}
-                  >
-                    Повернути
-                  </button>
-                )}
-              </div>
-            </li>
-          ))}
-        </ul>
+    <div className="min-h-screen bg-gray-900 text-yellow-600 p-6">
+      <div className="max-w-6xl mx-auto bg-gray-800 rounded-lg p-6 shadow-lg">
+        <h1 className="text-3xl font-bold text-yellow-600 mb-4">Admin Booking Management</h1>
+        <table className="w-full table-auto">
+          <thead>
+            <tr className="bg-gray-700">
+              <th className="text-left p-2">User ID</th>
+              <th className="text-left p-2">Session ID</th>
+              <th className="text-left p-2">Seat ID</th>
+              <th className="text-left p-2">Transaction ID</th>
+              <th className="text-left p-2">Booking Time</th>
+            </tr>
+          </thead>
+          <tbody>
+            {bookings.map((booking) => (
+              <tr key={booking.id} className="border-t border-gray-600">
+                <td className="p-2">{booking.userId}</td>
+                <td className="p-2">{booking.sessionId}</td>
+                <td className="p-2">{booking.seatId}</td>
+                <td className="p-2">{booking.transactionId}</td>
+                <td className="p-2">{new Date(booking.bookingTime).toLocaleString()}</td>
+                
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );
 };
 
-export default PaymentsPage;
+export default AdminBookingPage;

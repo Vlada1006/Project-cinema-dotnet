@@ -243,7 +243,7 @@ const MoviesPage = () => {
         })
           .then(async (response) => {
             if (!response.ok) {
-              throw new Error(Failed to add director: ${response.status});
+              throw new Error(`Failed to add genre: ${response.status}`);
             }
             const responseData = await response.json();
             console.log("Director added response:", responseData);

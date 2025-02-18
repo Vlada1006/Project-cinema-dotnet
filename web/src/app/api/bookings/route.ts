@@ -35,3 +35,36 @@ export async function POST(req: NextRequest) {
     );
   }
 }
+
+
+export async function GET(req: NextRequest) {
+
+  const { token } = (await getServerSession(authOptions)) as any;
+
+  try {
+    
+    const bookingApiResponse = await fetch(`https://localhost:7000/Api/Bookings`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+    );
+
+    if (!bookingApiResponse.ok) {
+      return NextResponse.json(
+        { error: "Failed to fetch booking data" },
+        { status: bookingApiResponse.status }
+      );
+    }
+
+    const bookingApiResponseBody = await bookingApiResponse.json();
+
+    return NextResponse.json(bookingApiResponseBody);
+  } catch (error) {
+    console.error("Error fetching booking data:", error);
+    return NextResponse.json(
+      { error: "An error occurred while fetching booking data" },
+      { status: 500 }
+    );
+  }
+}

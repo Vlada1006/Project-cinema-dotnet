@@ -81,3 +81,40 @@ export async function DELETE(
     );
   }
 }
+
+
+export async function GET(
+  req: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
+) {
+  const { token } = (await getServerSession(authOptions)) as any;
+
+  const { id } = await params;
+
+  try {
+    const sessionsApiResponse = await fetch(
+      `https://localhost:7000/Api/Sessions/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    if (!sessionsApiResponse.ok) {
+      return NextResponse.json(
+        { error: "Failed to fetch session data" },
+        { status: sessionsApiResponse.status }
+      );
+    }
+
+    const sessionsApiResponseBody = await sessionsApiResponse.json();
+
+    return NextResponse.json(sessionsApiResponseBody);
+  } catch (error) {
+    console.error("Error fetching session data:", error);
+    return NextResponse.json(
+      { error: "An error occurred while fetching session data" },
+      { status: 500 }
+    );
+  }
+}
