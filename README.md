@@ -4,8 +4,12 @@ Popcorn Cinema is an application developed during a student apprenticeship, desi
 Features:
 
 Browse Movies: Users can explore a wide range of movies available in the app.
+
 Book Tickets: Customers can book tickets for movies currently showing at cinemas.
+
 Rate Movies: After watching, users can rate the movies they’ve seen.
+
+
 
 Installation:
 
