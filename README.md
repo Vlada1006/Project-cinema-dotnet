@@ -1,4 +1,5 @@
-Popcorn Cinema App
+# Popcorn Cinema App
+
 Popcorn Cinema is an application developed during a student apprenticeship, designed to provide an easy and seamless experience for movie lovers.
 
 Features:
